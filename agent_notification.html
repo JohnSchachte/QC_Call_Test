@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf8">
+  <title>Shift4</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #333;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    a {
+      color: #136ef6;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #0082ca;
+    }
+    .bordered-table {
+      border: 1px solid #585858;
+      padding: 0;
+      border-spacing: 0;
+    }
+    .bordered-table td {
+      padding: 0;
+    }
+    p {
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <table class="bordered-table" width="600" cellspacing="0" cellpadding="0" align="center">
+    <tr>
+      <td>
+        <img src="https://www.shift4.com/images/email/SHIFT4-Email-Header-Bar.png" alt="Shift4 Payments" width="100%" style="display:block;" />
+        <h2 style="color: #136ef6; text-align: center;">Call Evaluation</h2>
+        <p style="font-weight: bold;padding-left:15px;">Dear <?= employeeName ?>,</p>
+        <p>Below is the most recent call evaluation scored for you by Reliability. Please take a few minutes to review the feedback thoroughly to ensure you are following all company standards accordingly. Our goal is to not only guarantee that our merchants receive quality customer service, but that all agents are adhering to all required SOPs, memos, etc.</p>
+        <p>Here's your Call Evaluation:</p>
+        <ul>
+          <li><a href="<?= uptivityLink ?>">Uptivity Link</a></li>
+          <? ticketLink.forEach(el => { ?>
+            <li>
+              <? if(typeof el === "object") { ?>
+                <a href="<?= el.url ?>">Ticket #<?= el.id ?></a>
+              <? } else { ?>
+                <?= el ?>
+              <? } ?>
+            </li>
+          <? }) ?>
+          <? emailArray.forEach(([key, value]) => { ?>
+            <li><b><?= key ?>:</b> <?= value ?></li>
+          <? }) ?>
+        </ul>
+        <br>
+        <p> If there is a dispute you would like to submit, please use this form <a href="https://forms.gle/1AVbDr3twscr3sWV8">Agent Dispute Form</a>. Remember to review the SOP for this process if you are not familiar <a href="https://shift4.zendesk.com/hc/en-us/articles/16581275959955-Contact-Center-Evaluation-Dispute-Process-SOP">Evaluation Dispute Process SOP</a></p>
+        <br>
+        <p>Sincerely,</p>
+        <p  style="font-weight: bold;">Reliability</p>
+        <div style="background-color:#000; padding:10px; text-align:center;">
+          <a href="https://www.facebook.com/Shift4Payments"><img src="https://www.shift4.com/email/social-facebook.png" alt="Facebook" width="16" height="16"></a>
+          <a href="https://twitter.com/shift4"><img src="https://www.shift4.com/email/social-twitter.png" alt="Twitter" width="16" height="16"></a>
+          <a href="https://www.linkedin.com/company/shift4/"><img src="https://www.shift4.com/email/social-linkedin.png" alt="Linkedin" width="16" height="16"></a>
+          <a href="https://vimeo.com/shift4payments"><img src="https://www.shift4.com/email/social-vimeo.png" alt="Vimeo" width="16" height="16"></a>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

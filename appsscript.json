@@ -1,0 +1,40 @@
+{
+  "timeZone": "America/New_York",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Sheets",
+        "serviceId": "sheets",
+        "version": "v4"
+      }
+    ],
+    "libraries": [
+      {
+        "userSymbol": "MkData",
+        "libraryId": "1Xj6lEdytx4FngSeLKAK81q3e4gF-2xHIaCWpT0MTDomt1ZiJgXB_dcCt",
+        "version": "0",
+        "developmentMode": true
+      },
+      {
+        "userSymbol": "NameToWFM",
+        "libraryId": "1KQIjcEZOvJX_7TCzcYTlxbkqkqR4ZZ34VtGZXNeDrff-Q1c3ngBm-uTq",
+        "version": "0",
+        "developmentMode": true
+      },
+      {
+        "userSymbol": "Custom_Utilities",
+        "libraryId": "1lYFtcdcDb6yiRj3Ohg509fT83RL5e7niO58Oia2U4GfwmM7CsahllnvS",
+        "version": "0",
+        "developmentMode": true
+      },
+      {
+        "userSymbol": "Self",
+        "version": "2",
+        "libraryId": "1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk",
+        "developmentMode": false
+      }
+    ]
+  }
+}
