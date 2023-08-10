@@ -11,9 +11,6 @@ class DoEmails{
     this.htmlTemplate = HtmlService.createTemplateFromFile("agent_notification"); // Create html template from emailTemplate.html file
     this.removeCols = new Set(["Resolution Outcome","How would you rate your experience on this call/chat if you were the customer? ","Agent Department","Date","Month & Year","% Score","Email Sent","Date Sent", "Agent Location","Team","Agents Department","CC Email", "Ticket#","Score %","Score",">3 Months Hire"," ","<90 Day Hire","Hire Date","Dispute Status","Copied to coaching form? And when"]);
     this.emailSubject = `Call Evaluation for `; // Set email subject to Quality Evalutation form with agent name
-    this.options = {
-      noReply: true,
-    };
   }
 
   /**
@@ -25,7 +22,7 @@ class DoEmails{
    * @param {Object} updateValues - An object to keep track of updated values.
    */
   send(row,colMap,agentObj,score,updateValues){
-    let emailOptions = { ...this.options }; //shallow copy of object.
+    let emailOptions = {};
     
 
     // assigning html variables based on form inputs
@@ -37,7 +34,7 @@ class DoEmails{
     this.htmlTemplate.emailArray = this.mkEmailArray(row,colMap,score) // Set emailArray in emailTemplate.html to emailArray
     emailOptions["htmlBody"] = this.htmlTemplate.evaluate().getContent(); //assigning the template to the email to be sent
     
-    //GmailApp.sendEmail("jschachte@shift4.com",this.emailSubject+row[colMap.get("Agents Name")],'',emailOptions);
+    // GmailApp.sendEmail("jschachte@shift4.com",this.emailSubject+row[colMap.get("Agents Name")],'',emailOptions);
     
     this.updateCC(agentObj,emailOptions,updateValues,colMap); // adds cc and updates the updateValues
     
