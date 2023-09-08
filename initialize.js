@@ -1,8 +1,8 @@
-// function initializeLastRow() {
-//   const scriptProps = PropertiesService.getScriptProperties();
-//   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-//   scriptProps.setProperty("lr",(6200).toString());
-// }
+function initializeLastRow() {
+  const scriptProps = PropertiesService.getScriptProperties();
+  // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
+  scriptProps.setProperty("lr",(7194).toString()); // change number to the last row you want to do.
+}
 
 // /**
 //  * row 1576 shows an example of the race condition of using a form submit with a getLastRow() 

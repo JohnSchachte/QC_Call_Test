@@ -26,7 +26,10 @@ class DoEmails{
     
 
     // assigning html variables based on form inputs
-    this.htmlTemplate.uptivityLink = `https://recordings.shift4.com/MediaPlayer/ExternalCallListPlayer/${row[colMap.get("Record ID")]}/true`
+    // this.htmlTemplate.uptivityLink = `https://recordings.shift4.com/MediaPlayer/ExternalCallListPlayer/${row[colMap.get("Record ID")]}/true`
+    // <li><a href="<?= uptivityLink ?>">Uptivity Link</a></li>
+
+    this.htmlTemplate.niceId = row[colMap.get("Record ID")];
     
     this.htmlTemplate.ticketLink =  (/\d{7}/g).test(row[colMap.get("Ticket#")]) ? row[colMap.get("Ticket#")].match((/\d{7}/g)).map(el => {return {"id" : el, "url" : "https://tickets.shift4.com/#/tickets/"+el}}) : ["No Ticket Link"]; // test if there is a ticket number. if yes then assign an object. otherwise no ticket.
 
