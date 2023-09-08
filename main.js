@@ -36,8 +36,8 @@ function main(){
       return;
     }
 
-    let updateValues = new Array(colMap.size); //the values being written to the sheet
-    const timeStamp = updateTimestampValues(updateValues, colMap, row);
+    let updateValues = new Array(colMap.size); // the values being written to the sheet.
+    const timeStamp = updateTimestampValues(updateValues, colMap, row); //updates timestamp but also returns it for further use
 
 
     let agentName = row[colMap.get("Agents Name")];
@@ -52,7 +52,7 @@ function main(){
     }
 
     if(agentObj["Hire Date"]){
-      updateHireDateValues(agentObj,updateValues,colMap,timeStamp)
+      updateHireDateValues(agentObj,updateValues,colMap,timeStamp);
     }
     
 
@@ -63,14 +63,37 @@ function main(){
       scriptProps.setProperty("lr",offset+index+1);
       return;
     }
+
     score = updateScoreValues(updateValues, colMap, score);
+
+    const SCORE_THRESHOLD = 0.75;
     
     doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
 
+    
     updateValues[colMap.get("Agent Location")] = agentObj["OFFICE LOCATION"];
     updateValues[colMap.get("Team")] = agentObj["Team"];
     Logger.log("Sent");
     writeToSheet(updateValues,index+offset);
+    if(score < SCORE_THRESHOLD){
+      /** TODO
+       * 1. trigger coaching script
+      /**
+       *TODO
+        * 1. initialize cache
+        * 2. save parameters in cache with trigger id as key
+        * 3. allow for the catch to call the function if too many triggers are active
+       *
+       */
+      const initializeCoaching = function (){
+        try{
+          Custom_Utilities.setUpTrigger(ScriptApp,"initializeCoaching",1);
+          
+        }catch(f){
+
+        }
+      }; 
+    }
     scriptProps.setProperty("lr",offset+index+1);
   });
   lock.releaseLock();
