@@ -7,10 +7,12 @@ class DoEmails{
    * Creates a new DoEmails instance.
    * @constructor
    */
-  constructor(){
+  constructor(scriptProp=PropertiesService.getScriptProperties().getProperties()){
     this.htmlTemplate = HtmlService.createTemplateFromFile("agent_notification"); // Create html template from emailTemplate.html file
     this.removeCols = new Set(["Resolution Outcome","How would you rate your experience on this call/chat if you were the customer? ","Agent Department","Date","Month & Year","% Score","Email Sent","Date Sent", "Agent Location","Team","Agents Department","CC Email", "Ticket#","Score %","Score",">3 Months Hire"," ","<90 Day Hire","Hire Date","Dispute Status","Copied to coaching form? And when"]);
     this.emailSubject = `Call Evaluation for `; // Set email subject to Quality Evalutation form with agent name
+    this.TRNASCRIPT_ID_HEADER = scriptProp["TRANSCRIPT_ID_HEADER"];
+    this.TICKET_HEADER = scriptProp["TICKET_HEADER"];
   }
 
   /**
@@ -23,20 +25,29 @@ class DoEmails{
    */
   send(row,colMap,agentObj,score,updateValues){
     let emailOptions = {};
-    
 
-    // assigning html variables based on form inputs
-    // this.htmlTemplate.uptivityLink = `https://recordings.shift4.com/MediaPlayer/ExternalCallListPlayer/${row[colMap.get("Record ID")]}/true`
-    // <li><a href="<?= uptivityLink ?>">Uptivity Link</a></li>
+    // format transcript ids
+    let transcriptIds = this.transformTranscriptIds(row[colMap.get(this.TRNASCRIPT_ID_HEADER)]);
+    if(!transcriptIds){
+      updateValues[colMap.get("Email Sent")] = "No Transcript Id";
+      return;
+    }
 
-    this.htmlTemplate.niceId = row[colMap.get("Record ID")];
-    
-    this.htmlTemplate.ticketLink =  (/\d{7}/g).test(row[colMap.get("Ticket#")]) ? row[colMap.get("Ticket#")].match((/\d{7}/g)).map(el => {return {"id" : el, "url" : "https://tickets.shift4.com/#/tickets/"+el}}) : ["No Ticket Link"]; // test if there is a ticket number. if yes then assign an object. otherwise no ticket.
+    this.htmlTemplate.transcriptIds = transcriptIds;
 
-    this.htmlTemplate.employeeName = agentObj["Employee Name"].toUpperCase(); // Set employeeName in emailTemplate.html to agentSup
-    this.htmlTemplate.emailArray = this.mkEmailArray(row,colMap,score) // Set emailArray in emailTemplate.html to emailArray
+    const ticketNumber = row[colMap.get(this.TICKET_HEADER)];
+    // format ticketLinks
+    this.htmlTemplate.ticketLink = (/\d{7}/g).test(ticketNumber) ? ticketNumber.match((/\d{7}/g)).map(el => {return {"id" : el, "url" : "https://tickets.shift4.com/#/tickets/"+el}}) : ["No Ticket Link"]; // test if there is a ticket number. if yes then assign an object. otherwise no ticket.
+
+     // Set employeeName in emailTemplate.html to agentSup
+    this.htmlTemplate.employeeName = agentObj["Employee Name"].toUpperCase();
+
+     // Set emailArray in emailTemplate.html to emailArray
+    this.htmlTemplate.emailArray = this.mkEmailArray(row,colMap,score);
+
     emailOptions["htmlBody"] = this.htmlTemplate.evaluate().getContent(); //assigning the template to the email to be sent
     
+    //uncomment for testing
     // GmailApp.sendEmail("jschachte@shift4.com",this.emailSubject+row[colMap.get("Agents Name")],'',emailOptions);
     
     this.updateCC(agentObj,emailOptions,updateValues,colMap); // adds cc and updates the updateValues
@@ -63,6 +74,18 @@ class DoEmails{
       }
     });
     return emailArray;
+  }
+  
+  /**
+   * logic for transforming transcriptIds.
+   * @param {String[]} transcriptIds - an array of transcript ids to transform or null.
+   * @return {Array} - An array of transformed transcript ids.
+   */
+  transformTranscriptIds(transcriptIds){
+    if(!transcriptIds){
+      return false;
+    }
+    return transcriptIds.split(/\s*\,\s*/g).map(id =>({href:"https://na1.nice-incontact.com/player/#/cxone-player/segments/" + id, id}));
   }
 
   /**

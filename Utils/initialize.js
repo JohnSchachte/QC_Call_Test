@@ -1,7 +1,7 @@
 function initializeLastRow() {
   const scriptProps = PropertiesService.getScriptProperties();
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(7194).toString()); // change number to the last row you want to do.
+  scriptProps.setProperty("lr",(7738).toString()); // change number to the last row you want to do.
 }
 
 // /**
@@ -15,3 +15,9 @@ function initializeLastRow() {
 //     .onFormSubmit()
 //     .create();
 // }
+
+function setScriptProperties(){
+  const scriptProp = PropertiesService.getScriptProperties();
+  scriptProp.setProperty("TRANSCRIPT_ID_HEADER","Record ID")
+  scriptProp.setProperty("TICKET_HEADER","Ticket#")
+}

@@ -102,7 +102,6 @@ function main(){
 
 function setScoreFormat(startRow){
   const ss = SpreadsheetApp.openById(BACKEND_ID);
-  Logger.log(ss.getSheetByName("Call Scorecard Form Responses"));
   ss.getSheetByName("Call Scorecard Form Responses")
     .getRange(`E${startRow}:E`)
     .setNumberFormat("0.00%")
