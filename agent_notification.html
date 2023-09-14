@@ -40,7 +40,23 @@
         <p>Below is the most recent call evaluation scored for you by Reliability. Please take a few minutes to review the feedback thoroughly to ensure you are following all company standards accordingly. Our goal is to not only guarantee that our merchants receive quality customer service, but that all agents are adhering to all required SOPs, memos, etc.</p>
         <p>Here's your Call Evaluation:</p>
         <ul>
-          <li>NICE Id: <?=niceId?></li>
+          <li>Call Transcripts:</li>
+          <ul>
+          <?
+          // Server-side logic
+          transcriptIds.forEach(function({href,id}) {
+            if (typeof id === "string") {
+              ?>
+              <li> <a href="<?=href?>"><?= id ?></a></li>
+              <?
+            } else {
+              ?>
+              <li><?= id ?></li>
+              <?
+            }
+          });
+          ?>
+          </ul>
           <? ticketLink.forEach(el => { ?>
             <li>
               <? if(typeof el === "object") { ?>
