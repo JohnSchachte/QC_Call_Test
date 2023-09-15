@@ -31,7 +31,7 @@ function main(){
   const doEmails = new DoEmails();
   data.forEach((row,index) => {
     // // skip row conditions. THIS WILL RUN FOR NAME MISMATCHES
-    if(!row[colMap.get("Agents Name")] || !row[colMap.get("Score")] || row[colMap.get("Email Sent")] == "Sent"){
+    if(!row[colMap.get(AGENT_NAME_HEADER)] || !row[colMap.get(SCORE_HEADER)] || row[colMap.get(EMAIL_SENT_HEADER)] == "Sent"){
       Logger.log("empty or already sent");
       return;
     }
@@ -40,12 +40,12 @@ function main(){
     const timeStamp = updateTimestampValues(updateValues, colMap, row); //updates timestamp but also returns it for further use
 
 
-    let agentName = row[colMap.get("Agents Name")];
+    let agentName = row[colMap.get(AGENT_NAME_HEADER)];
     let agentObj = NameToWFM.getAgentObj(agentName);
 
     if(!agentObj){
       Logger.log("agent was not found in WFM");
-      updateValues[colMap.get("Email Sent")] = "Name Mismatch with WFM";
+      updateValues[colMap.get(EMAIL_SENT_HEADER)] = "Name Mismatch with WFM";
       writeToSheet(updateValues,index+offset);
       scriptProps.setProperty("lr",offset+index+1);
       return;
@@ -56,7 +56,7 @@ function main(){
     }
     
 
-    let score = row[colMap.get("Score")];
+    let score = row[colMap.get(SCORE_HEADER)];
     if (!score) {
       Logger.log("No Score then Don't send");
       writeToSheet(updateValues,index+offset);
@@ -71,7 +71,7 @@ function main(){
     doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
 
     
-    updateValues[colMap.get("Agent Location")] = agentObj["OFFICE LOCATION"];
+    updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
     updateValues[colMap.get("Team")] = agentObj["Team"];
     Logger.log("Sent");
     writeToSheet(updateValues,index+offset);

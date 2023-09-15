@@ -6,13 +6,13 @@
  * @param {Array} row - The current row data.
  */
 function updateHireDateValues(agentObj, updateValues, colMap,timeStamp){
-  const hireDate = new Date(agentObj["Hire Date"]);
-  updateValues[colMap.get("Hire Date")] = agentObj["Hire Date"];
+  const hireDate = new Date(agentObj[HIRE_DATE_HEADER]);
+  updateValues[colMap.get(HIRE_DATE_HEADER)] = agentObj[HIRE_DATE_HEADER];
 
   const flag = under4Months(hireDate,timeStamp,120);
-  updateValues[colMap.get("<3 Months Hire")] = flag;
+  updateValues[colMap.get(LT_3MONTHS_HEADER)] = flag;
 
-  updateValues[colMap.get(">3 Months Hire")] = !flag;
+  updateValues[colMap.get(GT_MONTHS_HEADER)] = !flag;
 }
 
 /**
@@ -22,10 +22,10 @@ function updateHireDateValues(agentObj, updateValues, colMap,timeStamp){
  * @param {Array} row - The current row data.
  */
 function updateTimestampValues(updateValues, colMap, row){
-  let timeStamp = new Date(row[colMap.get("Timestamp")]);
-  updateValues[colMap.get("Date")] = Utilities.formatDate(timeStamp,"America/New_York", "MM/dd/yyyy");
-  updateValues[colMap.get("Month & Year")] = Utilities.formatDate(timeStamp,"America/New_York", "MMMM yyyy");
-  row[colMap.get("Timestamp")] = Utilities.formatDate(timeStamp,"America/New_York","MM/dd/yyyy HH:mm:ss a") + " EST";
+  let timeStamp = new Date(row[colMap.get(TIMESTAMP_HEADER)]);
+  updateValues[colMap.get(DATE_HEADER)] = Utilities.formatDate(timeStamp,"America/New_York", "MM/dd/yyyy");
+  updateValues[colMap.get(MONTH_YEAR_HEADER)] = Utilities.formatDate(timeStamp,"America/New_York", "MMMM yyyy");
+  row[colMap.get(TIMESTAMP_HEADER)] = Utilities.formatDate(timeStamp,"America/New_York","MM/dd/yyyy HH:mm:ss a") + " EST";
   return timeStamp;
 }
 
@@ -39,7 +39,7 @@ function updateTimestampValues(updateValues, colMap, row){
 function updateScoreValues(updateValues, colMap, score){
   score = score.split(" / ").map(integer => parseInt(integer));
   score = Math.round((score[0] / score[1])*10000);
-  updateValues[colMap.get("% Score")] = score/10000;
+  updateValues[colMap.get(PERC_SCORE_HEADER)] = score/10000;
   return score;
 }
 

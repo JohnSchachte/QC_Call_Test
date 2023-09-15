@@ -25,4 +25,12 @@ function setScriptProperties(){
   scriptProp.setProperty("TEAM","Team");
   scriptProp.setProperty("HIRE_DATE","Hire Date");
   scriptProp.setProperty("EVAL_ID","Eval ID");
+  scriptProp.setProperty("CC_EMAIL_HEADER","CC Email");
+  scriptProp.setProperty("HIRE_DATE_HEADER","Hire Date");
+  scriptProp.setProperty("<3_MONTHS_HEADER","<3 Months Hire");
+  scriptProp.setProperty(">3_MONTHS_HEADER",">3 Months Hire");
+  scriptProp.setProperty("TIMESTAMP_HEADER","Timestamp");
+  scriptProp.setProperty("DATE_HEADER","Date");
+  scriptProp.setProperty("MONTH_YEAR_HEADER","Month & Year");
+  scriptProp.setProperty("PERC_SCORE_HEADER","% Score");
 }
