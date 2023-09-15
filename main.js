@@ -9,7 +9,7 @@ function mainWrapper(){
  */
 function main(){
   // get colMap
-  const colMap = MkData.mkColMap(sheetsAPI.get(BACKEND_ID,"'Call Scorecard Form Responses'!1:1").values[0]);
+  const colMap = getColMap();
 
   const lock = LockService.getScriptLock();
   lock.waitLock(600000);
@@ -66,16 +66,6 @@ function main(){
 
     score = updateScoreValues(updateValues, colMap, score);
 
-    const SCORE_THRESHOLD = 0.75;
-    
-    doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
-
-    
-    updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
-    updateValues[colMap.get("Team")] = agentObj["Team"];
-    Logger.log("Sent");
-    writeToSheet(updateValues,index+offset);
-    if(score < SCORE_THRESHOLD){
       /** TODO
        * 1. trigger coaching script
       /**
@@ -87,23 +77,34 @@ function main(){
        */
       const initializeCoaching = function (){
         try{
-          Custom_Utilities.setUpTrigger(ScriptApp,"initializeCoaching",1);
+          const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeCoaching",1); //returns trigger id
+          const cache = CacheService.getScriptCache();
+          cache.put(t,JSON.stringify({row,agentObj,score,updateValues,rowIndex:index+offset}));
           
         }catch(f){
           Logger.log(f);
         }
       }; 
-    };
-    scriptProps.setProperty("lr",offset+index+1);
+
+    doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
+    
+    updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
+    updateValues[colMap.get(TEAM_HEADER)] = agentObj["Team"];
+    Logger.log("Sent");
+    writeToSheet(updateValues,index+offset);
+
+    scriptProps.setProperty("lr",offset+index+1); // update the last row to record where the script starts next time
+  
   });
   lock.releaseLock();
-  setScoreFormat(offset);
+  setScoreFormat(offset,colMap);
 }
 
-function setScoreFormat(startRow){
+function setScoreFormat(startRow,colMap){
   const ss = SpreadsheetApp.openById(BACKEND_ID);
+  const scorePercCol = Custom_Utilities.columnToLetter(colMap.get(PERC_SCORE_HEADER)+1);
   ss.getSheetByName("Call Scorecard Form Responses")
-    .getRange(`E${startRow}:E`)
+    .getRange(`${(scorePercCol)}${startRow}:${scorePercCol}`)
     .setNumberFormat("0.00%")
 }
 

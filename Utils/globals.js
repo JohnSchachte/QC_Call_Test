@@ -21,3 +21,4 @@ TIMESTAMP_HEADER = scriptPropsObj["TIMESTAMP_HEADER"],
 DATE_HEADER = scriptPropsObj["DATE_HEADER"],
 MONTH_YEAR_HEADER = scriptPropsObj["MONTH_YEAR_HEADER"],
 PERC_SCORE_HEADER = scriptPropsObj["PERC_SCORE_HEADER"];
+const SCORE_THRESHOLD = 0.75; //arbitrary number from Reliability team
