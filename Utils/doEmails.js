@@ -7,12 +7,10 @@ class DoEmails{
    * Creates a new DoEmails instance.
    * @constructor
    */
-  constructor(scriptProp=PropertiesService.getScriptProperties().getProperties()){
+  constructor(){
     this.htmlTemplate = HtmlService.createTemplateFromFile("agent_notification"); // Create html template from emailTemplate.html file
     this.removeCols = new Set(["Resolution Outcome","How would you rate your experience on this call/chat if you were the customer? ","Agent Department","Date","Month & Year","% Score","Email Sent","Date Sent", "Agent Location","Team","Agents Department","CC Email", "Ticket#","Score %","Score",">3 Months Hire"," ","<90 Day Hire","Hire Date","Dispute Status","Copied to coaching form? And when"]);
     this.emailSubject = `Call Evaluation for `; // Set email subject to Quality Evalutation form with agent name
-    this.TRNASCRIPT_ID_HEADER = scriptProp["TRANSCRIPT_ID_HEADER"];
-    this.TICKET_HEADER = scriptProp["TICKET_HEADER"];
   }
 
   /**

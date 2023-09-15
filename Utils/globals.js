@@ -2,5 +2,14 @@
 //const BACKEND_ID = "1FlFEkAEWH58yPcIbFz5hgOImKPkxfuI7Sv2RvMVbUKw"
 const BACKEND_ID = "1Fsw8e7Htowi9uaB50XEbJXRAK3IuaNSoYFY9sNUpt8Y";
 const sheetsAPI = Sheets.Spreadsheets.Values
-var scriptProp = null;
+const scriptProps = PropertiesService.getScriptProperties();
 var docProp = null;
+const TRNASCRIPT_ID_HEADER = scriptProp["TRANSCRIPT_ID_HEADER"], 
+TICKET_HEADER = scriptProp["TICKET_HEADER"], 
+AGENT_NAME = scriptProp["AGENT_NAME"], 
+EMAIL_SENT = scriptProp["EMAIL_SENT"], 
+SCORE = scriptProp["SCORE"], 
+AGENT_LOCATION = scriptProp["AGENT_LOCATION"], 
+TEAM = scriptProp["TEAM"], 
+HIRE_DATE = scriptProp["HIRE_DATE"], 
+EVAL_ID = scriptProp["EVAL_ID"];
