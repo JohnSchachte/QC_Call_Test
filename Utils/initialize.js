@@ -18,6 +18,13 @@ function initializeLastRow() {
 
 function setScriptProperties(){
   const scriptProp = PropertiesService.getScriptProperties();
-  scriptProp.setProperty("TRANSCRIPT_ID_HEADER","Record ID")
-  scriptProp.setProperty("TICKET_HEADER","Ticket#")
+  scriptProp.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
+  scriptProp.setProperty("TICKET_HEADER","Ticket#");
+  scriptProp.setProperty("AGENT_NAME","Agents Name");
+  scriptProp.setProperty("EMAIL_SENT","Email Sent");
+  scriptProp.setProperty("SCORE","Score");
+  scriptProp.setProperty("AGENT_LOCATION","Agent Location");
+  scriptProp.setProperty("TEAM","Team");
+  scriptProp.setProperty("HIRE_DATE","Hire Date");
+  scriptProp.setProperty("EVAL_ID","Eval ID");
 }

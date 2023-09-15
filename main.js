@@ -1,4 +1,7 @@
 // Test: https://script.google.com/u/0/home/projects/1sdajPEm4Dv5Gsx5zq0keM4xPEOXTHublMt_bWHKbvUvIPOogEfHfW4u8/edit
+
+const scriptProps = PropertiesService.getScriptProperties();
+
 function mainWrapper(){
   // usually an older version
   Self.main();
@@ -11,8 +14,8 @@ function main(){
   const colMap = MkData.mkColMap(sheetsAPI.get(BACKEND_ID,"'Call Scorecard Form Responses'!1:1").values[0]);
   // get doc properties
   const scriptProps = PropertiesService.getScriptProperties();
-  const lock = LockService.getScriptLock()
-  lock.waitLock(600000); 
+  const lock = LockService.getScriptLock();
+  lock.waitLock(600000);
   // mk data
   let data;
   const offset = parseInt(scriptProps.getProperty("lr")); 
@@ -90,10 +93,10 @@ function main(){
           Custom_Utilities.setUpTrigger(ScriptApp,"initializeCoaching",1);
           
         }catch(f){
-
+          Logger.log(f);
         }
       }; 
-    }
+    };
     scriptProps.setProperty("lr",offset+index+1);
   });
   lock.releaseLock();
