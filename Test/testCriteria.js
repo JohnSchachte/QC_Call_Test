@@ -4,28 +4,12 @@ function getColMapTest(){
     return Custom_Utilities.mkColMap(memoizedReads(BACKEND_ID_TEST,`${SUBMISSION_SHEET_NAME}!1:1`,{majorDimension:"ROWS"}).values[0]);
 }
 
-function testUpdateScoreValues(){
-  const colMap = getColMapTest();
-  const updateValues = new Array(colMap.size);
-  const score = "176 / 201";
-  const updatedScore = updateScoreValues(updateValues, colMap, score);
-  const expectedScore = Math.round((score[0] / score[1])*10000);
-  
-  if(updatedScore !== expectedScore) {
-    Logger.log("score was %s. score was supposed to be %s", updatedScore, expectedScore);
-    throw new Error();
-  };
-}
-
-class TestCriteria{
-    constructor(){
-        this.colMap = getColMapTest();
-        this.ss = SpreadsheetApp.openById(BACKEND_ID_TEST);
-        this.sheet = this.ss.getSheetByName(SUBMISSION_SHEET_NAME.replace(/\'/g,""));
-        this.testRows = Sheets.Spreadsheets.Values.get(BACKEND_ID_TEST,`${SUBMISSION_SHEET_NAME}!A${7589}:BZ`)
-          .values
+class TestCriteria extends Tester {
+    constructor() {
+        super(); // Call the parent class constructor
         this.noCoaching = [];
         this.needCoaching = [];
+        this.testSheet = this.ss.getSheetByName("Criteria_Test");
     }
     runScoreTest(){
         this.testRows.forEach((row,i) => {
@@ -91,10 +75,9 @@ class TestCriteria{
   }
 
     getCoachingSets(columns){
-      const scoreSheet = this.ss.getSheetByName("Score_Test");
       return columns.map(col => {
         return new Set(
-          scoreSheet.getSheetValues(1,col,scoreSheet.getLastRow(),1).map(el => el[0])
+          this.testSheet.getSheetValues(1,col,scoreSheet.getLastRow(),1).map(el => el[0])
         );
       })
     }

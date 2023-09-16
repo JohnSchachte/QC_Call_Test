@@ -19,9 +19,9 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
 
     /**TODO:
      * 1. get column map - done
-     * 2. ensure agent is apart of the coaching process
-     * 4. assign categories based on On Demand Coaching Form
-     * 5. Assign severities based on JIRA TICKET: https://shift4.atlassian.net/browse/PIP-821
+     * 2. ensure agent is apart of the coaching process - done
+     * 4. assign categories based on On Demand Coaching Form - done
+     * 5. Assign severities based on JIRA TICKET: https://shift4.atlassian.net/browse/PIP-821 - done
      * 3. setup coaching row
      * 4. send to coaching sheet endpoint
      * 5. send email to supervisor,manager
@@ -35,6 +35,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
         return false;
     }
     
+    // passed test of 632 rows of data
     const {severity,categories} = determineCoachingNeed(row,colMap,score);
     if(!severity){
         /**TODO
@@ -43,20 +44,20 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
         return false;
     }
 
-    const getHttp = function (team,cache){
-        const getTeams = Custom_Utilities.memoize( () => CoachingRequestScripts.getTeams(REPORTING_ID),cache);
-        const teams = getTeams();
-        for(let i=0;i<teams.length;i++){
-            if(teams[i].values[0].includes(team)){
-            return teams[i].values[0][2]; // replace this with web app url
-            }
-        }
-        throw new Error("Team is not on Operation Coaching Master Sheet");
-    };
-
     const memoizedGetHttp = Custom_Utilities.memoize(getHttp,cache);
-
-    const caseArray = mkCaseArray(row,colMap,agentObj,severity,categories);
+    coachingHeaders = {
+        "Request Id" : 0,
+        "Timestamp" : 1,
+        "Agent's Name" : 2,
+        "Supervisor" : 3,
+        "Email Address" : 4,
+        "Coaching Identifier?" : 5,
+        "Ticket Link" :6,
+        "Severity?":7,
+        "Category?":8,
+        "Describe?":9
+    };
+    const coachingRow = formatAsCoachingRow(row,colMap,agentObj,severity,categories).bind({coachingHeaders});
     
     const requestOptions = {
         method: 'post',
@@ -70,7 +71,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
 
     const name = agentObj["Employee Name"].toLowerCase().trim();
 
-    requestOptions["payload"] = JSON.stringify(caseArray); // prepare for request
+    requestOptions["payload"] = JSON.stringify(coachingRow); // prepare for request
     
     const result = retry(() => sendHttpWIthRetry(endPoint,requestOptions));
     

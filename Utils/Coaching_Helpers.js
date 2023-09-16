@@ -107,33 +107,32 @@ const mkDescribeText = function (evalRow,colMap,score){
     `
 }
 
-const mkCaseArray = function(evalRow,colMap, agentObj,severity,categories){
-    const row = new Array(11);
-    const coachingHeaders = {
-        "Request Id" : 0,
-        "Timestamp" : 1,
-        "Agent's Name" : 2,
-        "Supervisor" : 3,
-        "Email Address" : 4,
-        "Coaching Identifier?" : 5,
-        "Ticket Link" :6,
-        "Severity?":7,
-        "Category?":8,
-        "Describe?":9
+const getHttp = function (team,cache){
+    const getTeams = Custom_Utilities.memoize( () => CoachingRequestScripts.getTeams(REPORTING_ID),cache);
+    const teams = getTeams();
+    for(let i=0;i<teams.length;i++){
+        if(teams[i].values[0].includes(team)){
+        return teams[i].values[0][2]; // replace this with web app url
+        }
     }
+    throw new Error("Team is not on Operation Coaching Master Sheet");
+};
+
+const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categories){
+    const row = new Array(11);
     
-    row[coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];
-    row[coachingHeaders["Agent's Name"]] = agentObj["Employee Name"];
-    row[coachingHeaders["Supervisor"]] = agentObj["SUPERVISOR"];
-    row[coachingHeaders["Email Address"]] = agentObj["Email Address"]; //submitter
-    row[coachingHeaders["Coaching Identifier?"]] = evalRow[colMap.get(TRANSCRIPT_ID_HEADER)];
+    row[this.coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];
+    row[this.coachingHeaders["Agent's Name"]] = agentObj["Employee Name"];
+    row[this.coachingHeaders["Supervisor"]] = agentObj["SUPERVISOR"];
+    row[this.coachingHeaders["Email Address"]] = agentObj["Email Address"]; //submitter
+    row[this.coachingHeaders["Coaching Identifier?"]] = evalRow[colMap.get(TRANSCRIPT_ID_HEADER)];
     const ticketNumber = evalRow[colMap.get(TICKET_HEADER)];
-    row[coachingHeaders["Ticket Link"]] = CoachingRequestScripts.getTicketNumber(
+    row[this.coachingHeaders["Ticket Link"]] = CoachingRequestScripts.getTicketNumber(
         evalRow[colMap.get(TICKET_HEADER)],
         ticketNumber && /\d{7}/.test(ticketNumber)
     );
-    row[coachingHeaders["Severity?"]] = severity; //because they want these processed with 24hrs
-    row[coachingHeaders["Category?"]] = categories;
-    row[coachingHeaders["Describe?"]] = mkDescribeText(evalRow,colMap,score);
+    row[this.coachingHeaders["Severity?"]] = severity; //because they want these processed with 24hrs
+    row[this.coachingHeaders["Category?"]] = categories;
+    row[this.coachingHeaders["Describe?"]] = mkDescribeText(evalRow,colMap,score);
     return row;
 }
