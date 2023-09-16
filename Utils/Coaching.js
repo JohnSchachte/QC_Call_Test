@@ -34,47 +34,14 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
          */
         return false;
     }
-
-    /**
-     * 
-     * @param {*} row 
-     * @param {*} colMap
-     * returns {String[]|boolean} - returns false if no coaching is needed 
-     */
-    const determineCoachingNeed = function (row,colMap){
-        let severity;
-        const categories = [];
-        
-        if(score <= SCORE_THRESHOLD){
-            severity ="Medium";
-            categories.push("Scored Below 75%");
-        }
-        
-        if(row[colMap.get(scriptPropsObj["FILED_TICKET_HEADER"])] === "No"){
-            severity = "High";
-            categories.push("No ticket filed/documented");
-        }
-
-        if(hasThreeTicketStrikes(row,colMap)){
-            severity = "High";
-            categories.push("Ticket Handling");
-        }
-
-        const securiityValue = row[colMap.get(scriptPropsObj["SECURITY_HEADER"])];
-        if(securiityValue.toLowerCase().includes("no")){
-            severity = "High";
-            categories.push("Security Violation");
-        }
-
-        const workAvoidanceValue = row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]?.toLowerCase().trim();
-        if(checkWorkAvoidance(workAvoidanceValue)){
-            severity = "Immediate attention";
-            categories.push("Work Avoidance");
-        };
-        
-        return severity ? {severity,categories: categories.join(",")} : false;
-    };
-    const {severity,categories} = determineCoachingNeed(row,colMap);
+    
+    const {severity,categories} = determineCoachingNeed(row,colMap,score);
+    if(!severity){
+        /**TODO
+         * 1. write to sheet in column "Copied to coaching form? And when" as not added or something.
+         */
+        return false;
+    }
 
     const getHttp = function (team,cache){
         const getTeams = Custom_Utilities.memoize( () => CoachingRequestScripts.getTeams(REPORTING_ID),cache);
@@ -85,26 +52,45 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
             }
         }
         throw new Error("Team is not on Operation Coaching Master Sheet");
-    }
+    };
 
     const memoizedGetHttp = Custom_Utilities.memoize(getHttp,cache);
 
-    const mkCaseArray = function(submitRow,colMap, evalType){
+    const mkCaseArray = function(evalRow,colMap, agentObj,severity,categories){
         const row = new Array(11);
-        row[1] = submitRow[colMap.get("Timestamp")];
-        row[5] = submitRow[colMap.get(evalType === "phone" ? "What is the Id for the Evaluation" : "What is the Chat Id for the Evaluation")];
-        const hasTicketNumber = submitRow[colMap.get("Do you have a Ticket Number?")];
-        row[6] = CoachingRequestScripts.getTicketNumber(
-            submitRow[colMap.get("Ticket Number?")],
-            hasTicketNumber && hasTicketNumber.startsWith("Y")
+        const coachingHeaders = {
+            "Request Id" : 0,
+            "Timestamp" : 1,
+            "Agent's Name" : 2,
+            "Supervisor" : 3,
+            "Email Address" : 4,
+            "Coaching Identifier?" : 5,
+            "Ticket Link" :6,
+            "Severity?":7,
+            "Category?":8,
+            "Describe?":9
+        }
+        
+        
+        
+        
+        row[coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];
+        row[coachingHeaders["Agent's Name"]] = agentObj["Employee Name"];
+        row[coachingHeaders["Supervisor"]] = agentObj["SUPERVISOR"];
+        row[coachingHeaders["Email Address"]] = agentObj["Email Address"]; //submitter
+        row[coachingHeaders["Coaching Identifier?"]] = evalRow[colMap.get(TRANSCRIPT_ID_HEADER)];
+        const ticketNumber = evalRow[colMap.get(TICKET_HEADER)];
+        row[coachingHeaders["Ticket Link"]] = CoachingRequestScripts.getTicketNumber(
+            evalRow[colMap.get(TICKET_HEADER)],
+            ticketNumber && /\d{7}/.test(ticketNumber)
         );
-        row[7] = "High"; //because they want these processed with 24hrs
-        row[8] = `Evaluation Dispute : ${submitRow[colMap.get("What is your reason for disputing?")]}`; // category field
-        row[10] = submitRow[colMap.get("Add any related files you'd like to share")];
+        row[coachingHeaders["Severity?"]] = severity; //because they want these processed with 24hrs
+        row[coachingHeaders["Category?"]] = categories;
+        row[coachingHeaders["Describe?"]] = submitRow[colMap.get("Add any related files you'd like to share")];
         return row;
     }
 
-    const caseArray = this.mkCaseArray(formResponse,colMap,getType(formResponse,colMap));
+    const caseArray = this.mkCaseArray(row,colMap,);
     
     const requestOptions = {
         method: 'post',
@@ -122,9 +108,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
     }
     
     const endPoint = memoizedGetHttp(agentObject["Team"],cache);
-    caseArray[2] = agentObject["Employee Name"];
-    caseArray[3] = agentObject["SUPERVISOR"];
-    caseArray[4] = agentObject["Email Address"]; //submitter
+
     const name = agentObject["Employee Name"].toLowerCase().trim();
     
     // the check has been performed for the evalId.
