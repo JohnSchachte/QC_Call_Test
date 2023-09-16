@@ -20,7 +20,7 @@ class TestCriteria extends Tester {
     }
 
     coachingDetermination(){
-              this.testRows.forEach((row,i) => {
+        this.testRows.forEach((row,i) => {
             // Logger.log(i);
             let updateValues = new Array(this.colMap.size);
             let score = row[this.colMap.get(SCORE_HEADER)];
