@@ -37,8 +37,10 @@ const checkWorkAvoidance = function (workAvoidanceValue){
     return workAvoidanceSubStrings.some(s => workAvoidanceValue.includes(s));
 };
 
-const checkSecuirtyViolation = function (value){
-    return typeof value === "string" && value.toLowerCase().includes("no");
+const checkSecuirtyViolation = function (value) {
+  if (typeof value !== "string") return false;
+  value = value.toLowerCase();
+  return !/^yes|^na/.test(value);
 };
 
 const checkScore = function (score){

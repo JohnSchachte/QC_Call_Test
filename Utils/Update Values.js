@@ -37,10 +37,10 @@ function updateTimestampValues(updateValues, colMap, row){
  * @return {number} The updated score value.
  */
 function updateScoreValues(updateValues, colMap, score){
-  score = score.split(" / ").map(integer => parseInt(integer));
-  score = Math.round((score[0] / score[1])*10000);
-  updateValues[colMap.get(PERC_SCORE_HEADER)] = score/10000;
-  return score;
+  const [numerator, denominator] = score.split(" / ").map(integer => parseInt(integer));
+  const calculatedScore = Math.round((numerator / denominator) * 10000);
+  updateValues[colMap.get(PERC_SCORE_HEADER)] = calculatedScore / 10000;
+  return calculatedScore;
 }
 
 /**

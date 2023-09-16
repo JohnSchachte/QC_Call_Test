@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(7738).toString()); // change number to the last row you want to do.
+  scriptPropss.setProperty("lr",(7738).toString()); // change number to the last row you want to do.
 }
 
 // /**
@@ -16,39 +16,39 @@ function initializeLastRow() {
 // }
 
 function setScriptProperties(){
-  scriptProp.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
-  scriptProp.setProperty("TICKET_HEADER","Ticket#");
-  scriptProp.setProperty("AGENT_NAME","Agents Name");
-  scriptProp.setProperty("EMAIL_SENT","Email Sent");
-  scriptProp.setProperty("SCORE","Score");
-  scriptProp.setProperty("AGENT_LOCATION","Agent Location");
-  scriptProp.setProperty("TEAM","Team");
-  scriptProp.setProperty("HIRE_DATE","Hire Date");
-  scriptProp.setProperty("EVAL_ID","Eval ID");
-  scriptProp.setProperty("CC_EMAIL_HEADER","CC Email");
-  scriptProp.setProperty("HIRE_DATE_HEADER","Hire Date");
-  scriptProp.setProperty("<3_MONTHS_HEADER","<3 Months Hire");
-  scriptProp.setProperty(">3_MONTHS_HEADER",">3 Months Hire");
-  scriptProp.setProperty("TIMESTAMP_HEADER","Timestamp");
-  scriptProp.setProperty("DATE_HEADER","Date");
-  scriptProp.setProperty("MONTH_YEAR_HEADER","Month & Year");
-  scriptProp.setProperty("PERC_SCORE_HEADER","% Score");
-  scriptProp.setProperty("SUBMISSION_SHEET_NAME","'Call Scorecard Form Responses'");
-  scriptProp.setProperty("FILED_TICKET_HEADER","Did the agent file/document a ticket to record this interaction with the caller?");
-  scriptProp.setProperty("BUSINESS_INFO_ACCORDINGLY_HEADER", "Did the agent fill out the business information accordingly?");
-  scriptProp.setProperty("CALLER_NAME_HEADER", "Caller's Name");
-  scriptProp.setProperty("CALLER_POSITION_HEADER", "Caller's Position");
-  scriptProp.setProperty("CALLER_PHONE_HEADER", "Caller's Phone#");
-  scriptProp.setProperty("CALLER_EMAIL_HEADER", "Caller's Email");
-  scriptProp.setProperty("SUBJECT_HEADER", "Subject");
-  scriptProp.setProperty("PROBLEM_DESCRIPTION_HEADER", "Problem Description");
-  scriptProp.setProperty("ACTION_PLAN_HEADER", "Action Plan");
-  scriptProp.setProperty("SOLUTION_HEADER", "Solution");
-  scriptProp.setProperty("DESCRIPTION_HEADER", "Description");
-  scriptProp.setProperty("INTERNAL_NOTES_HEADER", "Internal Notes");
-  scriptProp.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
-  scriptProp.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
-  scriptProp.setProperty("EVALUATOR_HEADER","Evaluators Name");
+  scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
+  scriptProps.setProperty("TICKET_HEADER","Ticket#");
+  scriptProps.setProperty("AGENT_NAME","Agents Name");
+  scriptProps.setProperty("EMAIL_SENT","Email Sent");
+  scriptProps.setProperty("SCORE","Score");
+  scriptProps.setProperty("AGENT_LOCATION","Agent Location");
+  scriptProps.setProperty("TEAM","Team");
+  scriptProps.setProperty("HIRE_DATE","Hire Date");
+  scriptProps.setProperty("EVAL_ID","Eval ID");
+  scriptProps.setProperty("CC_EMAIL_HEADER","CC Email");
+  scriptProps.setProperty("HIRE_DATE_HEADER","Hire Date");
+  scriptProps.setProperty("<3_MONTHS_HEADER","<3 Months Hire");
+  scriptProps.setProperty(">3_MONTHS_HEADER",">3 Months Hire");
+  scriptProps.setProperty("TIMESTAMP_HEADER","Timestamp");
+  scriptProps.setProperty("DATE_HEADER","Date");
+  scriptProps.setProperty("MONTH_YEAR_HEADER","Month & Year");
+  scriptProps.setProperty("PERC_SCORE_HEADER","% Score");
+  scriptProps.setProperty("SUBMISSION_SHEET_NAME","'Call Scorecard Form Responses'");
+  scriptProps.setProperty("FILED_TICKET_HEADER","Did the agent file/document a ticket to record this interaction with the caller?");
+  scriptProps.setProperty("BUSINESS_INFO_ACCORDINGLY_HEADER", "Did the agent fill out the business information accordingly?");
+  scriptProps.setProperty("CALLER_NAME_HEADER", "Caller's Name");
+  scriptProps.setProperty("CALLER_POSITION_HEADER", "Caller's Position");
+  scriptProps.setProperty("CALLER_PHONE_HEADER", "Caller's Phone#");
+  scriptProps.setProperty("CALLER_EMAIL_HEADER", "Caller's Email");
+  scriptProps.setProperty("SUBJECT_HEADER", "Subject");
+  scriptProps.setProperty("PROBLEM_DESCRIPTION_HEADER", "Problem Description");
+  scriptProps.setProperty("ACTION_PLAN_HEADER", "Action Plan");
+  scriptProps.setProperty("SOLUTION_HEADER", "Solution");
+  scriptProps.setProperty("DESCRIPTION_HEADER", "Description");
+  scriptProps.setProperty("INTERNAL_NOTES_HEADER", "Internal Notes");
+  scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
+  scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
+  scriptProps.setProperty("EVALUATOR_HEADER","Evaluators Name");
   scriptProps.setProperty("SCORE_HEADER","% Score");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
 }
