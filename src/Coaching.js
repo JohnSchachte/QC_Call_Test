@@ -15,7 +15,7 @@ function initializeAlertAndCoachingOnLowScore(e){
     alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex);
 
 }
-function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
+function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
 
     /**TODO:
      * 1. get column map - done
@@ -69,8 +69,6 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
     
     const endPoint = memoizedGetHttp(agentObj["Team"],cache);
 
-    const name = agentObj["Employee Name"].toLowerCase().trim();
-
     requestOptions["payload"] = JSON.stringify(coachingRow); // prepare for request
     
     const response = retry(() => sendHttpWIthRetry(endPoint,requestOptions));
@@ -82,7 +80,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
     }
 
     // sendManagement Email
-    sendManagementCoachingEmail();
+    sendManagementCoachingEmail(coachingRow,agentObj);
 
 
     return result; // return denied or stopped
@@ -94,11 +92,9 @@ function sendHttpWIthRetry(endPoint,requestOptions){
 }
 
 function sendManagementCoachingEmail(coachingRow,agentObject){
-
         if(!agentObject){
             return;
         }
-
         const name = agentObject["Employee Name"].toLowerCase().trim();
         // the check has been performed for the evalId.
         const idObject = getIdObject(formResponse,colMap,evalType,name);
