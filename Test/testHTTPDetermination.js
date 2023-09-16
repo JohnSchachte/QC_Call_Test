@@ -1,4 +1,4 @@
-class TestCoachingRow extends Tester{
+class TestEndPointsDetermination extends Tester{
     constructor() {
         super(); // Call the parent class constructor
         this.noCoaching = [];
@@ -18,7 +18,7 @@ class TestCoachingRow extends Tester{
         this.testSheet = this.ss.getSheetByName("EndPoint_Test");
     }
 
-    runCoachingFormatTest() {
+    runEndPointTest() {
         this.filterForCoachings();
         // const formattedRows = this.formatCoachingRows();
         const https = this.determineHttp();
@@ -33,11 +33,17 @@ class TestCoachingRow extends Tester{
         
         https.forEach(el => {
             coachingSets.forEach((set, index) => {
-                if (set.has(el.rowIndex) === (el.http === httpsMap[setNames[index]])) {
+                const rowIndexNumber = parseFloat(el.rowIndex.replace(/,/g, ''));
+                if (set.has(rowIndexNumber) === (el.http === httpsMap[setNames[index]])) {
+                    Logger.log("rowIndex: %s, passed %s test", el.rowIndex, setNames[index]);
+                } else {
+                    Logger.log("http = %s",el.http)
+                    Logger.log("rowIndex : %s",el.rowIndex);
+                    Logger.log("set has : %s",[...set])
+                    Logger.log("set has the row = %s",set.has(el.rowIndex));
+                    Logger.log("row's http is the same as the http of the team = %s",(el.http === httpsMap[setNames[index]]))
                     Logger.log("%s Test Failed: %s", setNames[index], el);
                     throw new Error("test failed");
-                } else {
-                    Logger.log("rowIndex: %s, passed %s test", el.rowIndex, setNames[index]);
                 }
             });
         });
@@ -45,10 +51,11 @@ class TestCoachingRow extends Tester{
     }
     
     determineHttp(){
-
+        const cache = CacheService.getScriptCache();
         const memoizedGetHttp = Custom_Utilities.memoize(getHttp,cache);
-        return this.needCoaching.map(el => {
-            return {http: memoizedGetHttp(el.agentObj["Team"],cache),el};
+        return this.needCoaching.map((el,i) => {
+          // Logger.log("on index: %s for http. agentObj: %s",i,el.agentObj)
+            return {http: memoizedGetHttp(el.agentObj["Team"],cache),rowIndex: el.rowIndex};
         });
     }
 
@@ -69,7 +76,7 @@ class TestCoachingRow extends Tester{
                   Logger.log("%s produced a null agentObj. Please research.",row[this.colMap.get(AGENT_NAME_HEADER)]); // there were 4 and these employees were found on former employee sheet
                   return;
                 }
-                this.needCoaching.push({agentObj,row});
+                this.needCoaching.push({agentObj,rowIndex:row[this.colMap.get("Row")]});
             }
         });
         Logger.log("Need Coaching: %s",this.needCoaching);
@@ -82,6 +89,6 @@ class TestCoachingRow extends Tester{
     }
 }
 
-function testFormatRow(){
-  new TestCoachingRow().runCoachingFormatTest();
+function testEndPoints(){
+  new TestEndPointsDetermination().runEndPointTest();
 }

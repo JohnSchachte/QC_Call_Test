@@ -107,12 +107,15 @@ const mkDescribeText = function (evalRow,colMap,score){
     `
 }
 
-const getHttp = function (team,cache){
-    const getTeams = Custom_Utilities.memoize( () => CoachingRequestScripts.getTeams(REPORTING_ID),cache);
+const getHttp = function (team, cache) {
+    const getTeams = Custom_Utilities.memoize(() => CoachingRequestScripts.getTeams(REPORTING_ID), cache);
     const teams = getTeams();
-    for(let i=0;i<teams.length;i++){
-        if(teams[i].values[0].includes(team)){
-        return teams[i].values[0][2]; // replace this with web app url
+    if(typeof team !== "string") throw new Error("Team entered was not a string in getHttp function");
+    team = team.toLowerCase(); // Convert the input team to lowercase
+
+    for (let i = 0; i < teams.length; i++) {
+        if (teams[i].values[0].map(value => typeof value === "string" ? value.toLowerCase(): value).includes(team)) { // Convert each value to lowercase before checking
+            return teams[i].values[0][2]; // replace this with web app url
         }
     }
     throw new Error("Team is not on Operation Coaching Master Sheet");
