@@ -56,41 +56,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
 
     const memoizedGetHttp = Custom_Utilities.memoize(getHttp,cache);
 
-    const mkCaseArray = function(evalRow,colMap, agentObj,severity,categories){
-        const row = new Array(11);
-        const coachingHeaders = {
-            "Request Id" : 0,
-            "Timestamp" : 1,
-            "Agent's Name" : 2,
-            "Supervisor" : 3,
-            "Email Address" : 4,
-            "Coaching Identifier?" : 5,
-            "Ticket Link" :6,
-            "Severity?":7,
-            "Category?":8,
-            "Describe?":9
-        }
-        
-        
-        
-        
-        row[coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];
-        row[coachingHeaders["Agent's Name"]] = agentObj["Employee Name"];
-        row[coachingHeaders["Supervisor"]] = agentObj["SUPERVISOR"];
-        row[coachingHeaders["Email Address"]] = agentObj["Email Address"]; //submitter
-        row[coachingHeaders["Coaching Identifier?"]] = evalRow[colMap.get(TRANSCRIPT_ID_HEADER)];
-        const ticketNumber = evalRow[colMap.get(TICKET_HEADER)];
-        row[coachingHeaders["Ticket Link"]] = CoachingRequestScripts.getTicketNumber(
-            evalRow[colMap.get(TICKET_HEADER)],
-            ticketNumber && /\d{7}/.test(ticketNumber)
-        );
-        row[coachingHeaders["Severity?"]] = severity; //because they want these processed with 24hrs
-        row[coachingHeaders["Category?"]] = categories;
-        row[coachingHeaders["Describe?"]] = submitRow[colMap.get("Add any related files you'd like to share")];
-        return row;
-    }
-
-    const caseArray = this.mkCaseArray(row,colMap,);
+    const caseArray = mkCaseArray(row,colMap,agentObj,severity,categories);
     
     const requestOptions = {
         method: 'post',
@@ -100,33 +66,18 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
         }
     };
     
-    //check has been performed for the valid wfm agent;
-    // all the things we can do with agentObject
-    const agentObject = EmailToWFM.getAgentObj(formResponse[colMap.get("Email Address")]);
-    if(!agentObject){
-        return;
-    }
-    
-    const endPoint = memoizedGetHttp(agentObject["Team"],cache);
+    const endPoint = memoizedGetHttp(agentObj["Team"],cache);
 
-    const name = agentObject["Employee Name"].toLowerCase().trim();
-    
-    // the check has been performed for the evalId.
-    const evalType = getType(formResponse,colMap);
-    const idObject = getIdObject(formResponse,colMap,evalType,name);
-    if(!idObject){
-        return;
-    }
+    const name = agentObj["Employee Name"].toLowerCase().trim();
 
-    caseArray[9] = this.formatAdditionalComments(formResponse,colMap,idObject[0],idObject[1]); //caseArray is fully complete
     requestOptions["payload"] = JSON.stringify(caseArray); // prepare for request
-    const result = this.wait(this.checkCondition.bind(this));
     
-    // Logger.log("resultState = %s in %s",result,this.getName());
-    if(result === "approved"){
-        //appending to backend
-        const response = CoachingRequestScripts.fetchWithOAuth(endPoint,requestOptions); //parsed json.
-        return response["id"]; // approved
-    }
+    const result = retry(() => sendHttpWIthRetry(endPoint,requestOptions));
+    
     return result; // return denied or stopped
+}
+
+function sendHttpWIthRetry(endPoint,requestOptions){
+    const response = UrlFetchApp.fetch(endPoint,requestOptions);
+    return JSON.parse(response.getContentText());
 }

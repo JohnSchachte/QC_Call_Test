@@ -25,7 +25,7 @@ class DoEmails{
     let emailOptions = {};
 
     // format transcript ids
-    let transcriptIds = this.transformTranscriptIds(row[colMap.get(TRANSCRIPT_ID_HEADER)]);
+    let transcriptIds = transformTranscriptIds(row[colMap.get(TRANSCRIPT_ID_HEADER)]);
     if(!transcriptIds){
       updateValues[colMap.get(EMAIL_SENT_HEADER)] = "No Transcript Id";
       return;
@@ -72,18 +72,6 @@ class DoEmails{
       }
     });
     return emailArray;
-  }
-  
-  /**
-   * logic for transforming transcriptIds.
-   * @param {String[]} transcriptIds - an array of transcript ids to transform or null.
-   * @return {Array} - An array of transformed transcript ids.
-   */
-  transformTranscriptIds(transcriptIds){
-    if(!transcriptIds){
-      return false;
-    }
-    return transcriptIds.split(/\s*\,\s*/g).map(id =>({href:"https://na1.nice-incontact.com/player/#/cxone-player/segments/" + id, id}));
   }
 
   /**

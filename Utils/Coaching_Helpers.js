@@ -76,7 +76,7 @@ const determineCoachingNeed = function (row, colMap,score) {
         },
         {
             check: () => {
-                return checkWorkAvoidance(row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]?.toLowerCase().trim(););
+                return checkWorkAvoidance(row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]);
             },
             severity: "Immediate attention",
             category: "Work Avoidance"
@@ -92,3 +92,44 @@ const determineCoachingNeed = function (row, colMap,score) {
 
     return severity ? { severity, categories: categories.join(",") } : false;
 };
+
+const mkDescribeText = function (evalRow,colMap,score){
+    return `Evaluator: ${evalRow[colMap.get(EVALUATOR_HEADER)]}
+    Transcript URL: ${transformTranscriptIds(evalRow[colMap.get(TRANSCRIPT_ID_HEADER)]).join(",")}
+    Score: ${score}
+    Ticket#: ${evalRow[colMap.get(TICKET_HEADER)]}
+    Agent's Name: ${evalRow[colMap.get(AGENT_NAME_HEADER)]}
+    MID & DBA Name: ${evalRow[colMap.get(MID_DBA_HEADER)]},
+    `
+}
+
+const mkCaseArray = function(evalRow,colMap, agentObj,severity,categories){
+    const row = new Array(11);
+    const coachingHeaders = {
+        "Request Id" : 0,
+        "Timestamp" : 1,
+        "Agent's Name" : 2,
+        "Supervisor" : 3,
+        "Email Address" : 4,
+        "Coaching Identifier?" : 5,
+        "Ticket Link" :6,
+        "Severity?":7,
+        "Category?":8,
+        "Describe?":9
+    }
+    
+    row[coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];
+    row[coachingHeaders["Agent's Name"]] = agentObj["Employee Name"];
+    row[coachingHeaders["Supervisor"]] = agentObj["SUPERVISOR"];
+    row[coachingHeaders["Email Address"]] = agentObj["Email Address"]; //submitter
+    row[coachingHeaders["Coaching Identifier?"]] = evalRow[colMap.get(TRANSCRIPT_ID_HEADER)];
+    const ticketNumber = evalRow[colMap.get(TICKET_HEADER)];
+    row[coachingHeaders["Ticket Link"]] = CoachingRequestScripts.getTicketNumber(
+        evalRow[colMap.get(TICKET_HEADER)],
+        ticketNumber && /\d{7}/.test(ticketNumber)
+    );
+    row[coachingHeaders["Severity?"]] = severity; //because they want these processed with 24hrs
+    row[coachingHeaders["Category?"]] = categories;
+    row[coachingHeaders["Describe?"]] = mkDescribeText(evalRow,colMap,score);
+    return row;
+}
