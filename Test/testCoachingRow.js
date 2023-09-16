@@ -18,14 +18,34 @@ class TestCoachingRow extends Tester{
     }
 
     runCoachingFormatTest() {
-        this.determineCoachingNeeded();
+        this.filterForCoachings();
         const formattedRows = this.formatCoachingRows();
         
         formattedRows.forEach((row, index) => {
-            if (row.slice(1).some(el => !el) || (typeof row[coachingHeaders["Describe?"]] === 'string' && row[coachingHeaders["Describe?"]].includes('undefined'))) {
+            const slicedRow = row.slice(1);            
+            if (slicedRow.some(el => !el) || (/undefined|null/.test(row[this.coachingHeaders["Describe?"]]))) {
                 Logger.log(`Failed to format row at index: ${index + 1}`); // +1 because arrays are 0-indexed
+                Logger.log("%s is: ",index);
+                // const coachingHeaders = Object.keys(this.coachingHeaders);
+                // row.forEach((el,index)=> Logger.log(`${coachingHeaders[index]} is ${el}`));
+                Logger.log("Value after 'Describe?': %s", row[this.coachingHeaders["Describe?"]]);
+                const describeValue = row[this.coachingHeaders["Describe?"] - 1];
+                if (/undefined/.test(describeValue)) {
+                    Logger.log("Failure due to 'undefined' in 'Describe?' field.");
+                }
+                
+                if (/null/.test(describeValue)) {
+                    Logger.log("Failure due to 'null' in 'Describe?' field.");
+                }
+                  slicedRow.forEach((el, index) => {
+                      if (!el) {
+                          Logger.log(`Failure at index ${index + 1} due to value: ${el}`);
+                      }
+                  });
                 throw new Error(`Failed to format row at index: ${index + 1}`);
+
             }
+            Logger.log("%s is %s.",index,row)
         });
     }
 
@@ -42,16 +62,23 @@ class TestCoachingRow extends Tester{
             let {severity,categories} = determineCoachingNeed(row,this.colMap,score);
             if(severity){
                 const agentObj = NameToWFM.getAgentObj(row[this.colMap.get(AGENT_NAME_HEADER)]);
-                this.needCoaching.push({row,agentObj,severity,categories});
+                if(!agentObj){
+                  Logger.log("%s produced a null agentObj. Please research.",row[this.colMap.get(AGENT_NAME_HEADER)]); // there were 4 and these employees were found on former employee sheet
+                  return;
+                }
+                this.needCoaching.push({row,agentObj,severity,categories,score});
             }
         });
         Logger.log("Need Coaching: %s",this.needCoaching);
     }
     formatCoachingRows() {
-        const formatAsCoachingRow = this.formatCoachingRows.bind(this)
+        const formatAsCoachingRowBinded = formatAsCoachingRow.bind(this)
         return this.needCoaching.map(el => {
-            return formatAsCoachingRow(el.row,this.colMap,el.agentObj,el.severity,el.categories);
+            return formatAsCoachingRowBinded(el.row,this.colMap,el.agentObj,el.severity,el.categories,el.score);
         });
     }
+}
 
+function testFormatRow(){
+  new TestCoachingRow().runCoachingFormatTest();
 }

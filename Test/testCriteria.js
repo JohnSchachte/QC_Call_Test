@@ -12,7 +12,15 @@ class TestCriteria extends Tester {
         this.testSheet = this.ss.getSheetByName("Criteria_Test");
     }
     runScoreTest(){
-        this.testRows.forEach((row,i) => {
+        this.coachingDetermination();
+        Logger.log("Need Coaching: %s",this.needCoaching);
+        Logger.log("No Coaching: %s",this.noCoaching);
+        this.checkNoCoaching(); // passed
+        this.checkNeedsCoaching(); // passed
+    }
+
+    coachingDetermination(){
+              this.testRows.forEach((row,i) => {
             // Logger.log(i);
             let updateValues = new Array(this.colMap.size);
             let score = row[this.colMap.get(SCORE_HEADER)];
@@ -28,10 +36,6 @@ class TestCriteria extends Tester {
                 this.noCoaching.push({rowIndex:i+7589,severity,categories});
             }
         });
-        Logger.log("Need Coaching: %s",this.needCoaching);
-        Logger.log("No Coaching: %s",this.noCoaching);
-        this.checkNoCoaching(); // passed
-        this.checkNeedsCoaching();
     }
 
     checkNoCoaching() {
@@ -74,15 +78,21 @@ class TestCriteria extends Tester {
       });
   }
 
-    getCoachingSets(columns){
-      return columns.map(col => {
-        return new Set(
-          this.testSheet.getSheetValues(1,col,scoreSheet.getLastRow(),1).map(el => el[0])
-        );
-      })
-    }
+  checkNeedsCoachingLength(){
+    this.coachingDetermination();
+    const coachingSets = this.getCoachingSets([1,2,3,4])
+    const combinedSet = new Set([...coachingSets[0], ...coachingSets[1], ...coachingSets[2], ...coachingSets[3]]);
+    const needCoachingIndices = this.needCoaching.map(el => el.rowIndex);
+    const inNeedCoachingNotInSets = this.needCoaching.filter(el => !combinedSet.has(el.rowIndex));
+    const inSetsNotInNeedCoaching = [...combinedSet].filter(index => !needCoachingIndices.includes(index));
+
+    Logger.log("In needCoaching but not in sets: %s. Length = %s", inNeedCoachingNotInSets,inNeedCoachingNotInSets.length);
+    Logger.log("In sets but not in needCoaching: %s. Length = %s", inSetsNotInNeedCoaching, inSetsNotInNeedCoaching.length);
+
+  }
 }
 
 function testScore(){
-    new TestCriteria().runScoreTest();
+    // new TestCriteria().runScoreTest();
+    new TestCriteria().checkNeedsCoachingLength();
 }

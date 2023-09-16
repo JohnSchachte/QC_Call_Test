@@ -99,7 +99,7 @@ const determineCoachingNeed = function (row, colMap,score) {
 
 const mkDescribeText = function (evalRow,colMap,score){
     return `Evaluator: ${evalRow[colMap.get(EVALUATOR_HEADER)]}
-    Transcript URL: ${transformTranscriptIds(evalRow[colMap.get(TRANSCRIPT_ID_HEADER)]).join(",")}
+    Transcript URL: ${transformTranscriptIds(evalRow[colMap.get(TRANSCRIPT_ID_HEADER)]).map(el => el.href).join(",\n")}
     Score: ${score}
     Ticket#: ${evalRow[colMap.get(TICKET_HEADER)]}
     Agent's Name: ${evalRow[colMap.get(AGENT_NAME_HEADER)]}
@@ -118,7 +118,7 @@ const getHttp = function (team,cache){
     throw new Error("Team is not on Operation Coaching Master Sheet");
 };
 
-const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categories){
+const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categories,score){
     const row = new Array(11);
     
     row[this.coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];

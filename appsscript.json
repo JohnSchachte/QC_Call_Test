@@ -12,15 +12,9 @@
     ],
     "libraries": [
       {
-        "userSymbol": "MkData",
-        "libraryId": "1Xj6lEdytx4FngSeLKAK81q3e4gF-2xHIaCWpT0MTDomt1ZiJgXB_dcCt",
-        "version": "3"
-      },
-      {
         "userSymbol": "NameToWFM",
         "libraryId": "1KQIjcEZOvJX_7TCzcYTlxbkqkqR4ZZ34VtGZXNeDrff-Q1c3ngBm-uTq",
-        "version": "2",
-        "developmentMode": false
+        "version": "2"
       },
       {
         "userSymbol": "Custom_Utilities",
