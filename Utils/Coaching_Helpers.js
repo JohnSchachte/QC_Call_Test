@@ -25,6 +25,8 @@ const hasThreeTicketStrikes = function (row,colMap){
 };
 
 const checkWorkAvoidance = function (workAvoidanceValue){
+    if(typeof workAvoidanceValue !== "string") return false;
+    
     const workAvoidanceSubStrings = [
         "answered call on mute",
         "failed to disconnect",
@@ -32,7 +34,7 @@ const checkWorkAvoidance = function (workAvoidanceValue){
         "call disconnected",
         "more than 1 of the above"
     ];
-    if(typeof workAvoidanceValue !== "string") return false;
+
     workAvoidanceValue = workAvoidanceValue.toLowerCase().trim();
     return workAvoidanceSubStrings.some(s => workAvoidanceValue.includes(s));
 };
@@ -40,7 +42,7 @@ const checkWorkAvoidance = function (workAvoidanceValue){
 const checkSecuirtyViolation = function (value) {
   if (typeof value !== "string") return false;
   value = value.toLowerCase();
-  return !/^yes|^na/.test(value);
+  return !(/^yes|^na/.test(value));
 };
 
 const checkScore = function (score){

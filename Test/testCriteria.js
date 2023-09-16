@@ -24,9 +24,10 @@ class TestCriteria{
         this.sheet = this.ss.getSheetByName(SUBMISSION_SHEET_NAME.replace(/\'/g,""));
         this.testRows = Sheets.Spreadsheets.Values.get(BACKEND_ID_TEST,`${SUBMISSION_SHEET_NAME}!A${7589}:BZ`)
           .values
+        this.noCoaching = [];
+        this.needCoaching = [];
     }
     runScoreTest(){
-        const needCoaching = [], noCoaching = [];
         this.testRows.forEach((row,i) => {
             // Logger.log(i);
             let updateValues = new Array(this.colMap.size);
@@ -38,26 +39,64 @@ class TestCriteria{
             if(!score) return;
             let {severity,categories} = determineCoachingNeed(row,this.colMap,score);
             if(severity){
-                needCoaching.push({rowIndex:i+7589,severity,categories});
+                this.needCoaching.push({rowIndex:i+7589,severity,categories});
             }else{
-                noCoaching.push({rowIndex:i+7589,severity,categories});
+                this.noCoaching.push({rowIndex:i+7589,severity,categories});
             }
         });
-        Logger.log("Need Coaching: %s",needCoaching);
-        Logger.log("No Coaching: %s",noCoaching);
+        Logger.log("Need Coaching: %s",this.needCoaching);
+        Logger.log("No Coaching: %s",this.noCoaching);
+        this.checkNoCoaching(); // passed
+        this.checkNeedsCoaching();
+    }
 
-        const scoreSheet = this.ss.getSheetByName("Score_Test");
-        const scoreNeedCoaching = new Set(
-          scoreSheet.getSheetValues(1,1,scoreSheet.getLastRow(),scoreSheet.getLastColumn())[0]
+    checkNoCoaching() {
+        const coachingSets = this.getCoachingSets([1, 2, 3, 4]);
+        const setNames = ["Score Need", "No Ticket Filed", "Work Avoidance", "Security Violation"];
+        
+        this.noCoaching.forEach(el => {
+            coachingSets.forEach((set, index) => {
+                if (set.has(el.rowIndex)) {
+                    Logger.log("%s Test Failed: %s", setNames[index], el.rowIndex);
+                    throw new Error("test failed");
+                } else {
+                    Logger.log("rowIndex: %s, passed %s test", el.rowIndex, setNames[index]);
+                }
+            });
+        });
+    }
+
+  checkNeedsCoaching() {
+      const coachingSets = this.getCoachingSets([1, 2, 3, 4]);
+      const categories = [
+          "Scored Below 75%",
+          "No ticket filed/documented",
+          "Work Avoidance",
+          "Security Violation"
+      ];
+
+      this.needCoaching.forEach(el => {
+          coachingSets.forEach((set, index) => {
+              const category = categories[index];
+              if (set.has(el.rowIndex) !== el.categories.includes(category)) {
+                  Logger.log("Set has rowIndex: %s", set.has(el.rowIndex));
+                  Logger.log("Categories includes %s: %s", category, el.categories.includes(category));
+                  Logger.log("%s Test Failed: %s", category, el);
+                  throw new Error("test failed");
+              } else {
+                  Logger.log("rowIndex: %s, passed %s test", el.rowIndex, category);
+              }
+          });
+      });
+  }
+
+    getCoachingSets(columns){
+      const scoreSheet = this.ss.getSheetByName("Score_Test");
+      return columns.map(col => {
+        return new Set(
+          scoreSheet.getSheetValues(1,col,scoreSheet.getLastRow(),1).map(el => el[0])
         );
-        noCoaching.forEach(el => {
-          if(scoreNeedCoaching.has(el.rowIndex)){
-            Logger.log("Score Test Failed: %s",el.rowIndex);
-            throw new Error("test failed");
-          }else{
-            Logger.log("rowIndex: %s, passed test",el.rowIndex);
-          }
-        });  
+      })
     }
 }
 
