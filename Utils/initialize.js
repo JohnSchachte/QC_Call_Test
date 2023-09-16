@@ -47,4 +47,5 @@ function setScriptProperties(){
   scriptProp.setProperty("DESCRIPTION_HEADER", "Description");
   scriptProp.setProperty("INTERNAL_NOTES_HEADER", "Internal Notes");
   scriptProp.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
+  scriptProp.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
 }

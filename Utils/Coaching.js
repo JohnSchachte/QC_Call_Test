@@ -25,10 +25,10 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
      * 3. setup coaching row
      * 4. send to coaching sheet endpoint
      * 5. send email to supervisor,manager
-     * 6. write back to the sheet
+     * 6. write back to the sheet in "Copied to coaching form? And when"
      */
     const colMap = getColMap();
-    if(!OperationCoachingMembers.isInEmailSet(email.toLowerCase())){
+    if(!OperationCoachingMembers.isInEmailSet(agentObj["Email Address"].toLowerCase())){
         /** TODO
          * 1. write to sheet in column "Copied to coaching form? And when"
          */
@@ -41,44 +41,21 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
      * @param {*} colMap
      * returns {String[]|boolean} - returns false if no coaching is needed 
      */
-    const doesNeedCoaching = function (row,colMap){
+    const determineCoachingNeed = function (row,colMap){
         let severity;
         const categories = [];
+        
         if(score <= SCORE_THRESHOLD){
             severity ="Medium";
             categories.push("Scored Below 75%");
         }
+        
         if(row[colMap.get(scriptPropsObj["FILED_TICKET_HEADER"])] === "No"){
             severity = "High";
             categories.push("No ticket filed/documented");
         }
-        const doesTicketHave3Strikes = function (row,colMap){
-            let count =0;
-            const TICKET_HEADERS = [
-                "BUSINESS_INFO_ACCORDINGLY_HEADER",
-                "CALLER_NAME_HEADER",
-                "CALLER_POSITION_HEADER",
-                "CALLER_PHONE_HEADER",
-                "CALLER_EMAIL_HEADER",
-                "SUBJECT_HEADER",
-                "PROBLEM_DESCRIPTION_HEADER",
-                "ACTION_PLAN_HEADER",
-                "SOLUTION_HEADER",
-                "DESCRIPTION_HEADER",
-                "INTERNAL_NOTES_HEADER"
-            ];
 
-            TICKET_HEADERS.forEach(h => {
-                const value = row[colMap.get(scriptPropsObj[h])];
-                if(value && value.toLowerCase().includes("no")){
-                    count++;
-                }
-            });
-
-            return count >= 3;
-        };
-
-        if(doesTicketHave3Strikes(row,colMap)){
+        if(hasThreeTicketStrikes(row,colMap)){
             severity = "High";
             categories.push("Ticket Handling");
         }
@@ -88,9 +65,17 @@ function alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex){
             severity = "High";
             categories.push("Security Violation");
         }
-        // TODO: CHECK WORK AVOIDANCE
+
+        const workAvoidanceValue = row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]?.toLowerCase().trim();
+        if(checkWorkAvoidance(workAvoidanceValue)){
+            severity = "Immediate attention";
+            categories.push("Work Avoidance");
+        };
+        
+        return severity ? {severity,categories: categories.join(",")} : false;
     };
-    
+    const {severity,categories} = determineCoachingNeed(row,colMap);
+
     const getHttp = function (team,cache){
         const getTeams = Custom_Utilities.memoize( () => CoachingRequestScripts.getTeams(REPORTING_ID),cache);
         const teams = getTeams();
