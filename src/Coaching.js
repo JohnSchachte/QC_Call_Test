@@ -96,6 +96,8 @@ function sendManagementCoachingEmail(coachingRow,agentObject){
         if(!agentObject){
             return;
         }
+        const cache = CacheService.getScriptCache();
+        const getTeams = Custom_Utilities.memoize(() => CoachingRequestScripts.getTeams(REPORTING_ID), cache);
         // const coachingHeaders = {
         //     "Request Id" : 0,
         //     "Timestamp" : 1,
@@ -111,6 +113,7 @@ function sendManagementCoachingEmail(coachingRow,agentObject){
         // for template vars
         const vars = {
             agentName : agentObject["Employee Name"],
+            coachingId : CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject),
             transcriptIds :  transformTranscriptIds(coachingRow[this.coachingHeaders["Coaching Identifier?"]]),
             ticket : coachingRow[this.coachingHeaders["Ticket Link"]] == "No Ticket" ?
             [coachingRow[this.coachingHeaders["Ticket Link"]]] :

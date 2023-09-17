@@ -11,5 +11,14 @@ function testUpdateScoreValues(){
     };
 }
 
+function getSupSheet(){
+  const cache = CacheService.getScriptCache();
+  const agentObj = NameToWFM.getAgentObj("Schachte, John");
+  const getTeams = Custom_Utilities.memoize(() => CoachingRequestScripts.getTeams(REPORTING_ID), cache);
+  const supSheetUrl = CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObj);
+  if(supSheetUrl === "https://docs.google.com/spreadsheets/d/1ZG2DqMHKIgkQaUGpYgZwr-84AaQW5gocsQIv9rGagu0/edit#gid=1616052674") return true;
+  throw new Error();
+}
+
 
 

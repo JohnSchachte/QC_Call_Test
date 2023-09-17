@@ -23,3 +23,8 @@ class TestManagementEmails extends TestCoachingRow{
 function testSendManagementEmail(){
   new TestManagementEmails().runTestManagementEmail();
 }
+
+function checkEmailQuota() {
+  var remainingQuota = MailApp.getRemainingDailyQuota();
+  Logger.log('Remaining email quota: ' + remainingQuota);
+}
