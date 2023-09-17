@@ -80,7 +80,8 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
     }
 
     // sendManagement Email
-    sendManagementCoachingEmail(coachingRow,agentObj);
+    const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind({coachingHeaders})
+    sendManagementCoachingEmailBound(coachingRow,agentObj);
 
 
     return result; // return denied or stopped
@@ -93,12 +94,6 @@ function sendHttpWIthRetry(endPoint,requestOptions){
 
 function sendManagementCoachingEmail(coachingRow,agentObject){
         if(!agentObject){
-            return;
-        }
-        const name = agentObject["Employee Name"].toLowerCase().trim();
-        // the check has been performed for the evalId.
-        const idObject = getIdObject(formResponse,colMap,evalType,name);
-        if(!idObject){
             return;
         }
         // const coachingHeaders = {
@@ -116,19 +111,19 @@ function sendManagementCoachingEmail(coachingRow,agentObject){
         // for template vars
         const vars = {
             agentName : agentObject["Employee Name"],
-            id :  transformTranscriptIds(coachingRow[this.coachingHeaders["Coaching Identifier?"]]),
+            transcriptIds :  transformTranscriptIds(coachingRow[this.coachingHeaders["Coaching Identifier?"]]),
             ticket : coachingRow[this.coachingHeaders["Ticket Link"]] == "No Ticket" ?
             [coachingRow[this.coachingHeaders["Ticket Link"]]] :
             coachingRow[this.coachingHeaders["Ticket Link"]].match(/\d{7}/g).map(el => {return {"id" : el, "url" : "https://tickets.shift4.com/#/tickets/"+el}}),
-            severity : coachingRow[this.coachingHeaders["Ticket Link"]],
+            severity : coachingRow[this.coachingHeaders["Severity?"]],
             reason : coachingRow[this.coachingHeaders["Category?"]],
             description : coachingRow[this.coachingHeaders["Describe?"]],
-            agentEmail : formResponse[agentObject["Email Address"]]
+            agentEmail : agentObject["Email Address"]
         };
         
-        const template = HtmlService.createTemplateFromFile("html/agent_coaching");
+        const template = HtmlService.createTemplateFromFile("HTML/agent_coaching");
         template.vars = vars;
 
         // sendEmail("jschachte@shift4.com","Agent Evaluation Dispute: " + agentObject["Employee Name"],template);
-        sendEmail(CoachingRequestScripts.getEmails(agentObject),"Agent Evaluation Dispute: " + agentObject["Employee Name"],template);
+        sendEmail(CoachingRequestScripts.getEmails(agentObject),"Evaluation Coaching: " + agentObject["Employee Name"],template);
 }

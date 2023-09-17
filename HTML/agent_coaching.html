@@ -26,67 +26,78 @@
       padding: 0;
     }
     p {
-      padding: 15px;
+      padding: 0px;
     }
   </style>
 </head>
 <body>
   <table class="bordered-table" width="600" cellspacing="0" cellpadding="0" align="center">
     <tr>
+      <td>
+        <img src="https://www.shift4.com/images/email/SHIFT4-Email-Header-Bar.png" alt="Shift4 Payments" width="100%" style="display:block;" />
+      </td>
+    </tr>
+    <tr>
         <td style="-webkit-text-size-adjust: none; padding:10px 40px 0px 40px; font-family:Arial, Helvetica, sans-serif; font-size:13px; vertical-align:bottom;" valign="bottom">
-            <font color="#136ef6" style="font-size:21px;">
-            <center><strong>Agent Evaluation Dispute</strong></center>
-            </font>
-            <br/>
-            <font color="red"><strong><?= vars["agentName"] ?></strong></font> is receiving a Coaching:
-                <!-- This section of text is broken up to fit inside the table cell and line up with the box on the right.  -->
-                <ul color="black">
-                    <li>Call Transcripts:</li>
-                    <ul>
-                    <?
-                    // Server-side logic
-                    transcriptIds.forEach(function({href,id}) {
-                      if (typeof id === "string") {
-                        ?>
-                        <li> <a href="<?=href?>"><?= id ?></a></li>
-                        <?
-                      } else {
-                        ?>
-                        <li><?= id ?></li>
-                        <?
-                      }
-                    });
+          <h2 style="color: #136ef6; text-align: center;">Coaching for Evaluation</h2>
+          <br>
+          <font color="red"><strong><?= vars["agentName"] ?></strong></font> is receiving a Coaching:
+            <!-- This section of text is broken up to fit inside the table cell and line up with the box on the right.  -->
+            <ul color="black">
+                <li>Call Transcripts:</li>
+                <ul>
+                <?
+                // Server-side logic
+                vars["transcriptIds"].forEach(function({href,id}) {
+                  if (typeof id === "string") {
                     ?>
-                    </ul>
-                 <li>Ticket Number:
-                    <ul>
-                      <?vars["ticket"].forEach(el => {?>
-                        <li><? if(typeof el === "object") { ?>
-                          <a href=<?= el.url ?> ><?=el.id?> </a>
-                        <? }else{ ?>
-                          <?=el?> <? } ?>
-                        </li>
-                      <? }) ?>
-                    </ul>
-                  </li>
-                  <br>
-                  <li>Severity:
-                    <b><?=vars["severity"]?></b>
-                  </li>
-                  <br>
-                  <li>Reason:
-                      <b><?= vars["reason"] ?></b>
-                  </li>
-                  <br>
-                  <li style="white-space: pre-line;">Description:
-                  <b><?= vars["description"] ?></b>
-                  </li>
-                  <br>
-                Regards,
-                <br> Operations Standards
-                <br> Shift4 Payments
-                <br>
-        </td>
+                    <li> <a href="<?=href?>"><?= id ?></a></li>
+                    <?
+                  } else {
+                    ?>
+                    <li><?= id ?></li>
+                    <?
+                  }
+                });
+                ?>
+                </ul>
+              <li>Ticket Number:
+                <ul>
+                  <?vars["ticket"].forEach(el => {?>
+                    <li><? if(typeof el === "object") { ?>
+                      <a href=<?= el.url ?> ><?=el.id?> </a>
+                    <? }else{ ?>
+                      <?=el?> <? } ?>
+                    </li>
+                  <? }) ?>
+                </ul>
+              </li>
+              <br>
+              <li>Severity:
+                <b><?=vars["severity"]?></b>
+              </li>
+              <br>
+              <li>Reason:
+                  <b><?= vars["reason"] ?></b>
+              </li>
+              <br>
+              <li style="white-space: pre-line;">Description:
+              <b><?= vars["description"] ?></b>
+              </li>
+            </ul>
+          <p>Sincerely,<br></p>
+          <p  style="font-weight: bold;">Reliability</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0px">
+          <div style="background-color:#000; padding:0px; text-align:center;">
+            <a href="https://www.facebook.com/Shift4Payments"><img src="https://www.shift4.com/email/social-facebook.png" alt="Facebook" width="16" height="16"></a>
+            <a href="https://twitter.com/shift4"><img src="https://www.shift4.com/email/social-twitter.png" alt="Twitter" width="16" height="16"></a>
+            <a href="https://www.linkedin.com/company/shift4/"><img src="https://www.shift4.com/email/social-linkedin.png" alt="Linkedin" width="16" height="16"></a>
+            <a href="https://vimeo.com/shift4payments"><img src="https://www.shift4.com/email/social-vimeo.png" alt="Vimeo" width="16" height="16"></a>
+          </div>
+      </td>
     </tr>
   </table>
 </body>
