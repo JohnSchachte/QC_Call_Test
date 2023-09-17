@@ -6,7 +6,7 @@ class TestManagementEmails extends TestCoachingRow{
     runTestManagementEmail() {
         this.filterForCoachings();
         const formattedRows = this.formatCoachingRows();
-        const last10 = formattedRows.slice(-1);
+        const last10 = formattedRows.slice(-10);
         const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind(this)
         last10.forEach((row, index) => {
             sendManagementCoachingEmailBound(row.coachingRow,row.agentObject);

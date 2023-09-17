@@ -92,7 +92,7 @@ function sendHttpWIthRetry(endPoint,requestOptions){
     return JSON.parse(response.getContentText()); // this is what will actually trigger the error. NOT the line above
 }
 
-function sendManagementCoachingEmail(coachingRow,agentObject){
+function sendManagementCoachingEmail(coachingRow,agentObject,coachingId="test22"){
         if(!agentObject){
             return;
         }
@@ -111,9 +111,12 @@ function sendManagementCoachingEmail(coachingRow,agentObject){
         //     "Describe?":9
         // };
         // for template vars
+        Logger.log(CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject));
+        Logger.log(coachingId)
         const vars = {
             agentName : agentObject["Employee Name"],
-            coachingId : CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject),
+            coachingId,
+            supSheet : CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject),
             transcriptIds :  transformTranscriptIds(coachingRow[this.coachingHeaders["Coaching Identifier?"]]),
             ticket : coachingRow[this.coachingHeaders["Ticket Link"]] == "No Ticket" ?
             [coachingRow[this.coachingHeaders["Ticket Link"]]] :
