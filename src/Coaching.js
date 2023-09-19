@@ -17,7 +17,10 @@ function initializeAlertAndCoaching(e){
 }
 
 function alertAndCoach(row,agentObj,score,rowIndex){
-
+    Logger.log("alertAndCoach called for row: %s",rowIndex);
+    Logger.log("agentObj: %s",JSON.stringify(agentObj));
+    Logger.log("score: %s",score);
+    Logger.log("row: %s",JSON.stringify(row));
     /**TODO:
      * 1. get column map - done and tested
      * 2. ensure agent is apart of the coaching process - done and tested
