@@ -1,9 +1,9 @@
 // Test: https://script.google.com/u/0/home/projects/1sdajPEm4Dv5Gsx5zq0keM4xPEOXTHublMt_bWHKbvUvIPOogEfHfW4u8/edit
 
-function mainWrapper(){
-  // usually an older version
-  Self.main();
-}
+// function mainWrapper(){
+//   // usually an older version
+//   Self.main();
+// }
 
 /**
  * Main function that fetches data from a sheet, creates and sends emails, and updates the sheet.

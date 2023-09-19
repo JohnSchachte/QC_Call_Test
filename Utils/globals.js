@@ -33,4 +33,5 @@ SCORE_THRESHOLD = 0.75, //arbitrary number from Reliability team
 EVALUATOR_HEADER = scriptPropsObj["EVALUATOR_HEADER"],
 MID_DBA_HEADER = scriptPropsObj["MID_DBA_HEADER"],
 COACHING_STATUS_HEADER = scriptPropsObj["Coaching Status"],
-RESPONSE_SHEET_NAME = scriptPropsObj["Response Sheet Name"];
+RESPONSE_SHEET_NAME = scriptPropsObj["Response Sheet Name"],
+DATE_SENT_HEADER = scriptPropsObj["DATE_SENT_HEADER"];

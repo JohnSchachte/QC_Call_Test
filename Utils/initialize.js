@@ -17,6 +17,7 @@ function initializeLastRow() {
 
 function setScriptProperties(){
   scriptProps.setProperty("IS_PRODUCTION","false");
+  scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
   scriptProps.setProperty("TICKET_HEADER","Ticket#");
   scriptProps.setProperty("AGENT_NAME","Agents Name");

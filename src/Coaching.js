@@ -33,7 +33,6 @@ function alertAndCoach(row,agentObj,score,rowIndex){
 
     //writeToSheet Decorator
     const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
-    // const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
 
     const colMap = getColMap();
 

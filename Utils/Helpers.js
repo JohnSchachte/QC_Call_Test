@@ -33,9 +33,8 @@ function retry(tryFunct, waitTime = 1000,maxRetries=Number.MAX_VALUE) {
 
 function sendEmail(recipients,subject,template){
   Logger.log("receipients: %s",recipients);
-  // CHANGE FOR PRODUCTION!!! THIS IS THE TEST ENDPOINT.
-  GmailApp.sendEmail("jschachte@shift4.com",subject,"",{
-  // GmailApp.sendEmail(recipients,subject,"",{
+  recipients = IS_PRODUCTION == true ? recipients : "jschachte@shift4.com";
+  GmailApp.sendEmail(recipients,subject,"",{
     htmlBody: template.evaluate().getContent()
   });
 }

@@ -50,7 +50,7 @@ class DoEmails{
     this.updateCC(agentObj,emailOptions,updateValues,colMap); // adds cc and updates the updateValues
     
     if(IS_PRODUCTION == true) GmailApp.sendEmail(agentObj["Email Address"],this.emailSubject+row[colMap.get(AGENT_NAME_HEADER)],'',emailOptions); // send to the agent's email with CC's
-    updateValues[colMap.get("Email Sent")] = "Sent";
+    updateValues[colMap.get(EMAIL_SENT_HEADER)] = "Sent";
     updateValues[colMap.get("Date Sent")] = new Date().toLocaleString();
   }
 
