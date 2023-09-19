@@ -39,3 +39,28 @@ function getColMap(){
       htmlBody: template.evaluate().getContent()
     });
   }
+
+function setScoreFormat(startRow,colMap){
+  const ss = SpreadsheetApp.openById(BACKEND_ID);
+  const scorePercCol = Custom_Utilities.columnToLetter(colMap.get(PERC_SCORE_HEADER)+1);
+  ss.getSheetByName("Call Scorecard Form Responses")
+    .getRange(`${(scorePercCol)}${startRow}:${scorePercCol}`)
+    .setNumberFormat("0.00%")
+}
+
+const initializeCoaching = function (){
+  try{
+    const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeAlertAndCoaching",1); //returns trigger id
+    const cache = CacheService.getScriptCache();
+    cache.put(t,JSON.stringify({row,agentObj,score,updateValues,rowIndex:index+offset}));
+    
+  }catch(f){
+    Logger.log(f);
+    try{
+      alertAndCoach(row,agentObj,score,index+offset);
+    }catch(f){
+      Logger.log(f);
+      return;
+    }
+  }
+}; 

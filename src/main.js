@@ -8,12 +8,16 @@ function mainWrapper(){
  * Main function that fetches data from a sheet, creates and sends emails, and updates the sheet.
  */
 function main(){
+  /// CHANGE FOR PRODUCTION!!!
+  const colMap = getColMapTest();
   // get colMap
-  const colMap = getColMap();
+  // const colMap = getColMap();
 
   const lock = LockService.getScriptLock();
-  lock.waitLock(600000);
-  // mk data
+  const LOCK_WAIT_TIME = 600000; // 10 minutes
+  lock.waitLock(LOCK_WAIT_TIME); // wait 10 minutes for others' use of the code section and lock it when available
+
+  // make data
   let data;
   const offset = parseInt(scriptProps.getProperty("lr")); 
   try{
@@ -28,7 +32,9 @@ function main(){
     return;
   }
 
+  // initialize email sender
   const doEmails = new DoEmails();
+
   data.forEach((row,index) => {
     // // skip row conditions. THIS WILL RUN FOR NAME MISMATCHES
     if(!row[colMap.get(AGENT_NAME_HEADER)] || !row[colMap.get(SCORE_HEADER)] || row[colMap.get(EMAIL_SENT_HEADER)] == "Sent"){
@@ -40,8 +46,8 @@ function main(){
     const timeStamp = updateTimestampValues(updateValues, colMap, row); //updates timestamp but also returns it for further use
 
 
-    let agentName = row[colMap.get(AGENT_NAME_HEADER)];
-    let agentObj = NameToWFM.getAgentObj(agentName);
+    const agentName = row[colMap.get(AGENT_NAME_HEADER)];
+    const agentObj = NameToWFM.getAgentObj(agentName);
 
     if(!agentObj){
       Logger.log("agent was not found in WFM");
@@ -51,9 +57,7 @@ function main(){
       return;
     }
 
-    if(agentObj["Hire Date"]){
-      updateHireDateValues(agentObj,updateValues,colMap,timeStamp);
-    }
+    if(agentObj["Hire Date"]) updateHireDateValues(agentObj,updateValues,colMap,timeStamp);
     
 
     let score = row[colMap.get(SCORE_HEADER)];
@@ -65,47 +69,17 @@ function main(){
     }
 
     score = updateScoreValues(updateValues, colMap, score);
-      /**
-       * TODO;
-       * 1. Test while iterating with main on Test sheet
-       */
-      const initializeCoaching = function (){
-        try{
-          const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeAlertAndCoaching",1); //returns trigger id
-          const cache = CacheService.getScriptCache();
-          cache.put(t,JSON.stringify({row,agentObj,score,updateValues,rowIndex:index+offset}));
-          
-        }catch(f){
-          Logger.log(f);
-          try{
-            alertAndCoach(row,agentObj,score,index+offset);
-          }catch(f){
-            Logger.log(f);
-            return;
-          }
-        }
-      }; 
-
-    doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
-    
     updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
     updateValues[colMap.get(TEAM_HEADER)] = agentObj["Team"];
     Logger.log("Sent");
     writeToSheet(updateValues,index+offset);
-
     scriptProps.setProperty("lr",offset+index+1); // update the last row to record where the script starts next time
-  
-  });
+
+    doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
+    if(!row[colMap.get(COACHING_STATUS_HEADER)].includes("Coaching Id:")) initializeCoaching();
+  }); // end of loop
+
+
   lock.releaseLock();
   setScoreFormat(offset,colMap);
 }
-
-function setScoreFormat(startRow,colMap){
-  const ss = SpreadsheetApp.openById(BACKEND_ID);
-  const scorePercCol = Custom_Utilities.columnToLetter(colMap.get(PERC_SCORE_HEADER)+1);
-  ss.getSheetByName("Call Scorecard Form Responses")
-    .getRange(`${(scorePercCol)}${startRow}:${scorePercCol}`)
-    .setNumberFormat("0.00%")
-}
-
-
