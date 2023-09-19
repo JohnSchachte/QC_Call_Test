@@ -1,9 +1,9 @@
 class Tester {
     constructor() {
-        this.colMap = getColMapTest();
-        this.ss = SpreadsheetApp.openById(BACKEND_ID_TEST);
+        this.colMap = getColMap();
+        this.ss = SpreadsheetApp.openById(BACKEND_ID);
         this.sheet = this.ss.getSheetByName(SUBMISSION_SHEET_NAME.replace(/\'/g,""));
-        this.testRows = Sheets.Spreadsheets.Values.get(BACKEND_ID_TEST,`${SUBMISSION_SHEET_NAME}!A${7589}:BZ`)
+        this.testRows = Sheets.Spreadsheets.Values.get(BACKEND_ID,`${SUBMISSION_SHEET_NAME}!A${7589}:BZ`)
           .values;
     }
 

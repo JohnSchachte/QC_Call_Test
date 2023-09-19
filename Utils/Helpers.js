@@ -48,16 +48,16 @@ function setScoreFormat(startRow,colMap){
     .setNumberFormat("0.00%")
 }
 
-const initializeCoaching = function (){
+const initializeCoaching = function (row,agentObj,score,rowIndex){
   try{
     const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeAlertAndCoaching",1); //returns trigger id
     const cache = CacheService.getScriptCache();
-    cache.put(t,JSON.stringify({row,agentObj,score,updateValues,rowIndex:index+offset}));
+    cache.put(t,JSON.stringify({row,agentObj,score,rowIndex}));
     
   }catch(f){
     Logger.log(f);
     try{
-      alertAndCoach(row,agentObj,score,index+offset);
+      alertAndCoach(row,agentObj,score,rowIndex);
     }catch(f){
       Logger.log(f);
       return;

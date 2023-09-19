@@ -1,8 +1,5 @@
 function processSingleCoaching(rowIndex="8221"){
-    const colMap = getColMapTest();
-
-
-
+    const colMap = getColMap();
 
     const row = Sheets.Spreadsheets.Values.get(BACKEND_ID_TEST,`${RESPONSE_SHEET_NAME}!${rowIndex}:${rowIndex}`).values[0]
 
@@ -19,13 +16,5 @@ function processSingleCoaching(rowIndex="8221"){
     alertAndCoach(row,agentObj,calculatedScore,rowIndex);
 }
 
-/**
- * Calculates the score based on the given score string.
- * @param {string} score - The score in the format "numerator / denominator".
- * @return {number} The calculated score value.
- */
-function calculateScore(score){
-    const [numerator, denominator] = score.split(" / ").map(integer => parseInt(integer));
-    return Math.round((numerator / denominator) * 10000) / 10000;
-}
+
 

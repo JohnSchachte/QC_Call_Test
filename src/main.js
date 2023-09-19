@@ -4,14 +4,14 @@ function mainWrapper(){
   // usually an older version
   Self.main();
 }
+
 /**
  * Main function that fetches data from a sheet, creates and sends emails, and updates the sheet.
  */
 function main(){
-  /// CHANGE FOR PRODUCTION!!!
-  const colMap = getColMapTest();
+
   // get colMap
-  // const colMap = getColMap();
+  const colMap = getColMap();
 
   const lock = LockService.getScriptLock();
   const LOCK_WAIT_TIME = 600000; // 10 minutes
@@ -36,7 +36,7 @@ function main(){
   const doEmails = new DoEmails();
 
   data.forEach((row,index) => {
-    // // skip row conditions. THIS WILL RUN FOR NAME MISMATCHES
+    // skip row conditions. THIS WILL RUN FOR NAME MISMATCHES
     if(!row[colMap.get(AGENT_NAME_HEADER)] || !row[colMap.get(SCORE_HEADER)] || row[colMap.get(EMAIL_SENT_HEADER)] == "Sent"){
       Logger.log("empty or already sent");
       return;
@@ -72,11 +72,13 @@ function main(){
     updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
     updateValues[colMap.get(TEAM_HEADER)] = agentObj["Team"];
     Logger.log("Sent");
-    writeToSheet(updateValues,index+offset);
     scriptProps.setProperty("lr",offset+index+1); // update the last row to record where the script starts next time
 
     doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
-    if(!row[colMap.get(COACHING_STATUS_HEADER)].includes("Coaching Id:")) initializeCoaching();
+    writeToSheet(updateValues,index+offset);
+    
+    const coachingStatus = row[colMap.get(COACHING_STATUS_HEADER)];
+    if(!coachingStatus || !coachingStatus.includes("Coaching Id:")) initializeCoaching(row,agentObj,score,index+offset);
   }); // end of loop
 
 

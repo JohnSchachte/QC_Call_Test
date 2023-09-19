@@ -1,7 +1,7 @@
 const scriptProps = PropertiesService.getScriptProperties();
 const scriptPropsObj = scriptProps.getProperties();
 
-const BACKEND_ID_TEST = scriptPropsObj["BACKEND_ID_TEST"];
+// const BACKEND_ID_TEST = scriptPropsObj["BACKEND_ID_TEST"];
 const BACKEND_ID = scriptPropsObj["BACKEND_ID"];
 const REPORTING_ID = scriptPropsObj["REPORTING_ID"];
 const sheetsAPI = Sheets.Spreadsheets.Values
@@ -12,6 +12,7 @@ This is to allow quick changes to the script if Reliability changes a header nam
 This also allows us to use mostly the same script for different applications (Like Chat Evaluations).
 */
 const TRANSCRIPT_ID_HEADER = scriptPropsObj["TRANSCRIPT_ID_HEADER"], 
+IS_PRODUCTION = scriptPropsObj["IS_PRODUCTION"],
 TICKET_HEADER = scriptPropsObj["TICKET_HEADER"], 
 AGENT_NAME_HEADER = scriptPropsObj["AGENT_NAME"], 
 EMAIL_SENT_HEADER = scriptPropsObj["EMAIL_SENT"], 
