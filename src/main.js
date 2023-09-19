@@ -65,15 +65,9 @@ function main(){
     }
 
     score = updateScoreValues(updateValues, colMap, score);
-
-      /** TODO
-       * 1. trigger coaching script
       /**
-       *TODO
-        * 1. initialize cache
-        * 2. save parameters in cache with trigger id as key
-        * 3. allow for the catch to call the function if too many triggers are active
-       *
+       * TODO;
+       * 1. Test while iterating with main on Test sheet
        */
       const initializeCoaching = function (){
         try{

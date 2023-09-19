@@ -141,6 +141,6 @@ const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categorie
 }
 
 function writeToSheetA1Notation(A1Notation,value){
-    const range = this.sheet.getRange(A1Notation);
+    const range = this.responseSheet.getRange(A1Notation);
     range.setValue(value);
 }

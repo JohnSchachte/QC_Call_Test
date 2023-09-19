@@ -34,11 +34,13 @@ function alertAndCoach(row,agentObj,score,rowIndex){
     const responseSheet = SpreadsheetApp.openById(BACKEND_ID_TEST).getSheetByName(RESPONSE_SHEET_NAME);
     // const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
 
-    const writeCoachingStatus = writeToSheetA1Notation.bind({responseSheet});
-    const a1Notation = Custom_Utilities.columnToLetter(colMap.get(COACHING_STATUS_HEADER)+1)+rowIndex.toString(); //Used to write to sheet.
     // CHANGE FOR PRODUCTION!!!
     const colMap = getColMapTest();
     // const colMap = getColMap();
+
+    const writeCoachingStatus = writeToSheetA1Notation.bind({responseSheet});
+
+    const a1Notation = Custom_Utilities.columnToLetter(colMap.get(COACHING_STATUS_HEADER)+1)+rowIndex.toString(); //Used to write to sheet.
     if(!OperationCoachingMembers.isInEmailSet(agentObj["Email Address"].toLowerCase())){
         /** TODO
          * 1. write to sheet in column "Copied to coaching form? And when"
@@ -72,7 +74,9 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         "Describe?":9
     };
 
-    const coachingRow = formatAsCoachingRow(row,colMap,agentObj,severity,categories).bind({coachingHeaders});
+  const boundFormatAsCoachingRow = formatAsCoachingRow.bind({coachingHeaders});
+  const coachingRow = boundFormatAsCoachingRow(row, colMap, agentObj, severity, categories);
+
     
     const requestOptions = {
         method: 'post',
@@ -109,7 +113,6 @@ function alertAndCoach(row,agentObj,score,rowIndex){
          * 1. write to sheet in column "Copied to coaching form? And when" as added or something.
          */
         writeCoachingStatus(a1Notation,`Coaching Id: ${coachingId}\n Timestamp: ${new Date().toLocaleString()}`);
-        return true;
     }else{
         failureFunc();
     }
@@ -118,7 +121,7 @@ function alertAndCoach(row,agentObj,score,rowIndex){
     const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind({coachingHeaders})
     sendManagementCoachingEmailBound(coachingRow,agentObj,coachingId);
 
-    return result; // return denied or stopped
+    return; // return denied or stopped
 }
 
 // CHANGE FOR PRODUCTION!!!
@@ -148,12 +151,10 @@ function sendManagementCoachingEmail(coachingRow,agentObject,coachingId="test22"
         //     "Describe?":9
         // };
         // for template vars
-        Logger.log(CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject));
-        Logger.log(coachingId)
         const vars = {
             agentName : agentObject["Employee Name"],
             coachingId,
-            supSheet : CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject),
+            supSheet : CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject["Team"],agentObject["SUPERVISOR"]),
             transcriptIds :  transformTranscriptIds(coachingRow[this.coachingHeaders["Coaching Identifier?"]]),
             ticket : coachingRow[this.coachingHeaders["Ticket Link"]] == "No Ticket" ?
             [coachingRow[this.coachingHeaders["Ticket Link"]]] :
