@@ -73,7 +73,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
         contentType: 'application/json',
         headers: {
             Authorization: 'Bearer ' + CoachingRequestScripts.getOAuthService().getAccessToken()
-        }
+        },
     };
     
     const endPoint = memoizedGetHttp(agentObj["Team"],cache);
@@ -114,6 +114,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
 
 function sendHttpWIthRetry(endPoint,requestOptions){
     const response = UrlFetchApp.fetch(endPoint,requestOptions);
+    Logger.log(response.getContentText())
     return JSON.parse(response.getContentText()); // this is what will actually trigger the error. NOT the line above
 }
 
