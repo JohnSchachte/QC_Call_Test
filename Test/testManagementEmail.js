@@ -52,7 +52,7 @@ class TestHttpRequest extends TestManagementEmails{
             Logger.log("options: %s\nEndpoint:%s",requestOptions,testEndPoint);
             requestOptions["payload"] = JSON.stringify(row.coachingRow); // prepare for request
             Logger.log(JSON.stringify(row.coachingRow));
-            sendHttpWIthRetry(testEndPoint,requestOptions);
+            sendHttpWithRetry(testEndPoint,requestOptions);
             Logger.log("index = %s",index);
         });
     }

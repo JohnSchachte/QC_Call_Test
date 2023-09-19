@@ -2,7 +2,7 @@
  * @param {*} e - event object from trigger
  * @returns {void} 
  */
-function initializeAlertAndCoachingOnLowScore(e){
+function initializeAlertAndCoaching(e){
     Custom_Utilities.deleteSelfTrigger(ScriptApp,e.triggerUid);
     const cache = CacheService.getScriptCache();
     const cacheValue = cache.get(e.triggerUid);
@@ -12,10 +12,11 @@ function initializeAlertAndCoachingOnLowScore(e){
         return;
     }
     const {row,agentObj,score,updateValues,rowIndex} = JSON.parse(cacheValue);
-    alertAndCoachOnLowScore(row,agentObj,score,updateValues,rowIndex);
+    alertAndCoach(row,agentObj,score,updateValues,rowIndex);
 
 }
-function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
+
+function alertAndCoach(row,agentObj,score,rowIndex){
 
     /**TODO:
      * 1. get column map - done and tested
@@ -25,19 +26,23 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
      * 3. setup coaching row - done and tested
      * 4. send to coaching sheet endpoint - determination done and tested
      * 5. send email to supervisor,manager - done and tested
-     * 6. write back to the sheet in "Copied to coaching form? And when" - working
+     * 6. write back to the sheet in "Copied to coaching form? And when" - done but not tested
      */
 
+    //CHANGE FOR PRODUCTION!!!
     //writeToSheet Decorator
-    const responseSheet = SpreadsheetApp.openById(REPORTING_ID).getSheetByName(RESPONSE_SHEET_NAME);
-    const writeCoachingStatus = writeToSheetA1Notation.bind({sheet});
+    const responseSheet = SpreadsheetApp.openById(BACKEND_ID_TEST).getSheetByName(RESPONSE_SHEET_NAME);
+    // const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
+
+    const writeCoachingStatus = writeToSheetA1Notation.bind({responseSheet});
     const a1Notation = Custom_Utilities.columnToLetter(colMap.get(COACHING_STATUS_HEADER)+1)+rowIndex.toString(); //Used to write to sheet.
-    const colMap = getColMap();
+    // CHANGE FOR PRODUCTION!!!
+    const colMap = getColMapTest();
+    // const colMap = getColMap();
     if(!OperationCoachingMembers.isInEmailSet(agentObj["Email Address"].toLowerCase())){
         /** TODO
          * 1. write to sheet in column "Copied to coaching form? And when"
          */
-        
         writeCoachingStatus(a1Notation,"Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","Agent Not in Coaching Process: " + agentObj["Employee Name"],"Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
         return false;
@@ -66,6 +71,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
         "Category?":8,
         "Describe?":9
     };
+
     const coachingRow = formatAsCoachingRow(row,colMap,agentObj,severity,categories).bind({coachingHeaders});
     
     const requestOptions = {
@@ -76,6 +82,7 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
         },
     };
     
+    // USE FOR PRODUCTION!!!
     const endPoint = memoizedGetHttp(agentObj["Team"],cache);
 
     requestOptions["payload"] = JSON.stringify(coachingRow); // prepare for request
@@ -89,7 +96,9 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
         throw new Error("Row: " + rowIndex + " was NOT appended to a coaching backend sheet");
     }
     try{
-        response = retry(() => sendHttpWIthRetry(endPoint,requestOptions));
+        // CHANGE FOR PRODUCTION!!! THIS IS THE TEST ENDPOINT.
+        response = retry(() => sendHttpWithRetry("https://script.google.com/a/macros/shift4.com/s/AKfycbzVwcCdBlPVyTrjXjd0aPTf_iWYe9tJLCTPhUHGqA7FQ-ownSx0ZIKz6Ovkgl_WQw8lTA/exec",requestOptions))
+        // response = retry(() => sendHttpWithRetry(endPoint,requestOptions));
     }catch(f){
         Logger.log(f);
         failureFunc();
@@ -112,7 +121,8 @@ function alertAndCoachOnLowScore(row,agentObj,score,rowIndex){
     return result; // return denied or stopped
 }
 
-function sendHttpWIthRetry(endPoint,requestOptions){
+// CHANGE FOR PRODUCTION!!!
+function sendHttpWithRetry(endPoint,requestOptions){
     const response = UrlFetchApp.fetch(endPoint,requestOptions);
     Logger.log(response.getContentText())
     return JSON.parse(response.getContentText()); // this is what will actually trigger the error. NOT the line above
