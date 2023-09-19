@@ -139,3 +139,8 @@ const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categorie
     row[this.coachingHeaders["Describe?"]] = mkDescribeText(evalRow,colMap,score);
     return row;
 }
+
+function writeToSheetA1Notation(A1Notation,value){
+    const range = this.sheet.getRange(A1Notation);
+    range.setValue(value);
+}

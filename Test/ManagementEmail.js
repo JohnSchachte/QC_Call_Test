@@ -3,12 +3,12 @@ class TestManagementEmails extends TestCoachingRow{
         super(); // Call the parent class constructor
     }
 
-    runTestManagementEmail() {
+    runTestManagementEmail(howMany = -10) {
         this.filterForCoachings();
-        const formattedRows = this.formatCoachingRows();
-        const last10 = formattedRows.slice(-10);
+        this.formattedRows = this.formattedRows ? this.formattedRows : this.formatCoachingRows();
+        const lastHowMany = formattedRows.slice(howMany);
         const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind(this)
-        last10.forEach((row, index) => {
+        lastHowMany.forEach((row, index) => {
             sendManagementCoachingEmailBound(row.coachingRow,row.agentObject);
         });
     }
@@ -27,4 +27,28 @@ function testSendManagementEmail(){
 function checkEmailQuota() {
   var remainingQuota = MailApp.getRemainingDailyQuota();
   Logger.log('Remaining email quota: ' + remainingQuota);
+}
+
+class TestHttpRequest extends TestCoachingRow{
+    constructor(){
+        super();
+    }
+
+    runTestHttpRequest(howMany = -10){
+        this.filterForCoachings();
+        this.formattedRows = this.formattedRows ? this.formattedRows : this.formatCoachingRows();
+        const lastHowMany = this.formattedRows.slice(howMany);
+
+        lastHowMany.forEach((row, index) => {
+            const requestOptions = {
+                method: 'post',
+                contentType: 'application/json',
+                headers: {
+                    Authorization: 'Bearer ' + CoachingRequestScripts.getOAuthService().getAccessToken()
+                }
+            };
+            requestOptions["payload"] = JSON.stringify(row.coachingRow); // prepare for request
+            sendHttpWIthRetry("https://script.google.com/a/macros/shift4.com/s/AKfycbzVwcCdBlPVyTrjXjd0aPTf_iWYe9tJLCTPhUHGqA7FQ-ownSx0ZIKz6Ovkgl_WQw8lTA/exec",this.requestOptions);
+        });
+    }
 }

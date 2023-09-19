@@ -77,12 +77,18 @@ function main(){
        */
       const initializeCoaching = function (){
         try{
-          const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeCoaching",1); //returns trigger id
+          const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeAlertAndCoachingOnLowScore",1); //returns trigger id
           const cache = CacheService.getScriptCache();
           cache.put(t,JSON.stringify({row,agentObj,score,updateValues,rowIndex:index+offset}));
           
         }catch(f){
           Logger.log(f);
+          try{
+            alertAndCoachOnLowScore(row,agentObj,score,index+offset);
+          }catch(f){
+            Logger.log(f);
+            return;
+          }
         }
       }; 
 
