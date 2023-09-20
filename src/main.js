@@ -1,10 +1,5 @@
 // Test: https://script.google.com/u/0/home/projects/1sdajPEm4Dv5Gsx5zq0keM4xPEOXTHublMt_bWHKbvUvIPOogEfHfW4u8/edit
 
-// function mainWrapper(){
-//   // usually an older version
-//   Self.main();
-// }
-
 /**
  * Main function that fetches data from a sheet, creates and sends emails, and updates the sheet.
  */
@@ -36,7 +31,7 @@ function main(){
   const doEmails = new DoEmails();
 
   data.forEach((row,index) => {
-    // skip row conditions. THIS WILL RUN FOR NAME MISMATCHES
+    // skip row conditions. will run for name mismatches as "Email Sent" headers
     if(!row[colMap.get(AGENT_NAME_HEADER)] || !row[colMap.get(SCORE_HEADER)] || row[colMap.get(EMAIL_SENT_HEADER)] == "Sent"){
       Logger.log("empty or already sent");
       return;

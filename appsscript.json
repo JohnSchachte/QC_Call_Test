@@ -28,15 +28,9 @@
         "developmentMode": true
       },
       {
-        "userSymbol": "Self",
-        "libraryId": "1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk",
-        "version": "10"
-      },
-      {
         "userSymbol": "OperationCoachingMembers",
-        "version": "1",
         "libraryId": "1SVb5jxhLQp6_juLBnm6AcvUiD3jIkKFq8tGCxNagdetq_zyY_FmgBKr7",
-        "developmentMode": false
+        "version": "1"
       }
     ]
   }

@@ -33,7 +33,7 @@ function retry(tryFunct, waitTime = 1000,maxRetries=Number.MAX_VALUE) {
 
 function sendEmail(recipients,subject,template){
   Logger.log("receipients: %s",recipients);
-  recipients = IS_PRODUCTION == true ? recipients : "jschachte@shift4.com";
+  recipients = IS_PRODUCTION == "true" ? recipients : "jschachte@shift4.com";
   GmailApp.sendEmail(recipients,subject,"",{
     htmlBody: template.evaluate().getContent()
   });
@@ -51,7 +51,7 @@ const initializeCoaching = function (row,agentObj,score,rowIndex){
   try{
     const t = Custom_Utilities.setUpTrigger(ScriptApp,"initializeAlertAndCoaching",1); //returns trigger id
     const cache = CacheService.getScriptCache();
-    cache.put(t,JSON.stringify({row,agentObj,score,rowIndex}));
+    cache.put(t.getUniqueId(),JSON.stringify({row,agentObj,score,rowIndex}));
     
   }catch(f){
     Logger.log(f);

@@ -45,13 +45,13 @@ class DoEmails{
 
     emailOptions["htmlBody"] = this.htmlTemplate.evaluate().getContent(); //assigning the template to the email to be sent
     
-    if(IS_PRODUCTION == false) GmailApp.sendEmail( "jschachte@shift4.com",this.emailSubject+row[colMap.get("Agents Name")],'',emailOptions);
+    if(IS_PRODUCTION == "false") GmailApp.sendEmail( "jschachte@shift4.com",this.emailSubject+row[colMap.get("Agents Name")],'',emailOptions);
     
     this.updateCC(agentObj,emailOptions,updateValues,colMap); // adds cc and updates the updateValues
     
-    if(IS_PRODUCTION == true) GmailApp.sendEmail(agentObj["Email Address"],this.emailSubject+row[colMap.get(AGENT_NAME_HEADER)],'',emailOptions); // send to the agent's email with CC's
+    if(IS_PRODUCTION == "true") GmailApp.sendEmail(agentObj["Email Address"],this.emailSubject+row[colMap.get(AGENT_NAME_HEADER)],'',emailOptions); // send to the agent's email with CC's
     updateValues[colMap.get(EMAIL_SENT_HEADER)] = "Sent";
-    updateValues[colMap.get("Date Sent")] = new Date().toLocaleString();
+    updateValues[colMap.get(DATE_SENT_HEADER)] = new Date().toLocaleString();
   }
 
   /**
