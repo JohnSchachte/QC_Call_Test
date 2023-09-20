@@ -1,2 +1,2 @@
-initialize.js merge=ours
+config/* merge=ours
 .clasp.json merge=ours
