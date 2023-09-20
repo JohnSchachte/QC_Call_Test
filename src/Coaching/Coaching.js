@@ -64,11 +64,3 @@ function alertAndCoach(row,agentObj,score,rowIndex){
 
     return; // return denied or stopped
 }
-
-function sendHttpWithRetry(endPoint,requestOptions){
-    const response = UrlFetchApp.fetch(endPoint,requestOptions);
-    Logger.log(response.getContentText())
-    return JSON.parse(response.getContentText()); // this is what will actually trigger the error. NOT the line above
-}
-
-
