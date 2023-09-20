@@ -41,7 +41,7 @@ function alertAndCoach(row,agentObj,score,rowIndex){
 
     const a1Notation = Custom_Utilities.columnToLetter(colMap.get(COACHING_STATUS_HEADER)+1)+rowIndex.toString(); //Used to write to sheet.
     if(!OperationCoachingMembers.isInEmailSet(agentObj["Email Address"].toLowerCase())){
-        writeCoachingStatus(a1Notation,"Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
+        writeCoachingStatus(a1Notation,"Agent's Team is Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","Agent Not in Coaching Process: " + agentObj["Employee Name"],"Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
         return false;
     }
@@ -79,14 +79,13 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         },
     };
     
-    // USE FOR PRODUCTION!!!
     const endPoint = memoizedGetHttp(agentObj["Team"],cache);
 
     requestOptions["payload"] = JSON.stringify(coachingRow); // prepare for request
 
     let response;
     const failureFunc = () => {
-        // Assumption that is the response can't be JSON.parse() that there was an error.
+        // Assumption if there's an error then content can't get parsed.
         Logger.log("Row: %s was NOT appended to a coaching backend sheet",rowIndex);
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","Coaching Request Failure for Row: " + rowIndex,"Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(coachingRow));
         writeCoachingStatus(a1Notation,`HTTP FAILURE. REACH OUT OT PI.\n Timestamp: ${new Date().toLocaleString()}`);
@@ -103,7 +102,7 @@ function alertAndCoach(row,agentObj,score,rowIndex){
     const coachingId = response["id"];
     
     if(coachingId){
-        writeCoachingStatus(a1Notation,`Coaching Id: ${coachingId}\n Timestamp: ${new Date().toLocaleString()}`);
+        writeCoachingStatus(a1Notation,`Coaching Id: ${coachingId}\n Timestamp: ${new Date().toLocaleString()}\nSeverity: ${severity}\nCategories: ${categories}`);
     }else{
         failureFunc();
     }
@@ -158,6 +157,5 @@ function sendManagementCoachingEmail(coachingRow,agentObject,coachingId="test22"
         const template = HtmlService.createTemplateFromFile("HTML/agent_coaching");
         template.vars = emailVars;
 
-        // sendEmail("jschachte@shift4.com","Agent Evaluation Dispute: " + agentObject["Employee Name"],template);
         sendEmail(CoachingRequestScripts.getEmails(agentObject),"Evaluation Coaching: " + agentObject["Employee Name"],template);
 }
