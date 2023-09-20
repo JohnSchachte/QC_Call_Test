@@ -22,11 +22,10 @@ function setScriptProperties(){
   scriptProps.setProperty("TICKET_HEADER","Ticket#");
   scriptProps.setProperty("AGENT_NAME","Agents Name");
   scriptProps.setProperty("EMAIL_SENT","Email Sent");
-  scriptProps.setProperty("SCORE","Score");
+  scriptProps.setProperty("SCORE_HEADER","Score");
   scriptProps.setProperty("AGENT_LOCATION","Agent Location");
-  scriptProps.setProperty("TEAM","Team");
+  scriptProps.setProperty("TEAM_HEADER","Team");
   scriptProps.setProperty("HIRE_DATE","Hire Date");
-  scriptProps.setProperty("EVAL_ID","Eval ID");
   scriptProps.setProperty("CC_EMAIL_HEADER","CC Email");
   scriptProps.setProperty("HIRE_DATE_HEADER","Hire Date");
   scriptProps.setProperty("<3_MONTHS_HEADER","<3 Months Hire");
@@ -51,7 +50,6 @@ function setScriptProperties(){
   scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
   scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
   scriptProps.setProperty("EVALUATOR_HEADER","Evaluators Name");
-  scriptProps.setProperty("SCORE_HEADER","% Score");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
   // scriptProps.setProperty("BACKEND_ID","1Fsw8e7Htowi9uaB50XEbJXRAK3IuaNSoYFY9sNUpt8Y"); // production
   scriptProps.setProperty("BACKEND_ID","1zEZsxiRuB9fdcNEfxb8yBcfGqToA9XZZ5_9CT47C8CU");
