@@ -16,15 +16,15 @@ function initializeLastRow() {
 // }
 
 function setScriptProperties(){
-  scriptProps.setProperty("IS_PRODUCTION","false");
+  scriptProps.setProperty("IS_PRODUCTION","true");
   scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
   scriptProps.setProperty("TICKET_HEADER","Ticket#");
   scriptProps.setProperty("AGENT_NAME","Agents Name");
   scriptProps.setProperty("EMAIL_SENT","Email Sent");
-  scriptProps.setProperty("SCORE","Score");
+  scriptProps.setProperty("SCORE_HEADER","Score");
   scriptProps.setProperty("AGENT_LOCATION","Agent Location");
-  scriptProps.setProperty("TEAM","Team");
+  scriptProps.setProperty("TEAM_HEADER","Team");
   scriptProps.setProperty("HIRE_DATE","Hire Date");
   scriptProps.setProperty("EVAL_ID","Eval ID");
   scriptProps.setProperty("CC_EMAIL_HEADER","CC Email");
