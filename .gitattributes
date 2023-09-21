@@ -1,2 +1,2 @@
-config/* merge=keepMine
+Config/* merge=keepMine
 .clasp.json merge=keepMine
