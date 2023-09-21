@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(8218).toString()); // change number to the last row you want to do.
+  scriptProps.setProperty("lr",(8294).toString()); // change number to the last row you want to do. 8294
 }
 
 // /**
@@ -26,7 +26,6 @@ function setScriptProperties(){
   scriptProps.setProperty("AGENT_LOCATION","Agent Location");
   scriptProps.setProperty("TEAM_HEADER","Team");
   scriptProps.setProperty("HIRE_DATE","Hire Date");
-  scriptProps.setProperty("EVAL_ID","Eval ID");
   scriptProps.setProperty("CC_EMAIL_HEADER","CC Email");
   scriptProps.setProperty("HIRE_DATE_HEADER","Hire Date");
   scriptProps.setProperty("<3_MONTHS_HEADER","<3 Months Hire");
@@ -51,12 +50,11 @@ function setScriptProperties(){
   scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
   scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
   scriptProps.setProperty("EVALUATOR_HEADER","Evaluators Name");
-  scriptProps.setProperty("SCORE_HEADER","% Score");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
-  // scriptProps.setProperty("BACKEND_ID","1Fsw8e7Htowi9uaB50XEbJXRAK3IuaNSoYFY9sNUpt8Y"); // production
   scriptProps.setProperty("BACKEND_ID","1Fsw8e7Htowi9uaB50XEbJXRAK3IuaNSoYFY9sNUpt8Y");
-  // scriptProps.setProperty("BACKEND_ID_TEST","1zEZsxiRuB9fdcNEfxb8yBcfGqToA9XZZ5_9CT47C8CU");
   scriptProps.setProperty("REPORTING_ID","1zQ98-rxOzfeq1QOmVeaC7OgOcZ0IaD7vv7_Vak7rclE");
   scriptProps.setProperty("Coaching Status","Copied to coaching form? And when");
   scriptProps.setProperty("Response Sheet Name","Call Scorecard Form Responses");
+  scriptProps.setProperty("RELIABILITY_REPORTING_SHEET_NAME","Test_This_Month");
+
 }
