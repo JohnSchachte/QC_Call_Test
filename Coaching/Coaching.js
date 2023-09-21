@@ -52,15 +52,28 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         return false;
     }
 
-    const result = getCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation);
-    console.log(result.coachingRow);
-    console.log(result.coachingId);
+    const coachingHeaders = {
+        "Request Id" : 0,
+        "Timestamp" : 1,
+        "Agent's Name" : 2,
+        "Supervisor" : 3,
+        "Email Address" : 4,
+        "Coaching Identifier?" : 5,
+        "Ticket Link" :6,
+        "Severity?":7,
+        "Category?":8,
+        "Describe?":9
+    };
+
+    const {coachingRow,coachingId} = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation,writeCoachingStatus,coachingHeaders);
+    console.log("coachingRow = %s", coachingRow);
+    console.log("coachingId = %s",coachingId);
 
     // sendManagement Email
     const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind({coachingHeaders})
     sendManagementCoachingEmailBound(coachingRow,agentObj,coachingId);
 
-    sendReportingData(row,colMap,categories,rowIndex);
+    sendReportingData(row,colMap,categories,rowIndex,agentObj);
 
     return; // return denied or stopped
 }

@@ -1,22 +1,10 @@
-function getCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation) {
+function sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation,writeCoachingStatus,coachingHeaders) {
 
-    const cache = CacheService.getScriptCache();
-    const memoizedGetHttp = Custom_Utilities.memoize(getHttp,cache);
-    const coachingHeaders = {
-        "Request Id" : 0,
-        "Timestamp" : 1,
-        "Agent's Name" : 2,
-        "Supervisor" : 3,
-        "Email Address" : 4,
-        "Coaching Identifier?" : 5,
-        "Ticket Link" :6,
-        "Severity?":7,
-        "Category?":8,
-        "Describe?":9
-    };
-
+  const cache = CacheService.getScriptCache();
+  const memoizedGetHttp = Custom_Utilities.memoize(getHttp,cache);
+  
   const boundFormatAsCoachingRow = formatAsCoachingRow.bind({coachingHeaders});
-  const coachingRow = boundFormatAsCoachingRow(row, colMap, agentObj, severity, categories);
+  const coachingRow = boundFormatAsCoachingRow(row, colMap, agentObj, severity, categories,calculateScore(row[colMap.get(SCORE_HEADER)]));
 
     
     const requestOptions = {
@@ -48,7 +36,7 @@ function getCoachingData(row, colMap, agentObj, severity, categories, rowIndex, 
     }
 
     const coachingId = response["id"];
-    
+
     if(coachingId){
         writeCoachingStatus(a1Notation,`Coaching Id: ${coachingId}\n Timestamp: ${new Date().toLocaleString()}\nSeverity: ${severity}\nCategories: ${categories}`);
     }else{
