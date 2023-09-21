@@ -8,7 +8,7 @@ function initializeAlertAndCoaching(e){
     const cacheValue = cache.get(e.triggerUid);
     if(!cacheValue){
         Logger.log("No cache value found");
-        GmailApp.sendEmail("jscahchte@shift4.com,pi@shift4.com","No cache value found","No cache value found. Script Id: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk");
+        GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","No cache value found","No cache value found. Script Id: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk");
         return;
     }
     const {row,agentObj,score,updateValues,rowIndex} = JSON.parse(cacheValue);
