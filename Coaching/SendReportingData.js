@@ -5,11 +5,12 @@
  * @param {*} colMap
  * @param {*} categories
  */
-function transformReliabilityReporting(row,colMap,categories,rowIndex,reliabilityColMap,agentObj){
+function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj){
     /**
      * SCHEMA DEFINITION FOR THIS TABLE:
      * Evaluator
      * Date Scored:
+     * Scored Month, Year
      * Agent's Name
      * Record ID/Chat line # w/hyperlink
      * Score
@@ -17,35 +18,66 @@ function transformReliabilityReporting(row,colMap,categories,rowIndex,reliabilit
      * Below 75%
      * Ticket handling(3 or more)
      * Security Violation
-     * No Ticket/Documents
-     * Work Avoidance  */
+     * No Ticket Filed/Documents
+     * Work Avoidance
+     * Row Index
+     * Coaching Sent Timestamp
+     * Coaching Sent To  
+    */
+   
     const transFormedRow = new Array(12);
     let colMapString = "";
-    colMap.forEach((value,key) => colMapString += `${key} : ${value} \n` );
     colMapString = "";
-    reliabilityColMap.forEach((value,key) => colMapString += `${key} : ${value} \n` );
-    transFormedRow[reliabilityColMap.get("Evaluator")] = row[colMap.get(EVALUATOR_HEADER)]; 
-    transFormedRow[reliabilityColMap.get("Date Scored:")] = new Date().toLocaleDateString();
-    transFormedRow[reliabilityColMap.get("Agent's Name")] = row[colMap.get(AGENT_NAME_HEADER)];
-    transFormedRow[reliabilityColMap.get("Agent's Team")] = agentObj["Team"];
-    transFormedRow[reliabilityColMap.get("Record ID/Chat line # w/hyperlink")] =  transformTranscriptIds(row[colMap.get(TRANSCRIPT_ID_HEADER)]).map(({href}) => href).join(",\n");
-    transFormedRow[reliabilityColMap.get("Score")] = calculateScore(row[colMap.get(SCORE_HEADER)]);
+    reportingColMap.forEach((value,key) => colMapString += `${key} : ${value} \n` );
+    transFormedRow[reportingColMap.get("Evaluator")] = row[colMap.get(EVALUATOR_HEADER)];
+     
+    transFormedRow[reportingColMap.get("Date Scored:")] = row[colMap.get(TIMESTAMP_HEADER)];
+    transFormedRow[reportingColMap.get("Scored Month, Year")] = row[colMap.get(TIMESTAMP_HEADER)]
+    transFormedRow[reportingColMap.get("Agent's Name")] = row[colMap.get(AGENT_NAME_HEADER)];
+    transFormedRow[reportingColMap.get("Agent's Team")] = agentObj["Team"];
+    transFormedRow[reportingColMap.get("Record ID/Chat line # w/hyperlink")] =  transformTranscriptIds(row[colMap.get(TRANSCRIPT_ID_HEADER)]).map(({href}) => href).join(",\n");
+    transFormedRow[reportingColMap.get("Score")] = calculateScore(row[colMap.get(SCORE_HEADER)]);
+    
     let ticketNumber = row[colMap.get(TICKET_HEADER)];
-    transFormedRow[reliabilityColMap.get("Ticket# w/HyperLink")] = ((/\d{7}/g).test(ticketNumber) ? ticketNumber.match((/\d{7}/g)).map(el => {return "https://tickets.shift4.com/#/tickets/"+el}) : ["No Ticket Link"]).join(",\n");
-    transFormedRow[reliabilityColMap.get("Below 75%")] = categories.includes("Scored Below 75%");
-    transFormedRow[reliabilityColMap.get("Ticket Handling(3 or more)")] = categories.includes("Ticket Handling");
-    transFormedRow[reliabilityColMap.get("Security Violation")] = categories.includes("Security Violation");
-    transFormedRow[reliabilityColMap.get("No Ticket Filed/Documents")] = categories.includes("No ticket filed/documented");
-    transFormedRow[reliabilityColMap.get("Work Avoidance")] = categories.includes("Work Avoidance");
-    transFormedRow[reliabilityColMap.get("Row Index")] = rowIndex;
+    transFormedRow[reportingColMap.get("Ticket# w/HyperLink")] = ((/\d{7}/g).test(ticketNumber) ? ticketNumber.match((/\d{7}/g)).map(el => {return "https://tickets.shift4.com/#/tickets/"+el}) : ["No Ticket Link"]).join(",\n");
+    
+    transFormedRow[reportingColMap.get("Below 75%")] = categories.includes("Scored Below 75%");
+    
+    transFormedRow[reportingColMap.get("Ticket Handling(3 or more)")] = categories.includes("Ticket Handling");
+    
+    transFormedRow[reportingColMap.get("Security Violation")] = categories.includes("Security Violation");
+    
+    transFormedRow[reportingColMap.get("No Ticket Filed/Documents")] = categories.includes("No ticket filed/documented");
+    
+    transFormedRow[reportingColMap.get("Work Avoidance")] = categories.includes("Work Avoidance");
+    
+    transFormedRow[reportingColMap.get("Row Index")] = rowIndex;
+
+    transFormedRow[reportingColMap.get("Coaching Sent Timestamp")] = new Date().toLocaleString();
+    transFormedRow[reportingColMap.get("Coaching Sent To")] =  (agentObj["Sup_Email"] || agentObj["Manager_Email"] || "");
     Logger.log("reportRow = %s",transFormedRow);
+    
     return transFormedRow;
 }
 
 function sendReportingData(row,colMap,categories,rowIndex,agentObj){
-    const reportingSS = "1-h8et_sdVVSmUbKq-ZK86-K93VRyX80xW2r2fgmIIhQ";
-    const reportingSheet = SpreadsheetApp.openById(reportingSS).getSheetByName(RELIABILITY_REPORTING_SHEET_NAME);
-    const reliabilityColMap = Custom_Utilities.mkColMap(reportingSheet.getSheetValues(1,1,1,reportingSheet.getLastColumn())[0]);
-    const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reliabilityColMap,agentObj);
+
+    const reportingColMap = getReportingColMap();
+    const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj);
+    
+    const ss = SpreadsheetApp.openById(scriptPropsObj["REPORTING_SS_ID"]);
+    const reportingSheet = ss.getSheetByName(scriptPropsObj["REPORTING_SHEET_NAME"]);
+
+    
+    const lock = LockService.getScriptLock();
+    lock.waitLock(LOCK_WAIT_TIME);
     reportingSheet.appendRow(reportingRow);
+    lock.releaseLock();
+
+}
+
+function getReportingColMap(){
+    const cache = CacheService.getScriptCache();
+    const memoizedReads = Custom_Utilities.getMemoizedReads(cache);
+    return Custom_Utilities.mkColMap(memoizedReads(scriptPropsObj["REPORTING_SS_ID"],`${scriptPropsObj["REPORTING_SHEET_NAME"]}!1:1`,{majorDimension:"ROWS"}).values[0]);
 }

@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(8461).toString()); // change number to the last row you want to do. 8294
+  scriptProps.setProperty("lr",(8294).toString()); // change number to the last row you want to do. 8294
 }
 
 // /**
@@ -55,6 +55,6 @@ function setScriptProperties(){
   scriptProps.setProperty("REPORTING_ID","1zQ98-rxOzfeq1QOmVeaC7OgOcZ0IaD7vv7_Vak7rclE");
   scriptProps.setProperty("Coaching Status","Copied to coaching form? And when");
   scriptProps.setProperty("Response Sheet Name","Call Scorecard Form Responses");
-  scriptProps.setProperty("RELIABILITY_REPORTING_SHEET_NAME","Test_This_Month");
-
+  scriptProps.setProperty("REPORTING_SS_ID","1QSTxbx-HfTZbQpDqaAYuj9T7784HWJ7ABQ4BsT_Ql_U");
+  scriptProps.setProperty("REPORTING_SHEET_NAME","Coaching_Form_Data");
 }

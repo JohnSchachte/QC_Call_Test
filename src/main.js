@@ -9,7 +9,6 @@ function main(){
   const colMap = getColMap();
 
   const lock = LockService.getScriptLock();
-  const LOCK_WAIT_TIME = 600000; // 10 minutes
   lock.waitLock(LOCK_WAIT_TIME); // wait 10 minutes for others' use of the code section and lock it when available
 
   // make data
