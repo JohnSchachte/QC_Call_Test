@@ -48,6 +48,7 @@ function alertAndCoach(row,agentObj,score,rowIndex){
     
     const {severity,categories} = determineCoachingNeed(row,colMap,score);
     if(!severity){
+        Logger.log("Severity is falsy")
         writeCoachingStatus(a1Notation,"No Coaching needed. Timestamp: " + new Date().toLocaleString());
         return false;
     }
@@ -65,7 +66,7 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         "Describe?":9
     };
 
-    const {coachingRow,coachingId} = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation,writeCoachingStatus,coachingHeaders);
+    const {coachingRow,coachingId} = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation, writeCoachingStatus,coachingHeaders);
     console.log("coachingRow = %s", coachingRow);
     console.log("coachingId = %s",coachingId);
 

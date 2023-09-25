@@ -1,3 +1,5 @@
+const LOCK_WAIT_TIME = 600000; // 10 minutes
+
 const scriptProps = PropertiesService.getScriptProperties();
 const scriptPropsObj = scriptProps.getProperties();
 

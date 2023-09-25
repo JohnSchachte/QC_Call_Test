@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(8461).toString()); // change number to the last row you want to do. 8294
+  scriptProps.setProperty("lr",(8294).toString()); // change number to the last row you want to do. 8294
 }
 
 // /**
@@ -57,5 +57,4 @@ function setScriptProperties(){
   scriptProps.setProperty("Response Sheet Name","Call Scorecard Form Responses");
   scriptProps.setProperty("REPORTING_SS_ID","1QSTxbx-HfTZbQpDqaAYuj9T7784HWJ7ABQ4BsT_Ql_U");
   scriptProps.setProperty("REPORTING_SHEET_NAME","Coaching_Form_Data");
-
 }

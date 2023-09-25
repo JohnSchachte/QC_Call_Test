@@ -61,14 +61,23 @@ function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingC
 }
 
 function sendReportingData(row,colMap,categories,rowIndex,agentObj){
-    // CHECK initialize.js to change these values
+
     const reportingColMap = getReportingColMap();
     const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj);
+    
+    const ss = SpreadsheetApp.openById(scriptPropsObj["REPORTING_SS_ID"]);
+    const reportingSheet = ss.getSheetByName(scriptPropsObj["REPORTING_SHEET_NAME"]);
+
+    
+    const lock = LockService.getScriptLock();
+    lock.waitLock(LOCK_WAIT_TIME);
     reportingSheet.appendRow(reportingRow);
+    lock.releaseLock();
+
 }
 
 function getReportingColMap(){
     const cache = CacheService.getScriptCache();
     const memoizedReads = Custom_Utilities.getMemoizedReads(cache);
-    return Custom_Utilities.mkColMap(memoizedReads(scriptProps["REPORTING_SS_ID"],`${scriptProps["REPORTING_SHEET_NAME"]}!1:1`,{majorDimension:"ROWS"}).values[0]);
+    return Custom_Utilities.mkColMap(memoizedReads(scriptPropsObj["REPORTING_SS_ID"],`${scriptPropsObj["REPORTING_SHEET_NAME"]}!1:1`,{majorDimension:"ROWS"}).values[0]);
 }
