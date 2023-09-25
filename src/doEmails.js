@@ -47,8 +47,14 @@ class DoEmails{
     
     if(IS_PRODUCTION == "false") GmailApp.sendEmail( "jschachte@shift4.com",this.emailSubject+row[colMap.get("Agents Name")],'',emailOptions);
     
-    this.updateCC(agentObj,emailOptions,updateValues,colMap); // adds cc and updates the updateValues
-    
+    const cc = this.updateCC(agentObj["Sup_Email"],agentObj["Manager_Email"]); // adds cc and updates the updateValues
+    if(cc){
+      emailOptions["cc"] = cc;
+      updateValues[colMap.get(CC_EMAIL_HEADER)] = cc;
+    }else{
+      updateValues[colMap.get(CC_EMAIL_HEADER)] = "No CC";
+    }
+
     if(IS_PRODUCTION == "true") GmailApp.sendEmail(agentObj["Email Address"],this.emailSubject+row[colMap.get(AGENT_NAME_HEADER)],'',emailOptions); // send to the agent's email with CC's
     updateValues[colMap.get(EMAIL_SENT_HEADER)] = "Sent";
     updateValues[colMap.get(DATE_SENT_HEADER)] = new Date().toLocaleString();
@@ -75,28 +81,12 @@ class DoEmails{
 
   /**
    * Update the CC field of the email options and updateValues.
-   * @param {Object} agentObj - An object containing the agent's details.
-   * @param {Object} emailOptions - The options for the email to be sent.
-   * @param {Object} updateValues - An object to keep track of updated values.
-   * @param {Map} colMap - A map of the column names to their indices.
-   */
-  updateCC(agentObj,emailOptions,updateValues,colMap){
+   * @param {string} supEmail - Email of Supervisor.
+   * @param {string} managerEmail - Email of Manager.
+   * @return {string} - The updated CC field or "" the empty string in none.
+  */
+  updateCC(supEmail,managerEmail){
     // Obj ect with email options
-    if(agentObj["Sup_Email"]){
-      // checks if supEmail is a blank string or not
-      emailOptions["cc"] = agentObj["Sup_Email"];
-      updateValues[colMap.get(CC_EMAIL_HEADER)] = agentObj["Sup_Email"];
-    }
-
-    if(!agentObj["Sup_Email"] && agentObj["Manager_Email"]){
-      //if no sup email check if manager email
-      emailOptions["cc"] = agentObj["Manager_Email"];
-      updateValues[colMap.get(CC_EMAIL_HEADER)] = agentObj["Manager_Email"] ;
-    }
-    if(!agentObj["Sup_Email"] && !agentObj["Manager_Email"]){
-      // if neither reach out to rtas
-      updateValues[colMap.get(CC_EMAIL_HEADER)] = "No CC";
-      // GmailApp.sendEmail("rta@shift4.com","Cannot find Agent's Supervisor or Managers Email","Hello when processing an agent's score evaluation we were not able to find the supervisor's or manager's email. Could you check on this for agent = "+agentName);
-    }
+    return supEmail || managerEmail || "";
   }
 }
