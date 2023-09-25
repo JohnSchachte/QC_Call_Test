@@ -16,7 +16,11 @@ function initializeLastRow() {
 // }
 
 function setScriptProperties(){
+  
+  // if in production, this should be true
   scriptProps.setProperty("IS_PRODUCTION","false");
+
+  // this will depend on chat or call schema/headers
   scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
   scriptProps.setProperty("TICKET_HEADER","Ticket#");
@@ -51,10 +55,14 @@ function setScriptProperties(){
   scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
   scriptProps.setProperty("EVALUATOR_HEADER","Evaluators Name");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
+  
+  // All these need to be granted permissions if you want to run the script
+  scriptProps.setProperty("Response Sheet Name","Call Scorecard Form Responses");
   scriptProps.setProperty("BACKEND_ID","1zEZsxiRuB9fdcNEfxb8yBcfGqToA9XZZ5_9CT47C8CU");
   scriptProps.setProperty("REPORTING_ID","1zQ98-rxOzfeq1QOmVeaC7OgOcZ0IaD7vv7_Vak7rclE");
-  scriptProps.setProperty("Coaching Status","Copied to coaching form? And when");
-  scriptProps.setProperty("Response Sheet Name","Call Scorecard Form Responses");
+  // reliability coaching reporting
   scriptProps.setProperty("REPORTING_SS_ID","1QSTxbx-HfTZbQpDqaAYuj9T7784HWJ7ABQ4BsT_Ql_U");
+  
   scriptProps.setProperty("REPORTING_SHEET_NAME","Coaching_Form_Data");
+  scriptProps.setProperty("Coaching Status","Copied to coaching form? And when");
 }
