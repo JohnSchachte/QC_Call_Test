@@ -42,9 +42,9 @@ function setScriptProperties(){
   scriptProps.setProperty("CALLER_PHONE_HEADER", "Caller's Phone#");
   scriptProps.setProperty("CALLER_EMAIL_HEADER", "Caller's Email");
   scriptProps.setProperty("SUBJECT_HEADER", "Subject");
-  scriptProps.setProperty("PROBLEM_DESCRIPTION_HEADER", "Problem Description");
+  scriptProps.setProperty("PROBLEM_DESCRIPTION_HEADER", "Problem Description ");
   scriptProps.setProperty("ACTION_PLAN_HEADER", "Action Plan");
-  scriptProps.setProperty("SOLUTION_HEADER", "Solution");
+  scriptProps.setProperty("SOLUTION_HEADER", "Solution Description");
   scriptProps.setProperty("DESCRIPTION_HEADER", "Description");
   scriptProps.setProperty("INTERNAL_NOTES_HEADER", "Internal Notes");
   scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
