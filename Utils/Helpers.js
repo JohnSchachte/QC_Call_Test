@@ -57,7 +57,7 @@ function sendEmail(recipients,subject,template){
 function setScoreFormat(startRow,colMap){
   const ss = SpreadsheetApp.openById(BACKEND_ID);
   const scorePercCol = Custom_Utilities.columnToLetter(colMap.get(PERC_SCORE_HEADER)+1);
-  ss.getSheetByName("Call Scorecard Form Responses")
+  ss.getSheetByName(RESPONSE_SHEET_NAME)
     .getRange(`${(scorePercCol)}${startRow}:${scorePercCol}`)
     .setNumberFormat("0.00%")
 }

@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(8294).toString()); // change number to the last row you want to do. 8294
+  scriptProps.setProperty("lr",(4347).toString()); // change number to the last row you want to do. 
 }
 
 // /**
@@ -19,7 +19,7 @@ function setScriptProperties(){
   
   // if in production, this should be true
   scriptProps.setProperty("IS_PRODUCTION","false");
-
+  scriptProps.setProperty("IS_CALL","false");
   // this will depend on chat or call schema/headers
   scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Chat Transcript Segment ID#");
@@ -45,7 +45,7 @@ function setScriptProperties(){
   // criteria fields/headers
   scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines while assisting the merchant?");
   scriptProps.setProperty("FILED_TICKET_HEADER","Did the agent file/document a ticket to record this interaction with the chatter?");
-  scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently?");
+  scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently? ");
   scriptProps.setProperty("EVALUATOR_HEADER","Evaluators Name");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
   
