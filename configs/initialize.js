@@ -19,7 +19,6 @@ function setScriptProperties(){
   
   // if in production, this should be true
   scriptProps.setProperty("IS_PRODUCTION","false");
-
   // this will depend on chat or call schema/headers
   scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Chat Transcript Segment ID#");
@@ -51,7 +50,7 @@ function setScriptProperties(){
   
   // All these need to be granted permissions if you want to run the script
   scriptProps.setProperty("Response Sheet Name","Chat Form Responses");
-  scriptProps.setProperty("BACKEND_ID","1SY1_eBIKx7bpIv7zOpSgm1v9rIqCyCjSZzeReysqfic");
+  scriptProps.setProperty("BACKEND_ID","1zEZsxiRuB9fdcNEfxb8yBcfGqToA9XZZ5_9CT47C8CU");
   scriptProps.setProperty("REPORTING_ID","1zQ98-rxOzfeq1QOmVeaC7OgOcZ0IaD7vv7_Vak7rclE");
   // reliability coaching reporting
   scriptProps.setProperty("REPORTING_SS_ID","1QSTxbx-HfTZbQpDqaAYuj9T7784HWJ7ABQ4BsT_Ql_U");
