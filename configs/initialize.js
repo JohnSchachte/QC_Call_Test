@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(4347).toString()); // change number to the last row you want to do. 
+  scriptProps.setProperty("lr",(4486).toString()); // change number to the last row you want to do. Test row = 4347
 }
 
 // /**
