@@ -1,10 +1,10 @@
 class Tester {
     constructor() {
-        this.startRow = 4347;
+        this.startRow = IS_CALL == "true" ? 7589 : 4347;
         this.colMap = getColMap();
         this.ss = SpreadsheetApp.openById(BACKEND_ID);
         this.sheet = this.ss.getSheetByName(SUBMISSION_SHEET_NAME.replace(/\'/g,""));
-        this.testRows = Sheets.Spreadsheets.Values.get(BACKEND_ID,`${SUBMISSION_SHEET_NAME}!A${this.startRow}:AI`)
+        this.testRows = Sheets.Spreadsheets.Values.get(BACKEND_ID,`${SUBMISSION_SHEET_NAME}!A${this.startRow}:${IS_CALL == "true" ? "BZ" : "AI"}`)
           .values;
     }
 

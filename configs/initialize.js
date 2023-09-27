@@ -46,7 +46,7 @@ function setScriptProperties(){
   scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines while assisting the merchant?");
   scriptProps.setProperty("FILED_TICKET_HEADER","Did the agent file/document a ticket to record this interaction with the chatter?");
   scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently? ");
-  scriptProps.setProperty("EVALUATOR_HEADER","Evaluators Name");
+  scriptProps.setProperty("EVALUATOR_HEADER","Evaluator Name");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
   
   // All these need to be granted permissions if you want to run the script

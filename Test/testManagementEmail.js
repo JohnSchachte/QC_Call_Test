@@ -6,7 +6,7 @@ class TestManagementEmails extends TestCoachingRow{
     runTestManagementEmail(howMany = -10) {
         this.filterForCoachings();
         this.formattedRows = this.formattedRows ? this.formattedRows : this.formatCoachingRows();
-        const lastHowMany = formattedRows.slice(howMany);
+        const lastHowMany = this.formattedRows.slice(howMany);
         const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind(this)
         lastHowMany.forEach((row, index) => {
             sendManagementCoachingEmailBound(row.coachingRow,row.agentObject);
@@ -57,6 +57,7 @@ class TestHttpRequest extends TestManagementEmails{
         });
     }
 }
+
 function testHttpRequest(){
   new TestHttpRequest().runTestHttpRequest();
 }
