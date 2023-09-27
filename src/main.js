@@ -16,7 +16,7 @@ function main(){
   const offset = parseInt(scriptProps.getProperty("lr")); 
   try{
     Logger.log("range = %s",`Submissions!A${offset}:${Custom_Utilities.columnToLetter(colMap.size)}`);
-    data = sheetsAPI.get(BACKEND_ID,`'Call Scorecard Form Responses'!A${offset}:${Custom_Utilities.columnToLetter(colMap.size)}`).values;
+    data = sheetsAPI.get(BACKEND_ID,`${SUBMISSION_SHEET_NAME}!A${offset}:${Custom_Utilities.columnToLetter(colMap.size)}`).values;
   }catch(L){
     Logger.log(L);
     return;

@@ -53,6 +53,6 @@ function writeToSheet(updateValues,index){
     {
     majorDimension:"ROWS",
     values:[updateValues],
-    },BACKEND_ID,`'Call Scorecard Form Responses'!${index}:${index}`,{valueInputOption:"USER_ENTERED"})
+    },BACKEND_ID,`${SUBMISSION_SHEET_NAME}!${index}:${index}`,{valueInputOption:"USER_ENTERED"})
   );
 }

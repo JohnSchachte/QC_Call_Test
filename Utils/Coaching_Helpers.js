@@ -4,12 +4,14 @@ const mkDescribeText = function (evalRow,colMap,score){
     Score: ${score}
     Ticket#: ${evalRow[colMap.get(TICKET_HEADER)]}
     Agent's Name: ${evalRow[colMap.get(AGENT_NAME_HEADER)]}
-    MID & DBA Name: ${evalRow[colMap.get(MID_DBA_HEADER)]},
+    ${IS_CALL == "true" ? `MID & DBA Name:  ${evalRow[colMap.get(MID_DBA_HEADER)]}` : ""},
     `
 }
+const cache = CacheService.getScriptCache();
+const getTeams = Custom_Utilities.memoize((REPORTING_ID) => Custom_Utilities.exponentialBackoff(() => CoachingRequestScripts.getTeams(REPORTING_ID)), cache);
 
 const getHttp = function (team, cache) {
-    const getTeams = Custom_Utilities.memoize((REPORTING_ID) => Custom_Utilities.exponentialBackoff(() => CoachingRequestScripts.getTeams(REPORTING_ID)), cache);
+    
     const teams = getTeams(REPORTING_ID);
     if(typeof team !== "string") throw new Error("Team entered was not a string in getHttp function");
     team = team.toLowerCase(); // Convert the input team to lowercase

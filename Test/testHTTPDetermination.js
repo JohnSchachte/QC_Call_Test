@@ -76,7 +76,7 @@ class TestEndPointsDetermination extends Tester{
                   Logger.log("%s produced a null agentObj. Please research.",row[this.colMap.get(AGENT_NAME_HEADER)]); // there were 4 and these employees were found on former employee sheet
                   return;
                 }
-                this.needCoaching.push({agentObj,rowIndex:row[this.colMap.get("Row")]});
+                this.needCoaching.push({agentObj,rowIndex:row[this.colMap.get(IS_CALL == "true" ? "Row" : "Chat Id")]});
             }
         });
         Logger.log("Need Coaching: %s",this.needCoaching);
