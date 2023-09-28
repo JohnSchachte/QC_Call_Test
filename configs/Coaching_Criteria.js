@@ -38,6 +38,21 @@ const checkScore = function (score){
     return score <= SCORE_THRESHOLD; // there must be a score this has been checked before eval email was sent.
 };
 
+const checkWorkAvoidance = function (workAvoidanceValue){
+    if(typeof workAvoidanceValue !== "string") return false;
+    
+    const workAvoidanceSubStrings = [
+        "answered call on mute",
+        "failed to disconnect",
+        "placed caller on hold",
+        "call disconnected",
+        "more than 1 of the above"
+    ];
+
+    workAvoidanceValue = workAvoidanceValue.toLowerCase().trim();
+    return workAvoidanceSubStrings.some(s => workAvoidanceValue.includes(s));
+};
+
 const determineCoachingNeed = function (row, colMap,score) {
     let severity;
     const categories = [];
@@ -65,7 +80,7 @@ const determineCoachingNeed = function (row, colMap,score) {
         },
         {
             check: () => {
-                return checkIncludesNo(row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]);
+                return checkWorkAvoidance(row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]);
             },
             severity: "Immediate attention",
             category: "Work Avoidance"
