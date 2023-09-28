@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(4347).toString()); // change number to the last row you want to do. 
+  scriptProps.setProperty("lr",(7589).toString()); // change number to the last row you want to do. 
 }
 
 // /**
@@ -43,8 +43,8 @@ function setScriptProperties(){
   
   // criteria fields/headers
   scriptProps.setProperty("DESCRIPTION_HEADER", "Description");
-scriptProps.setProperty("INTERNAL_NOTES_HEADER", "Internal Notes");
-scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
+  scriptProps.setProperty("INTERNAL_NOTES_HEADER", "Internal Notes");
+  scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines during the call?");
   scriptProps.setProperty("FILED_TICKET_HEADER","Did the agent file/document a ticket to record this interaction with the caller?");
   scriptProps.setProperty("BUSINESS_INFO_ACCORDINGLY_HEADER", "Did the agent fill out the business information accordingly?");
   scriptProps.setProperty("CALLER_NAME_HEADER", "Caller's Name");
