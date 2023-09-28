@@ -59,7 +59,7 @@ const determineCoachingNeed = function (row, colMap,score) {
             category: "Ticket Handling"
         },
         {
-            check: () => checkIncludesNo(row[colMap.get(scriptPropsObj["SECURITY_HEADER"])]),
+            check: () => checkSecuirtyViolation(row[colMap.get(scriptPropsObj["SECURITY_HEADER"])]),
             severity: "High",
             category: "Security Violation"
         },

@@ -4,7 +4,7 @@ const mkDescribeText = function (evalRow,colMap,score){
     Score: ${score}
     Ticket#: ${evalRow[colMap.get(TICKET_HEADER)]}
     Agent's Name: ${evalRow[colMap.get(AGENT_NAME_HEADER)]}
-    ${IS_CALL == "true" ? `MID & DBA Name:  ${evalRow[colMap.get(MID_DBA_HEADER)]}` : ""},
+    ${IS_CALL == "true" ? `MID & DBA Name:  ${evalRow[colMap.get(MID_DBA_HEADER)]}` : ""}
     `
 }
 const cache = CacheService.getScriptCache();
