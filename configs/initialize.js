@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(4486).toString()); // change number to the last row you want to do. Test row = 4347
+  scriptProps.setProperty("lr",(4347).toString()); // change number to the last row you want to do. Test row = 4347
 }
 
 // /**
@@ -20,6 +20,7 @@ function setScriptProperties(){
   // if in production, this should be true
   scriptProps.setProperty("IS_PRODUCTION","false");
   scriptProps.setProperty("IS_CALL","false");
+  
   // this will depend on chat or call schema/headers
   scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Chat Transcript Segment ID#");
