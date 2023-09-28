@@ -68,11 +68,7 @@ function sendReportingData(row,colMap,categories,rowIndex,agentObj){
     const ss = SpreadsheetApp.openById(scriptPropsObj["REPORTING_SS_ID"]);
     const reportingSheet = ss.getSheetByName(scriptPropsObj["REPORTING_SHEET_NAME"]);
 
-    
-    const lock = LockService.getScriptLock();
-    lock.waitLock(LOCK_WAIT_TIME);
     reportingSheet.appendRow(reportingRow);
-    lock.releaseLock();
 
 }
 

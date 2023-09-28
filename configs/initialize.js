@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(4347).toString()); // change number to the last row you want to do. Test row = 4347
+  scriptProps.setProperty("lr",(4481).toString()); // change number to the last row you want to do. Test row = 4347
 }
 
 // /**
@@ -46,7 +46,7 @@ function setScriptProperties(){
   // criteria fields/headers
   scriptProps.setProperty("SECURITY_HEADER", "Did the agent adhere to all account security guidelines while assisting the merchant?");
   scriptProps.setProperty("FILED_TICKET_HEADER","Did the agent file/document a ticket to record this interaction with the chatter?");
-  scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently? ");
+  scriptProps.setProperty("WORK_AVOIDANCE_HEADER","Did the agent work efficiently? "); // reliability wants this criteria not to count
   scriptProps.setProperty("EVALUATOR_HEADER","Evaluator Name");
   scriptProps.setProperty("MID_DBA_HEADER","MID & DBA Name");
   

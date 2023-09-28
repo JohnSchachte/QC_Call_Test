@@ -63,13 +63,13 @@ const determineCoachingNeed = function (row, colMap,score) {
             severity: "High",
             category: "Security Violation"
         },
-        {
-            check: () => {
-                return checkIncludesNo(row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]);
-            },
-            severity: "Immediate attention",
-            category: "Work Avoidance"
-        }
+        // {
+        //     check: () => {
+        //         return checkIncludesNo(row[colMap.get(scriptPropsObj["WORK_AVOIDANCE_HEADER"])]);
+        //     },
+        //     severity: "Immediate attention",
+        //     category: "Work Avoidance"
+        // } turned off by Tara and team
     ];
 
     criteria.forEach(criterion => {
