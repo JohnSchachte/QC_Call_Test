@@ -31,9 +31,9 @@ class TestCriteria extends Tester {
             if(!score) return;
             let {severity,categories} = determineCoachingNeed(row,this.colMap,score);
             if(severity){
-                this.needCoaching.push({rowIndex:i+7589,severity,categories});
+                this.needCoaching.push({rowIndex:i+this.startRow,severity,categories});
             }else{
-                this.noCoaching.push({rowIndex:i+7589,severity,categories});
+                this.noCoaching.push({rowIndex:i+this.startRow,severity,categories});
             }
         });
     }
@@ -81,9 +81,9 @@ class TestCriteria extends Tester {
   checkNeedsCoachingLength(){
     this.coachingDetermination();
     const coachingSets = this.getCoachingSets([1,2,3,4])
-    const combinedSet = new Set([...coachingSets[0], ...coachingSets[1], ...coachingSets[2], ...coachingSets[3]]);
+    const combinedSet = new Set([...coachingSets[0], ...coachingSets[1], ...coachingSets[2], ...coachingSets[3]].filter(el => el));
     const needCoachingIndices = this.needCoaching.map(el => el.rowIndex);
-    const inNeedCoachingNotInSets = this.needCoaching.filter(el => !combinedSet.has(el.rowIndex));
+    const inNeedCoachingNotInSets = this.needCoaching.filter(el => !combinedSet.has(el.rowIndex)).filter(el => !/^Ticket\sHandling$/.test(el["categories"]));
     const inSetsNotInNeedCoaching = [...combinedSet].filter(index => !needCoachingIndices.includes(index));
 
     Logger.log("In needCoaching but not in sets: %s. Length = %s", inNeedCoachingNotInSets,inNeedCoachingNotInSets.length);

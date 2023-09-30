@@ -15,6 +15,7 @@ This also allows us to use mostly the same script for different applications (Li
 */
 const TRANSCRIPT_ID_HEADER = scriptPropsObj["TRANSCRIPT_ID_HEADER"], 
 IS_PRODUCTION = scriptPropsObj["IS_PRODUCTION"],
+IS_CALL = scriptPropsObj["IS_CALL"],
 TICKET_HEADER = scriptPropsObj["TICKET_HEADER"], 
 AGENT_NAME_HEADER = scriptPropsObj["AGENT_NAME"], 
 EMAIL_SENT_HEADER = scriptPropsObj["EMAIL_SENT"], 

@@ -19,11 +19,12 @@ function sendManagementCoachingEmail(coachingRow,agentObject,coachingId="test22"
         // };
         // for template vars
         let coachingIdAnchor;
+        const teams = getTeams();
         try{
-          coachingIdAnchor = CoachingRequestScripts.getSupCoachingSheet(getTeams(),agentObject["Team"],agentObject["SUPERVISOR"])
+          coachingIdAnchor = CoachingRequestScripts.getSupCoachingSheet(teams,agentObject["Team"],agentObject["SUPERVISOR"]);
         }catch(f){
           Logger.log("trying to get sup Sheet. Error: %s",f);
-          coachingIdAnchor = CoachingRequestScripts.getBackEndNew(getTeams(),agentObject["Team"])
+          coachingIdAnchor = CoachingRequestScripts.getBackEndNew(teams,agentObject["Team"])
         }
         const emailVars = {
             agentName : agentObject["Employee Name"],

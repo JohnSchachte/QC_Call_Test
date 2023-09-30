@@ -26,13 +26,14 @@ function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingC
     */
    
     const transFormedRow = new Array(12);
-    let colMapString = "";
-    colMapString = "";
-    reportingColMap.forEach((value,key) => colMapString += `${key} : ${value} \n` );
+
     transFormedRow[reportingColMap.get("Evaluator")] = row[colMap.get(EVALUATOR_HEADER)];
      
-    transFormedRow[reportingColMap.get("Date Scored:")] = row[colMap.get(TIMESTAMP_HEADER)];
-    transFormedRow[reportingColMap.get("Scored Month, Year")] = row[colMap.get(TIMESTAMP_HEADER)]
+    const timeStamp = row[colMap.get(TIMESTAMP_HEADER)];
+    transFormedRow[reportingColMap.get("Date Scored:")] = timeStamp;
+    const month_date = formatTimestamp_Month_Date(new Date(timeStamp)); 
+    transFormedRow[reportingColMap.get("Scored Month, Year")] = month_date;
+
     transFormedRow[reportingColMap.get("Agent's Name")] = row[colMap.get(AGENT_NAME_HEADER)];
     transFormedRow[reportingColMap.get("Agent's Team")] = agentObj["Team"];
     transFormedRow[reportingColMap.get("Record ID/Chat line # w/hyperlink")] =  transformTranscriptIds(row[colMap.get(TRANSCRIPT_ID_HEADER)]).map(({href}) => href).join(",\n");
@@ -68,11 +69,7 @@ function sendReportingData(row,colMap,categories,rowIndex,agentObj){
     const ss = SpreadsheetApp.openById(scriptPropsObj["REPORTING_SS_ID"]);
     const reportingSheet = ss.getSheetByName(scriptPropsObj["REPORTING_SHEET_NAME"]);
 
-    
-    const lock = LockService.getScriptLock();
-    lock.waitLock(LOCK_WAIT_TIME);
     reportingSheet.appendRow(reportingRow);
-    lock.releaseLock();
 
 }
 
