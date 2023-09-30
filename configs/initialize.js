@@ -1,6 +1,6 @@
 function initializeLastRow() {
   // const submSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName("Submissions");
-  scriptProps.setProperty("lr",(4481).toString()); // change number to the last row you want to do. Test row = 4347
+  scriptProps.setProperty("lr",(4471).toString()); // change number to the last row you want to do. Test row = 4347
 }
 
 // /**
@@ -53,6 +53,7 @@ function setScriptProperties(){
   // All these need to be granted permissions if you want to run the script
   scriptProps.setProperty("Response Sheet Name","Chat Form Responses");
   scriptProps.setProperty("BACKEND_ID","1SY1_eBIKx7bpIv7zOpSgm1v9rIqCyCjSZzeReysqfic");
+  // coaching reporting
   scriptProps.setProperty("REPORTING_ID","1zQ98-rxOzfeq1QOmVeaC7OgOcZ0IaD7vv7_Vak7rclE");
   // reliability coaching reporting
   scriptProps.setProperty("REPORTING_SS_ID","1QSTxbx-HfTZbQpDqaAYuj9T7784HWJ7ABQ4BsT_Ql_U");
