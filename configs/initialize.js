@@ -20,6 +20,7 @@ function setScriptProperties(){
   // if in production, this should be true
   scriptProps.setProperty("IS_PRODUCTION","true");
   scriptProps.setProperty("IS_CALL","true");
+  
   // this will depend on chat or call schema/headers
   scriptProps.setProperty("DATE_SENT_HEADER","Date Sent");
   scriptProps.setProperty("TRANSCRIPT_ID_HEADER","Record ID");
@@ -62,10 +63,11 @@ function setScriptProperties(){
   
   // All these need to be granted permissions if you want to run the script
   scriptProps.setProperty("Response Sheet Name","Call Scorecard Form Responses");
-  scriptProps.setProperty("BACKEND_ID","1zEZsxiRuB9fdcNEfxb8yBcfGqToA9XZZ5_9CT47C8CU");
+  scriptProps.setProperty("BACKEND_ID","1Fsw8e7Htowi9uaB50XEbJXRAK3IuaNSoYFY9sNUpt8Y");
   scriptProps.setProperty("REPORTING_ID","1zQ98-rxOzfeq1QOmVeaC7OgOcZ0IaD7vv7_Vak7rclE");
-  // reliability coaching reporting
-  scriptProps.setProperty("REPORTING_SS_ID","1QSTxbx-HfTZbQpDqaAYuj9T7784HWJ7ABQ4BsT_Ql_U");
   
+  // reliability coaching reporting
+  scriptProps.setProperty("REPORTING_SS_ID","1-h8et_sdVVSmUbKq-ZK86-K93VRyX80xW2r2fgmIIhQ");
   scriptProps.setProperty("REPORTING_SHEET_NAME","Coaching_Form_Data");
+  
 }
