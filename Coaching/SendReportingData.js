@@ -30,8 +30,8 @@ function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingC
     transFormedRow[reportingColMap.get("Evaluator")] = row[colMap.get(EVALUATOR_HEADER)];
      
     const timeStamp = row[colMap.get(TIMESTAMP_HEADER)];
-    transFormedRow[reportingColMap.get("Date Scored:")] = timeStamp;
-    const month_date = formatTimestamp_Month_Date(new Date(timeStamp)); 
+    transFormedRow[reportingColMap.get("Date Scored:")] = timeStamp; 
+    const month_date = formatTimestamp_Month_Date(new Date(timeStamp?.replace(/AM|PM|EST/g,"").trim() ?? new Date()));
     transFormedRow[reportingColMap.get("Scored Month, Year")] = month_date;
 
     transFormedRow[reportingColMap.get("Agent's Name")] = row[colMap.get(AGENT_NAME_HEADER)];

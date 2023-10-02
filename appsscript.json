@@ -31,6 +31,12 @@
         "userSymbol": "OperationCoachingMembers",
         "libraryId": "1SVb5jxhLQp6_juLBnm6AcvUiD3jIkKFq8tGCxNagdetq_zyY_FmgBKr7",
         "version": "1"
+      },
+      {
+        "userSymbol": "Self",
+        "version": "0",
+        "libraryId": "1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk",
+        "developmentMode": true
       }
     ]
   }
