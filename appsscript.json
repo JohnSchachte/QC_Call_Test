@@ -24,8 +24,7 @@
       {
         "userSymbol": "CoachingRequestScripts",
         "libraryId": "1Qwnt6CJYCbtBT-deW9Q-uiB6f407S3PoFpHN0wBozX00uw92WmJzvU0n",
-        "version": "6",
-        "developmentMode": false
+        "version": "6"
       },
       {
         "userSymbol": "OperationCoachingMembers",
@@ -34,9 +33,9 @@
       },
       {
         "userSymbol": "Self",
-        "version": "0",
         "libraryId": "1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk",
-        "developmentMode": true
+        "version": "14",
+        "developmentMode": false
       }
     ]
   }
