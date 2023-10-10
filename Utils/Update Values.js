@@ -1,4 +1,29 @@
 /**
+ * Converts a score from the format .XXX* (or just .XXX) to XX.XX%.
+ * @param {(string|number)} score - The score in the format .XXX* or .XXX.
+ * @return {string} The score in the format XX.XX%.
+ */
+function convertScoreFormat(score) {
+  // Convert the score to a string (in case it's a number)
+  const scoreStr = String(score);
+
+  // Remove any non-numeric characters (like '*') and parse the score
+  const parsedScore = parseFloat(scoreStr.replace(/[^0-9.]/g, ''));
+
+  // Convert the score to percentage format
+  const percentageScore = (parsedScore * 100).toFixed(2) + '%';
+
+  return percentageScore;
+}
+
+// Example usage:
+const score1 = ".123*";
+const score2 = 0.123;
+console.log(convertScoreFormat(score1));  // Outputs: "12.30%"
+console.log(convertScoreFormat(score2));  // Outputs: "12.30%"
+
+
+/**
  * Updates the hire date related values in the 'updateValues' array.
  * @param {Object} agentObj - The object containing agent's data.
  * @param {Array} updateValues - The array of values to update.
@@ -24,9 +49,13 @@ function updateHireDateValues(agentObj, updateValues, colMap,timeStamp){
 function updateTimestampValues(updateValues, colMap, row){
   let timeStamp = new Date(row[colMap.get(TIMESTAMP_HEADER)]);
   updateValues[colMap.get(DATE_HEADER)] = Utilities.formatDate(timeStamp,"America/New_York", "MM/dd/yyyy");
-  updateValues[colMap.get(MONTH_YEAR_HEADER)] = Utilities.formatDate(timeStamp,"America/New_York", "MMMM yyyy");
+  updateValues[colMap.get(MONTH_YEAR_HEADER)] = formatTimestamp_Month_Date(timeStamp);
   row[colMap.get(TIMESTAMP_HEADER)] = Utilities.formatDate(timeStamp,"America/New_York","MM/dd/yyyy HH:mm:ss a") + " EST";
   return timeStamp;
+}
+
+function formatTimestamp_Month_Date(date){
+  return Utilities.formatDate(date,"America/New_York", "MMMM yyyy");
 }
 
 /**
@@ -53,6 +82,6 @@ function writeToSheet(updateValues,index){
     {
     majorDimension:"ROWS",
     values:[updateValues],
-    },BACKEND_ID,`'Call Scorecard Form Responses'!${index}:${index}`,{valueInputOption:"USER_ENTERED"})
+    },BACKEND_ID,`${SUBMISSION_SHEET_NAME}!${index}:${index}`,{valueInputOption:"USER_ENTERED"})
   );
 }

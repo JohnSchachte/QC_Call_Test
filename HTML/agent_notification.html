@@ -35,12 +35,12 @@
     <tr>
       <td>
         <img src="https://www.shift4.com/images/email/SHIFT4-Email-Header-Bar.png" alt="Shift4 Payments" width="100%" style="display:block;" />
-        <h2 style="color: #136ef6; text-align: center;">Call Evaluation</h2>
+        <h2 style="color: #136ef6; text-align: center;"><? IS_CALL == "true" ? "Call" : "Chat"?> Evaluation</h2>
         <p style="font-weight: bold;padding-left:15px;">Dear <?= employeeName ?>,</p>
-        <p>Below is the most recent call evaluation scored for you by Reliability. Please take a few minutes to review the feedback thoroughly to ensure you are following all company standards accordingly. Our goal is to not only guarantee that our merchants receive quality customer service, but that all agents are adhering to all required SOPs, memos, etc.</p>
-        <p>Here's your Call Evaluation:</p>
+        <p>Below is the most recent <? IS_CALL == "true" ? "call" : "chat"?> evaluation scored for you by Reliability. Please take a few minutes to review the feedback thoroughly to ensure you are following all company standards accordingly. Our goal is to not only guarantee that our merchants receive quality customer service, but that all agents are adhering to all required SOPs, memos, etc.</p>
+        <p>Here's your <? IS_CALL == "true" ? "Call" : "Chat"?> Evaluation:</p>
         <ul>
-          <li>Call Transcripts:</li>
+          <li><? IS_CALL == "true" ? "Call" : "Chat"?> Transcripts:</li>
           <ul>
           <?
           // Server-side logic
@@ -60,7 +60,7 @@
           <? ticketLink.forEach(el => { ?>
             <li>
               <? if(typeof el === "object") { ?>
-                <a href="<?= el.url ?>">Ticket #<?= el.id ?></a>
+                <a href="<?= el.url ?>">Ticket #: <?= el.id ?></a>
               <? } else { ?>
                 <?= el ?>
               <? } ?>

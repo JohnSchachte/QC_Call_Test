@@ -1,3 +1,5 @@
+const LOCK_WAIT_TIME = 600000; // 10 minutes
+
 const scriptProps = PropertiesService.getScriptProperties();
 const scriptPropsObj = scriptProps.getProperties();
 
@@ -13,13 +15,14 @@ This also allows us to use mostly the same script for different applications (Li
 */
 const TRANSCRIPT_ID_HEADER = scriptPropsObj["TRANSCRIPT_ID_HEADER"], 
 IS_PRODUCTION = scriptPropsObj["IS_PRODUCTION"],
+IS_CALL = scriptPropsObj["IS_CALL"],
 TICKET_HEADER = scriptPropsObj["TICKET_HEADER"], 
 AGENT_NAME_HEADER = scriptPropsObj["AGENT_NAME"], 
 EMAIL_SENT_HEADER = scriptPropsObj["EMAIL_SENT"], 
 SCORE_HEADER = scriptPropsObj["SCORE_HEADER"], 
 AGENT_LOCATION_HEADER = scriptPropsObj["AGENT_LOCATION"], 
 TEAM_HEADER = scriptPropsObj["TEAM_HEADER"], 
-HIRE_DATE_HEADER = scriptPropsObj["HIRE_DATE"], 
+HIRE_DATE_HEADER = scriptPropsObj["HIRE_DATE_HEADER"], 
 CC_EMAIL_HEADER = scriptPropsObj["CC_EMAIL_HEADER"],
 LT_3MONTHS_HEADER = scriptPropsObj["<3_MONTHS_HEADER"],
 GT_MONTHS_HEADER = scriptPropsObj[">3_MONTHS_HEADER"],
@@ -33,4 +36,7 @@ EVALUATOR_HEADER = scriptPropsObj["EVALUATOR_HEADER"],
 MID_DBA_HEADER = scriptPropsObj["MID_DBA_HEADER"],
 COACHING_STATUS_HEADER = scriptPropsObj["Coaching Status"],
 RESPONSE_SHEET_NAME = scriptPropsObj["Response Sheet Name"],
-DATE_SENT_HEADER = scriptPropsObj["DATE_SENT_HEADER"];
+DATE_SENT_HEADER = scriptPropsObj["DATE_SENT_HEADER"],
+RELIABILITY_REPORTING_SHEET_NAME = scriptPropsObj["REPORTING_SHEET_NAME"],
+RELIABILITY_REPORTING_SS_ID = scriptPropsObj["REPORTING_SS_ID"];
+

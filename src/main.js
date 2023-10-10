@@ -8,8 +8,8 @@ function main(){
   // get colMap
   const colMap = getColMap();
 
+  //lock in case main takes longer than the next trigger event.
   const lock = LockService.getScriptLock();
-  const LOCK_WAIT_TIME = 600000; // 10 minutes
   lock.waitLock(LOCK_WAIT_TIME); // wait 10 minutes for others' use of the code section and lock it when available
 
   // make data
@@ -17,7 +17,7 @@ function main(){
   const offset = parseInt(scriptProps.getProperty("lr")); 
   try{
     Logger.log("range = %s",`Submissions!A${offset}:${Custom_Utilities.columnToLetter(colMap.size)}`);
-    data = sheetsAPI.get(BACKEND_ID,`'Call Scorecard Form Responses'!A${offset}:${Custom_Utilities.columnToLetter(colMap.size)}`).values;
+    data = sheetsAPI.get(BACKEND_ID,`${SUBMISSION_SHEET_NAME}!A${offset}:${Custom_Utilities.columnToLetter(colMap.size)}`).values;
   }catch(L){
     Logger.log(L);
     return;
@@ -44,8 +44,9 @@ function main(){
     const agentName = row[colMap.get(AGENT_NAME_HEADER)];
     const agentObj = NameToWFM.getAgentObj(agentName);
 
+
     if(!agentObj){
-      Logger.log("agent was not found in WFM");
+      Logger.log("agent was not found in WFM so we can't send to their because we cannot look it up");
       updateValues[colMap.get(EMAIL_SENT_HEADER)] = "Name Mismatch with WFM";
       writeToSheet(updateValues,index+offset);
       scriptProps.setProperty("lr",offset+index+1);
@@ -62,18 +63,24 @@ function main(){
       scriptProps.setProperty("lr",offset+index+1);
       return;
     }
-
     score = updateScoreValues(updateValues, colMap, score);
+
     updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
     updateValues[colMap.get(TEAM_HEADER)] = agentObj["Team"];
-    Logger.log("Sent");
+    Logger.log("Sent for row %s",(offset+index));
     scriptProps.setProperty("lr",offset+index+1); // update the last row to record where the script starts next time
+    
+    if(IS_CALL == "false"){
+      updateValues[colMap.get("Chat Id")] = (offset+index).toString();
+      row[colMap.get("Chat Id")] = (offset+index).toString();
+    }
 
     doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
     writeToSheet(updateValues,index+offset);
     
     const coachingStatus = row[colMap.get(COACHING_STATUS_HEADER)];
-    if(!coachingStatus || !coachingStatus.includes("Coaching Id:")) initializeCoaching(row,agentObj,score,index+offset);
+
+    if(!coachingStatus || !coachingStatus.includes("Coaching Id:")) initializeCoaching(row,agentObj,calculateScore(row[colMap.get(SCORE_HEADER)]),index+offset);
   }); // end of loop
 
 

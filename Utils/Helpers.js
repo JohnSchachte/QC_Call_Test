@@ -5,6 +5,21 @@ function getColMap(){
 }
 
 /**
+ * Checks if a given timestamp is less than 5 months from a given hire date
+ * @param {Date} hireDate - The starting date
+ * @param {Date} timestamp - The date to compare to the hire date
+ * @returns {boolean} True if the timestamp is less than 5 months from the hire date, false otherwise
+ */
+function under4Months(hireDate, timestamp) {
+  Logger.log("hire date = %s",hireDate);
+  Logger.log("timestamp = %s",timestamp);
+
+  let fourMonths = new Date(hireDate.getFullYear(), hireDate.getMonth() + 4, 1); // four months from the hireDate, at start of the month
+  return timestamp < fourMonths;
+};
+
+
+/**
  * logic for transforming transcriptIds.
  * @param {String[]} transcriptIds - an array of transcript ids to transform or null.
  * @return {Array} - An array of transformed transcript ids.
@@ -42,7 +57,7 @@ function sendEmail(recipients,subject,template){
 function setScoreFormat(startRow,colMap){
   const ss = SpreadsheetApp.openById(BACKEND_ID);
   const scorePercCol = Custom_Utilities.columnToLetter(colMap.get(PERC_SCORE_HEADER)+1);
-  ss.getSheetByName("Call Scorecard Form Responses")
+  ss.getSheetByName(RESPONSE_SHEET_NAME)
     .getRange(`${(scorePercCol)}${startRow}:${scorePercCol}`)
     .setNumberFormat("0.00%")
 }
