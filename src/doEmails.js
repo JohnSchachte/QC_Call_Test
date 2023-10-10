@@ -13,7 +13,6 @@ class DoEmails{
     this.emailSubject = IS_CALL == "true" ? `Call Evaluation for ` : `Chat Evaluation for `; // Set email subject to Quality Evalutation form with agent name
   }
 
-  
   /**
    * Send an evaluation email to an agent.
    * @param {Object} row - The row of data to be included in the email.
