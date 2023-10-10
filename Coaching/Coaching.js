@@ -18,7 +18,6 @@ function alertAndCoach(row,agentObj,score,rowIndex){
     Logger.log("score: %s",score);
     Logger.log("row: %s",JSON.stringify(row));
 
-
     //writeToSheet Decorator
     const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
 
@@ -31,6 +30,13 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         writeCoachingStatus(a1Notation,"Agent's Team is Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","Agent Not in Coaching Process: " + agentObj["Employee Name"],"Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
         return false;
+    }
+
+    try{
+      CoachingRequestScripts.getEmails(agentObject)
+    }catch(f){
+      Logger.log(f);
+      writeCoachingStatus(a1Notation,"No Sup or Manager. Tried at " + new Date().toLocaleString());
     }
     
     const {severity,categories} = determineCoachingNeed(row,colMap,score);

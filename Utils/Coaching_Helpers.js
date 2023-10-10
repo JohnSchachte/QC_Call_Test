@@ -1,7 +1,7 @@
 const mkDescribeText = function (evalRow,colMap,score){
     return `Evaluator: ${evalRow[colMap.get(EVALUATOR_HEADER)]}
     Transcript URL: ${transformTranscriptIds(evalRow[colMap.get(TRANSCRIPT_ID_HEADER)]).map(el => el.href).join(",\n")}
-    Score: ${score}
+    Score: ${convertScoreFormat(score)}
     Ticket#: ${evalRow[colMap.get(TICKET_HEADER)]}
     Agent's Name: ${evalRow[colMap.get(AGENT_NAME_HEADER)]}
     ${IS_CALL == "true" ? `MID & DBA Name:  ${evalRow[colMap.get(MID_DBA_HEADER)]}` : ""}
@@ -30,7 +30,7 @@ const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categorie
     row[this.coachingHeaders["Timestamp"]] = evalRow[colMap.get("Timestamp")];
     row[this.coachingHeaders["Agent's Name"]] = agentObj["Employee Name"];
     row[this.coachingHeaders["Supervisor"]] = agentObj["SUPERVISOR"];
-    row[this.coachingHeaders["Email Address"]] = agentObj["Email Address"]; //submitter
+    row[this.coachingHeaders["Email Address"]] = "ReliabilityManagement@shift4.com"; //submitter
     row[this.coachingHeaders["Coaching Identifier?"]] = evalRow[colMap.get(TRANSCRIPT_ID_HEADER)];
     const ticketNumber = evalRow[colMap.get(TICKET_HEADER)];
     row[this.coachingHeaders["Ticket Link"]] = CoachingRequestScripts.getTicketNumber(
