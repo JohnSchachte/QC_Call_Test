@@ -1,10 +1,3 @@
-/**
- *
- *
- * @param {*} row
- * @param {*} colMap
- * @param {*} categories
- */
 function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj){
     /**
      * SCHEMA DEFINITION FOR THIS TABLE:

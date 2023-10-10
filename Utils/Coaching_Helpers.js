@@ -1,7 +1,7 @@
 const mkDescribeText = function (evalRow,colMap,score){
     return `Evaluator: ${evalRow[colMap.get(EVALUATOR_HEADER)]}
     Transcript URL: ${transformTranscriptIds(evalRow[colMap.get(TRANSCRIPT_ID_HEADER)]).map(el => el.href).join(",\n")}
-    Score: ${score}
+    Score: ${convertScoreFormat(score)}
     Ticket#: ${evalRow[colMap.get(TICKET_HEADER)]}
     Agent's Name: ${evalRow[colMap.get(AGENT_NAME_HEADER)]}
     ${IS_CALL == "true" ? `MID & DBA Name:  ${evalRow[colMap.get(MID_DBA_HEADER)]}` : ""}
