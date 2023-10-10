@@ -35,6 +35,13 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","Agent Not in Coaching Process: " + agentObj["Employee Name"],"Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
         return false;
     }
+
+    try{
+      CoachingRequestScripts.getEmails(agentObject)
+    }catch(f){
+      Logger.log(f);
+      writeCoachingStatus(a1Notation,"No Sup or Manager. Tried at " + new Date().toLocaleString());
+    }
     
     const {severity,categories} = determineCoachingNeed(row,colMap,score);
     if(!severity){

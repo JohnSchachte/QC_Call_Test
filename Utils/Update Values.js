@@ -16,12 +16,6 @@ function convertScoreFormat(score) {
   return percentageScore;
 }
 
-// Example usage:
-const score1 = ".123*";
-const score2 = 0.123;
-console.log(convertScoreFormat(score1));  // Outputs: "12.30%"
-console.log(convertScoreFormat(score2));  // Outputs: "12.30%"
-
 
 /**
  * Updates the hire date related values in the 'updateValues' array.
