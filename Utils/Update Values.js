@@ -1,4 +1,23 @@
 /**
+ * Converts a score from the format .XXX* (or just .XXX) to XX.XX%.
+ * @param {(string|number)} score - The score in the format .XXX* or .XXX.
+ * @return {string} The score in the format XX.XX%.
+ */
+function convertScoreFormat(score) {
+  // Convert the score to a string (in case it's a number)
+  const scoreStr = String(score);
+
+  // Remove any non-numeric characters (like '*') and parse the score
+  const parsedScore = parseFloat(scoreStr.replace(/[^0-9.]/g, ''));
+
+  // Convert the score to percentage format
+  const percentageScore = (parsedScore * 100).toFixed(2) + '%';
+
+  return percentageScore;
+}
+
+
+/**
  * Updates the hire date related values in the 'updateValues' array.
  * @param {Object} agentObj - The object containing agent's data.
  * @param {Array} updateValues - The array of values to update.

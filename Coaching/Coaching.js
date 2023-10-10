@@ -21,16 +21,6 @@ function alertAndCoach(row,agentObj,score,rowIndex){
     Logger.log("agentObj: %s",JSON.stringify(agentObj));
     Logger.log("score: %s",score);
     Logger.log("row: %s",JSON.stringify(row));
-    /**TODO:
-     * 1. get column map - done and tested
-     * 2. ensure agent is apart of the coaching process - done and tested
-     * 4. assign categories based on On Demand Coaching Form - done and tested
-     * 5. Assign severities based on JIRA TICKET: https://shift4.atlassian.net/browse/PIP-821 - done and tested
-     * 3. setup coaching row - done and tested
-     * 4. send to coaching sheet endpoint - determination done and tested
-     * 5. send email to supervisor,manager - done and tested
-     * 6. write back to the sheet in "Copied to coaching form? And when" - done but not tested
-     */
 
     //writeToSheet Decorator
     const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
@@ -44,6 +34,13 @@ function alertAndCoach(row,agentObj,score,rowIndex){
         writeCoachingStatus(a1Notation,"Agent's Team is Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com","Agent Not in Coaching Process: " + agentObj["Employee Name"],"Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
         return false;
+    }
+
+    try{
+      CoachingRequestScripts.getEmails(agentObject)
+    }catch(f){
+      Logger.log(f);
+      writeCoachingStatus(a1Notation,"No Sup or Manager. Tried at " + new Date().toLocaleString());
     }
     
     const {severity,categories} = determineCoachingNeed(row,colMap,score);
