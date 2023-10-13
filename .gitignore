@@ -1,5 +1,9 @@
 .clasp.json
 configs/
 .claspignore
+<<<<<<< HEAD
 appsscript.json
 ```
+=======
+appsscript.json
+>>>>>>> remoteTest/test
