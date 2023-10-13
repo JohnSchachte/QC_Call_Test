@@ -1,3 +1,11 @@
+/**
+ * Constructs a description text for the evaluation.
+ *
+ * @param {Array} evalRow - The evaluation row data.
+ * @param {Map} colMap - The mapping of column names to indexes.
+ * @param {number} score - The evaluation score.
+ * @returns {string} - The constructed description text.
+ */
 const mkDescribeText = function (evalRow,colMap,score){
     return `Evaluator: ${evalRow[colMap.get(EVALUATOR_HEADER)]}
     Transcript URL: ${transformTranscriptIds(evalRow[colMap.get(TRANSCRIPT_ID_HEADER)]).map(el => el.href).join(",\n")}
@@ -7,9 +15,24 @@ const mkDescribeText = function (evalRow,colMap,score){
     ${IS_CALL == "true" ? `MID & DBA Name:  ${evalRow[colMap.get(MID_DBA_HEADER)]}` : ""}
     `
 }
+// Cache instance for memoized functions.
 const cache = CacheService.getScriptCache();
+/**
+ * Memoized function to get the list of teams.
+ *
+ * @param {string} REPORTING_ID - The ID used for reporting.
+ * @returns {Array} - List of teams.
+*/
 const getTeams = Custom_Utilities.memoize((REPORTING_ID) => Custom_Utilities.exponentialBackoff(() => CoachingRequestScripts.getTeams(REPORTING_ID)), cache);
 
+/**
+ * Fetches the HTTP URL associated with a team.
+ *
+ * @param {string} team - The team name.
+ * @param {CacheService.Cache} cache - The cache instance to use.
+ * @returns {string} - The associated HTTP URL.
+ * @throws Will throw an error if the team name is not a string or if the team is not found.
+ */
 const getHttp = function (team, cache) {
     
     const teams = getTeams(REPORTING_ID);
@@ -24,6 +47,17 @@ const getHttp = function (team, cache) {
     throw new Error("Team is not on Operation Coaching Master Sheet");
 };
 
+/**
+ * Formats the evaluation row as a coaching row.
+ *
+ * @param {Array} evalRow - The evaluation row data.
+ * @param {Map} colMap - The mapping of column names to indexes.
+ * @param {Object} agentObj - The agent's data.
+ * @param {string} severity - The severity level of the evaluation.
+ * @param {Array} categories - The list of evaluation categories.
+ * @param {number} score - The evaluation score.
+ * @returns {Array} - The formatted coaching row.
+ */
 const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categories,score){
     const row = new Array(11);
     
@@ -43,6 +77,12 @@ const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categorie
     return row;
 }
 
+/**
+ * Writes a value to a sheet using A1 notation.
+ *
+ * @param {string} A1Notation - The A1 notation reference to the cell.
+ * @param {any} value - The value to write to the cell.
+ */
 function writeToSheetA1Notation(A1Notation,value){
     const range = this.responseSheet.getRange(A1Notation);
     range.setValue(value);

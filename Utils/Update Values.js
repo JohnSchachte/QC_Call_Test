@@ -1,44 +1,46 @@
 /**
- * Converts a score from the format .XXX* (or just .XXX) to XX.XX%.
- * @param {(string|number)} score - The score in the format .XXX* or .XXX.
- * @return {string} The score in the format XX.XX%.
+ * Calculates a score from a string in the format "numerator / denominator".
+ * @param {string} score - A string in the format "numerator / denominator".
+ * @returns {number} - The calculated score rounded to four decimal places.
+ */
+function calculateScore(score){
+  const [numerator, denominator] = score.split(" / ").map(integer => parseInt(integer));
+  return Math.round((numerator / denominator) * 10000) / 10000;
+}
+
+/**
+ * Converts a score into a percentage format.
+ * @param {(string|number)} score - The score to convert.
+ * @returns {string} - The score in percentage format.
  */
 function convertScoreFormat(score) {
-  // Convert the score to a string (in case it's a number)
   const scoreStr = String(score);
-
-  // Remove any non-numeric characters (like '*') and parse the score
   const parsedScore = parseFloat(scoreStr.replace(/[^0-9.]/g, ''));
-
-  // Convert the score to percentage format
   const percentageScore = (parsedScore * 100).toFixed(2) + '%';
-
   return percentageScore;
 }
 
-
 /**
- * Updates the hire date related values in the 'updateValues' array.
- * @param {Object} agentObj - The object containing agent's data.
- * @param {Array} updateValues - The array of values to update.
- * @param {Map} colMap - The map containing column indexes.
- * @param {Array} row - The current row data.
+ * Updates hire date values in a provided values map.
+ * @param {Object} agentObj - Object containing agent's data.
+ * @param {Array} updateValues - Array containing values to update.
+ * @param {Map} colMap - Column map to locate columns by header.
+ * @param {Date} timeStamp - Timestamp associated with the current record.
  */
-function updateHireDateValues(agentObj, updateValues, colMap,timeStamp){
+function updateHireDateValues(agentObj, updateValues, colMap, timeStamp){
   const hireDate = new Date(agentObj[HIRE_DATE_HEADER]);
   updateValues[colMap.get(HIRE_DATE_HEADER)] = agentObj[HIRE_DATE_HEADER];
-
-  const flag = under4Months(hireDate,timeStamp,120);
+  const flag = under4Months(hireDate, timeStamp, 120);
   updateValues[colMap.get(LT_3MONTHS_HEADER)] = flag;
-
   updateValues[colMap.get(GT_MONTHS_HEADER)] = !flag;
 }
 
 /**
- * Updates the timestamp related values in the 'updateValues' array.
- * @param {Array} updateValues - The array of values to update.
- * @param {Map} colMap - The map containing column indexes.
- * @param {Array} row - The current row data.
+ * Updates timestamp values in a provided values map.
+ * @param {Array} updateValues - Array containing values to update.
+ * @param {Map} colMap - Column map to locate columns by header.
+ * @param {Array} row - Array representing a single row of data.
+ * @returns {Date} - The parsed timestamp.
  */
 function updateTimestampValues(updateValues, colMap, row){
   let timeStamp = new Date(row[colMap.get(TIMESTAMP_HEADER)]);
@@ -48,16 +50,21 @@ function updateTimestampValues(updateValues, colMap, row){
   return timeStamp;
 }
 
+/**
+ * Formats a date to display the month and year.
+ * @param {Date} date - The date to format.
+ * @returns {string} - Formatted date string in "MMMM yyyy" format.
+ */
 function formatTimestamp_Month_Date(date){
   return Utilities.formatDate(date,"America/New_York", "MMMM yyyy");
 }
 
 /**
- * Updates the score in the 'updateValues' array.
- * @param {Array} updateValues - The array of values to update.
- * @param {Map} colMap - The map containing column indexes.
- * @param {string} score - The score to update.
- * @return {number} The updated score value.
+ * Updates score values in a provided values map.
+ * @param {Array} updateValues - Array containing values to update.
+ * @param {Map} colMap - Column map to locate columns by header.
+ * @param {string} score - The score in "numerator / denominator" format.
+ * @returns {number} - The calculated score.
  */
 function updateScoreValues(updateValues, colMap, score){
   const [numerator, denominator] = score.split(" / ").map(integer => parseInt(integer));
@@ -67,15 +74,15 @@ function updateScoreValues(updateValues, colMap, score){
 }
 
 /**
- * Writes an array of values to a specified row in the 'Call Scorecard Form Responses' sheet.
- * @param {Array} updateValues - The array of values to write to the sheet.
- * @param {Number} index - The row number to write the values to.
-*/
-function writeToSheet(updateValues,index){
-  Custom_Utilities.exponentialBackoff(() =>sheetsAPI.update(
+ * Writes provided values to the spreadsheet at the specified row index.
+ * @param {Array} updateValues - Array of values to write.
+ * @param {number} index - The row index where values should be updated.
+ */
+function writeToSheet(updateValues, index){
+  Custom_Utilities.exponentialBackoff(() => sheetsAPI.update(
     {
-    majorDimension:"ROWS",
-    values:[updateValues],
-    },BACKEND_ID,`${SUBMISSION_SHEET_NAME}!${index}:${index}`,{valueInputOption:"USER_ENTERED"})
+    majorDimension: "ROWS",
+    values: [updateValues],
+    }, BACKEND_ID, `${SUBMISSION_SHEET_NAME}!${index}:${index}`, {valueInputOption: "USER_ENTERED"})
   );
 }

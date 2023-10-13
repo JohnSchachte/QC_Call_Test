@@ -1,16 +1,30 @@
-// Test: https://script.google.com/u/0/home/projects/1sdajPEm4Dv5Gsx5zq0keM4xPEOXTHublMt_bWHKbvUvIPOogEfHfW4u8/edit
-
+/**
+ * Entry point function to start the script.
+ */
 function mainWrapper(){
   Self.main();
 }
 
-
 /**
  * Main function that fetches data from a sheet, creates and sends emails, and updates the sheet.
+ * @description 
+ * 1. Retrieves column mapping.
+ * 2. Acquires a script lock to prevent overlapping execution.
+ * 3. Retrieves data from the submissions sheet.
+ * 4. Initializes the email sender.
+ * 5. Processes each row of data:
+ *   - Checks if the row qualifies for processing.
+ *   - Retrieves and updates agent information.
+ *   - Checks and updates score.
+ *   - Sends email.
+ *   - Writes updated values back to the sheet.
+ *   - Optionally initializes a coaching session.
+ * 6. Releases the script lock.
+ * 7. Sets the score format for the data processed.
  */
 function main(){
 
-  // get colMap
+  // get schema for the backend
   const colMap = getColMap();
 
   //lock in case main takes longer than the next trigger event.

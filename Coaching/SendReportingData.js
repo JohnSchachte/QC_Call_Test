@@ -1,5 +1,15 @@
-function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj){
-    /**
+/**
+ * Transforms the given row data into a format suitable for reliability reporting.
+ *
+ * @param {Array} row - The row data to transform.
+ * @param {Map} colMap - A map of column headers to their indices for the row data.
+ * @param {Array} categories - The categories associated with the row.
+ * @param {number} rowIndex - The index of the row in the original data.
+ * @param {Map} reportingColMap - A map of column headers to their indices for the reporting data.
+ * @param {Object} agentObj - An object containing agent data.
+ * @returns {Array} The transformed row data.
+ */
+function transformReliabilityReporting(row, colMap, categories, rowIndex, reportingColMap, agentObj) {    /**
      * SCHEMA DEFINITION FOR THIS TABLE:
      * Evaluator
      * Date Scored:
@@ -54,7 +64,12 @@ function transformReliabilityReporting(row,colMap,categories,rowIndex,reportingC
     return transFormedRow;
 }
 
-function sendReportingData(row,colMap,categories,rowIndex,agentObj){
+/**
+ * Retrieves a map of column headers to their indices for the reporting data.
+ *
+ * @returns {Map} A map of column headers to their indices.
+ */
+function getReportingColMap() {
 
     const reportingColMap = getReportingColMap();
     const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj);

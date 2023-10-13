@@ -15,12 +15,12 @@ class DoEmails{
 
   
   /**
-   * Send an evaluation email to an agent.
-   * @param {Object} row - The row of data to be included in the email.
-   * @param {Map} colMap - A map of the column names to their indices.
-   * @param {Object} agentObj - An object containing the agent's details.
-   * @param {Number} score - The agent's score.
-   * @param {Object} updateValues - An object to keep track of updated values.
+   * Send an email based on the provided data.
+   * @param {Array} row - The row data.
+   * @param {Map} colMap - A map relating column names to their indices.
+   * @param {Object} agentObj - Object containing agent's data.
+   * @param {number} score - The agent's score.
+   * @param {Array} updateValues - Array containing values to update.
    */
   send(row,colMap,agentObj,score,updateValues){
     let emailOptions = {};
@@ -61,12 +61,12 @@ class DoEmails{
     updateValues[colMap.get(DATE_SENT_HEADER)] = new Date().toLocaleString();
   }
 
-  /**
-   * Create an array of data to be included in the email.
-   * @param {Object} row - The row of data to be included in the email.
-   * @param {Map} colMap - A map of the column names to their indices.
-   * @param {Number} score - The agent's score.
-   * @return {Array} - An array of key-value pairs to be included in the email.
+ /**
+   * Create an array structure for email content.
+   * @param {Array} row - The row data.
+   * @param {Map} colMap - A map relating column names to their indices.
+   * @param {number} score - The agent's score.
+   * @returns {Array} An array of key-value pairs for email content.
    */
   mkEmailArray(row,colMap,score){
     let emailArray = [
@@ -79,13 +79,12 @@ class DoEmails{
     });
     return emailArray;
   }
-
   /**
-   * Update the CC field of the email options and updateValues.
-   * @param {string} supEmail - Email of Supervisor.
-   * @param {string} managerEmail - Email of Manager.
-   * @return {string} - The updated CC field or "" the empty string in none.
-  */
+   * Determine the CC recipients for the email based on supervisor and manager emails.
+   * @param {string} supEmail - The supervisor's email address.
+   * @param {string} managerEmail - The manager's email address.
+   * @returns {string} The CC recipients for the email.
+   */
   updateCC(supEmail,managerEmail){
     // Obj ect with email options
     return supEmail || managerEmail || "";
