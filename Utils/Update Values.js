@@ -1,3 +1,8 @@
+function calculateScore(score){
+  const [numerator, denominator] = score.split(" / ").map(integer => parseInt(integer));
+  return Math.round((numerator / denominator) * 10000) / 10000;
+}
+
 /**
  * Converts a score from the format .XXX* (or just .XXX) to XX.XX%.
  * @param {(string|number)} score - The score in the format .XXX* or .XXX.
