@@ -65,6 +65,27 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
 }
 
 /**
+ * Appends transformed row data to the reporting sheet.
+ *
+ * @param {Array} row - The row data to send.
+ * @param {Map} colMap - A map of column headers to their indices for the row data.
+ * @param {Array} categories - The categories associated with the row.
+ * @param {number} rowIndex - The index of the row in the original data.
+ * @param {Object} agentObj - An object containing agent data.
+ */
+function sendReportingData(row,colMap,categories,rowIndex,agentObj){
+
+    const reportingColMap = getReportingColMap();
+    const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj);
+    
+    const ss = SpreadsheetApp.openById(scriptPropsObj["REPORTING_SS_ID"]);
+    const reportingSheet = ss.getSheetByName(scriptPropsObj["REPORTING_SHEET_NAME"]);
+
+    reportingSheet.appendRow(reportingRow);
+
+}
+
+/**
  * Retrieves a map of column headers to their indices for the reporting data.
  *
  * @returns {Map} A map of column headers to their indices.
@@ -79,10 +100,4 @@ function getReportingColMap() {
 
     reportingSheet.appendRow(reportingRow);
 
-}
-
-function getReportingColMap(){
-    const cache = CacheService.getScriptCache();
-    const memoizedReads = Custom_Utilities.getMemoizedReads(cache);
-    return Custom_Utilities.mkColMap(memoizedReads(scriptPropsObj["REPORTING_SS_ID"],`${scriptPropsObj["REPORTING_SHEET_NAME"]}!1:1`,{majorDimension:"ROWS"}).values[0]);
 }
