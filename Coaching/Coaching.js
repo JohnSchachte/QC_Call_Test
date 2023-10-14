@@ -57,14 +57,6 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
         return false;
     }
 
-    try {
-        CoachingRequestScripts.getEmails(agentObj);
-    } catch (f) {
-        Logger.log(f);
-        writeCoachingStatus(a1Notation, "No Sup or Manager. Tried at " + new Date().toLocaleString());
-        return;
-    }
-
     const { severity, categories } = determineCoachingNeed(row, colMap, score);
 
     // If no coaching is needed, log it and update the sheet
