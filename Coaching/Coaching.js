@@ -52,6 +52,7 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     if (!OperationCoachingMembers.isInEmailSet(agentObj["Email Address"].toLowerCase())) {
         addValueToTransactionWriter ("Agent's Team is Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com", "Agent Not in Coaching Process: " + agentObj["Employee Name"], "Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
+        transactionWriter.commit();
         return false;
     }
 
@@ -83,6 +84,7 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     try {
         ({ coachingRow, coachingId } = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, coachingHeaders));
     } catch (f) {
+      // object in Error file
         if (f instanceof CoachingIdNull) {
             addValueToTransactionWriter(f.message);
             transactionWriter.commit();
@@ -107,7 +109,8 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
       sendManagementCoachingEmailBound(coachingRow, agentObj, coachingId);
     }catch(f){
       Logger.log(f);
-      if(f instanceof NoManagementEmailFound || f instanceof NonMemberTeam){
+      Logger.log(f.name)
+      if(f.name === "NoManagementEmailFound" || f.name === "NonMemberTeam"){
         addValueToTransactionWriter(f.message);
       }
     }
