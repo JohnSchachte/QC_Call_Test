@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-function initializeAlertAndCoaching(e){
-    Custom_Utilities.deleteSelfTrigger(e,ScriptApp);
-=======
 /**
  * Initializes the alert and coaching process after verifying cache value.
  * If the cache is not available, sends an email alert.
@@ -13,7 +9,6 @@ function initializeAlertAndCoaching(e) {
     // Delete the trigger that initiated this script
     Custom_Utilities.deleteSelfTrigger(e, ScriptApp);
 
->>>>>>> remoteTest/test
     const cache = CacheService.getScriptCache();
     const cacheValue = cache.get(e.triggerUid);
 
