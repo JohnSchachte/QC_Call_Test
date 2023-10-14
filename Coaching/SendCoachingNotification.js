@@ -10,13 +10,6 @@ function sendManagementCoachingEmail(coachingRow, agentObject, coachingId = "tes
     if (!agentObject) {
         return;
     }
-    try {
-      CoachingRequestScripts.getEmails(agentObj);
-    } catch (f) {
-        Logger.log(f);
-        writeCoachingStatus(a1Notation, "No Sup or Manager. Tried at " + new Date().toLocaleString());
-        return;
-    }
     const cache = CacheService.getScriptCache();
     const getTeams = Custom_Utilities.memoize(() => CoachingRequestScripts.getTeams(REPORTING_ID), cache);
   
@@ -27,7 +20,7 @@ function sendManagementCoachingEmail(coachingRow, agentObject, coachingId = "tes
         coachingIdAnchor = CoachingRequestScripts.getSupCoachingSheet(teams, agentObject["Team"], agentObject["SUPERVISOR"]);
     } catch (f) {
         Logger.log("trying to get sup Sheet. Error: %s", f);
-        coachingIdAnchor = CoachingRequestScripts.getBackEndNew(teams, agentObject["Team"])
+        coachingIdAnchor = CoachingRequestScripts.getBackEndNew(teams, agentObject["Team"]);
     }
   
     // Populate email variables based on coaching details

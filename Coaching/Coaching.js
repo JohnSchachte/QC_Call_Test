@@ -84,8 +84,11 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     console.log("coachingId = %s",coachingId);
     // Sending management email with coaching details
     const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind({ coachingHeaders });
-    sendManagementCoachingEmailBound(coachingRow, agentObj, coachingId);
-
-    // Sending reporting data
-    sendReportingData(row, colMap, categories, rowIndex, agentObj);
+    try{
+      sendManagementCoachingEmailBound(coachingRow, agentObj, coachingId);
+      // Sending reporting data
+      sendReportingData(row, colMap, categories, rowIndex, agentObj);
+    }catch(f){
+      Logger.log(f);
+    }
 }

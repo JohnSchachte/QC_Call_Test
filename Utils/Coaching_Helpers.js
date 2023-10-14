@@ -77,13 +77,3 @@ const formatAsCoachingRow = function(evalRow,colMap, agentObj,severity,categorie
     return row;
 }
 
-/**
- * Writes a value to a sheet using A1 notation.
- *
- * @param {string} A1Notation - The A1 notation reference to the cell.
- * @param {any} value - The value to write to the cell.
- */
-function writeToSheetA1Notation(A1Notation,value){
-    const range = this.responseSheet.getRange(A1Notation);
-    range.setValue(value);
-}
