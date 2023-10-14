@@ -23,7 +23,8 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
      * Security Violation
      * No Ticket Filed/Documents
      * Work Avoidance
-     * Row Index
+     * Call Index
+     * Chat Index
      * Coaching Sent Timestamp
      * Coaching Sent To  
     */
@@ -38,7 +39,7 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
     transFormedRow[reportingColMap.get("Scored Month, Year")] = month_date;
 
     transFormedRow[reportingColMap.get("Agent's Name")] = row[colMap.get(AGENT_NAME_HEADER)];
-    transFormedRow[reportingColMap.get("Agent's Team")] = agentObj["Team"];
+    transFormedRow[reportingColMap.get("Agent's Team")] = agentObj?.Team ?? "WFM Name mismatch";;
     transFormedRow[reportingColMap.get("Record ID/Chat line # w/hyperlink")] =  transformTranscriptIds(row[colMap.get(TRANSCRIPT_ID_HEADER)]).map(({href}) => href).join(",\n");
     transFormedRow[reportingColMap.get("Score")] = calculateScore(row[colMap.get(SCORE_HEADER)]);
     
@@ -55,10 +56,10 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
     
     transFormedRow[reportingColMap.get("Work Avoidance")] = categories.includes("Work Avoidance");
     
-    transFormedRow[reportingColMap.get("Row Index")] = rowIndex;
+    transFormedRow[reportingColMap.get(IS_CALL == "true" ? "Call Index" : "Chat Index")] = rowIndex; // determines what foreign key dependencies is being used Call || Chat
 
     transFormedRow[reportingColMap.get("Coaching Sent Timestamp")] = new Date().toLocaleString();
-    transFormedRow[reportingColMap.get("Coaching Sent To")] =  (agentObj["Sup_Email"] || agentObj["Manager_Email"] || "");
+    transFormedRow[reportingColMap.get("Coaching Sent To")] =  (agentObj?.Sup_Email || agentObj?.Manager_Email || "");
     Logger.log("reportRow = %s",transFormedRow);
     
     return transFormedRow;
