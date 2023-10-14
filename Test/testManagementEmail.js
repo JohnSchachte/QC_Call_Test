@@ -62,22 +62,3 @@ function testHttpRequest(){
   new TestHttpRequest().runTestHttpRequest();
 }
 
-class TestReiliabilityData extends TestManagementEmails{
-    constructor(){
-        super();
-    }
-
-    runTestReiliabilityData(howMany = -10){
-        this.filterForCoachings();
-        this.formattedRows = this.formattedRows ? this.formattedRows : this.formatCoachingRows();
-        const lastHowMany = this.formattedRows.slice(howMany);
-        lastHowMany.forEach((row, index) => {
-          transformReliabilityReporting()
-            Logger.log("index = %s",index);
-        });
-    }
-}
-
-function testHttpRequest(){
-  new TestReiliabilityData().runTestHttpRequest();
-}

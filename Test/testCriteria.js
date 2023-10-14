@@ -1,7 +1,6 @@
-function getColMapTest(){
-    const cache = CacheService.getScriptCache();
-    const memoizedReads = Custom_Utilities.getMemoizedReads(cache);
-    return Custom_Utilities.mkColMap(memoizedReads(BACKEND_ID_TEST,`${SUBMISSION_SHEET_NAME}!1:1`,{majorDimension:"ROWS"}).values[0]);
+
+function testReiliabilityData(){
+  new TestReiliabilityData().runTestReiliabilityData();
 }
 
 class TestCriteria extends Tester {
@@ -31,7 +30,7 @@ class TestCriteria extends Tester {
             if(!score) return;
             let {severity,categories} = determineCoachingNeed(row,this.colMap,score);
             if(severity){
-                this.needCoaching.push({rowIndex:i+this.startRow,severity,categories});
+                this.needCoaching.push({rowIndex:i+this.startRow,severity,categories,row});
             }else{
                 this.noCoaching.push({rowIndex:i+this.startRow,severity,categories});
             }
@@ -95,4 +94,19 @@ class TestCriteria extends Tester {
 function testScore(){
     // new TestCriteria().runScoreTest();
     new TestCriteria().checkNeedsCoachingLength();
+}
+
+class TestReiliabilityData extends TestCriteria{
+    constructor(){
+        super();
+    }
+
+    runTestReiliabilityData(){
+        this.coachingDetermination();
+        this.needCoaching.forEach((row, index) => {
+          const agentObj = NameToWFM.getAgentObj(row.row[this.colMap.get(AGENT_NAME_HEADER)]);
+            sendReportingData(row.row,this.colMap,row.categories,row.rowIndex,agentObj)
+            Logger.log("index = %s",row.rowIndex);
+        });
+    }
 }
