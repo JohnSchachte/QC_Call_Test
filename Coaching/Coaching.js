@@ -60,6 +60,7 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     // If no coaching is needed, log it and update the sheet
     if (!severity) {
         addValueToTransactionWriter("No Coaching needed. Timestamp: " + new Date().toLocaleString());
+        transactionWriter.commit();
         return false;
     }
     Logger.log("severity: %s", severity);
@@ -80,7 +81,7 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
 
     let coachingRow, coachingId;
     try {
-        ({ coachingRow, coachingId } = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation, addValueToTransactionWriter, coachingHeaders));
+        ({ coachingRow, coachingId } = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, coachingHeaders));
     } catch (f) {
         if (f instanceof CoachingIdNull) {
             addValueToTransactionWriter(f.message);
@@ -111,4 +112,5 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
       }
     }
     sendReportingData(row, colMap, categories, rowIndex, agentObj);
+    transactionWriter.commit();
 }
