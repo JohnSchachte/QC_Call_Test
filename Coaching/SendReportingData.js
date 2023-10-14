@@ -65,11 +65,15 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
 }
 
 /**
- * Retrieves a map of column headers to their indices for the reporting data.
+ * Appends transformed row data to the reporting sheet.
  *
- * @returns {Map} A map of column headers to their indices.
+ * @param {Array} row - The row data to send.
+ * @param {Map} colMap - A map of column headers to their indices for the row data.
+ * @param {Array} categories - The categories associated with the row.
+ * @param {number} rowIndex - The index of the row in the original data.
+ * @param {Object} agentObj - An object containing agent data.
  */
-function getReportingColMap() {
+function sendReportingData(row,colMap,categories,rowIndex,agentObj){
 
     const reportingColMap = getReportingColMap();
     const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj);
@@ -81,6 +85,11 @@ function getReportingColMap() {
 
 }
 
+/**
+ * Retrieves a map of column headers to their indices for the reporting data.
+ *
+ * @returns {Map} A map of column headers to their indices.
+ */
 function getReportingColMap(){
     const cache = CacheService.getScriptCache();
     const memoizedReads = Custom_Utilities.getMemoizedReads(cache);
