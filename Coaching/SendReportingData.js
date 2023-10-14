@@ -23,7 +23,8 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
      * Security Violation
      * No Ticket Filed/Documents
      * Work Avoidance
-     * Row Index
+     * Call Index
+     * Chat Index
      * Coaching Sent Timestamp
      * Coaching Sent To  
     */
@@ -55,7 +56,7 @@ function transformReliabilityReporting(row, colMap, categories, rowIndex, report
     
     transFormedRow[reportingColMap.get("Work Avoidance")] = categories.includes("Work Avoidance");
     
-    transFormedRow[reportingColMap.get("Row Index")] = rowIndex;
+    transFormedRow[reportingColMap.get(IS_CALL == "true" ? "Call Index" : "Chat Index")] = rowIndex;
 
     transFormedRow[reportingColMap.get("Coaching Sent Timestamp")] = new Date().toLocaleString();
     transFormedRow[reportingColMap.get("Coaching Sent To")] =  (agentObj["Sup_Email"] || agentObj["Manager_Email"] || "");
