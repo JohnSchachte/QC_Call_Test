@@ -22,7 +22,8 @@ class TestCoachingRow extends Tester{
         const formattedRows = this.formatCoachingRows();
         
         formattedRows.forEach((row, index) => {
-            const slicedRow = row.slice(1);            
+            const slicedRow = row.slice(1);
+            Logger.log("describe element is %s",row[this.coachingHeaders["Describe?"]])       
             if (slicedRow.some(el => !el) || (/undefined|null/.test(row[this.coachingHeaders["Describe?"]]))) {
                 Logger.log(`Failed to format row at index: ${index + 1}`); // +1 because arrays are 0-indexed
                 Logger.log("%s is: ",index);
