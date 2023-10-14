@@ -46,13 +46,11 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     const responseSheet = SpreadsheetApp.openById(BACKEND_ID).getSheetByName(RESPONSE_SHEET_NAME);
     const colMap = getColMap();
 
-    // Function bound with the response sheet to write data to it
-    const writeCoachingStatus = writeToSheetA1Notation.bind({ responseSheet });
-    const a1Notation = Custom_Utilities.columnToLetter(colMap.get(COACHING_STATUS_HEADER) + 1) + rowIndex.toString();
-
+    const transactionWriter = Custom_Utilities.writeTransactionManagerFactory(responseSheet,colMap);
+    const addValueToTransactionWriter = (value) => transactionWriter.addValue(COACHING_STATUS_HEADER,rowIndex,value,false);
     // If agent is not part of the coaching set, log it and send an email alert
     if (!OperationCoachingMembers.isInEmailSet(agentObj["Email Address"].toLowerCase())) {
-        writeCoachingStatus(a1Notation, "Agent's Team is Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
+        addValueToTransactionWriter ("Agent's Team is Not in Coaching Process. Timestamp: " + new Date().toLocaleString());
         GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com", "Agent Not in Coaching Process: " + agentObj["Employee Name"], "Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(agentObj));
         return false;
     }
@@ -61,11 +59,11 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
 
     // If no coaching is needed, log it and update the sheet
     if (!severity) {
-        Logger.log("Severity is falsy");
-        writeCoachingStatus(a1Notation, "No Coaching needed. Timestamp: " + new Date().toLocaleString());
+        addValueToTransactionWriter("No Coaching needed. Timestamp: " + new Date().toLocaleString());
         return false;
     }
-
+    Logger.log("severity: %s", severity);
+    Logger.log("categories: %s", categories);
     // Header information for coaching
     const coachingHeaders = {
         "Request Id" : 0,
@@ -79,16 +77,38 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
         "Category?":8,
         "Describe?":9
     };
-    const { coachingRow, coachingId } = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation, writeCoachingStatus, coachingHeaders);
+
+    let coachingRow, coachingId;
+    try {
+        ({ coachingRow, coachingId } = sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation, addValueToTransactionWriter, coachingHeaders));
+    } catch (f) {
+        if (f instanceof CoachingIdNull) {
+            addValueToTransactionWriter(f.message);
+            transactionWriter.commit();
+            return;
+        } else if (f instanceof HTTPError) {
+            addValueToTransactionWriter(f.message);
+            transactionWriter.commit();
+            return;
+        } else {
+            throw f;
+        }
+    }
+    
+    // No errors so keep going
+    addValueToTransactionWriter(`Coaching Id: ${coachingId}\n Timestamp: ${new Date().toLocaleString()}\nSeverity: ${severity}\nCategories: ${categories}`);
     console.log("coachingRow = %s", coachingRow);
     console.log("coachingId = %s",coachingId);
+    
     // Sending management email with coaching details
     const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind({ coachingHeaders });
     try{
       sendManagementCoachingEmailBound(coachingRow, agentObj, coachingId);
-      // Sending reporting data
-      sendReportingData(row, colMap, categories, rowIndex, agentObj);
     }catch(f){
       Logger.log(f);
+      if(f instanceof NoManagementEmailFound || f instanceof NonMemberTeam){
+        addValueToTransactionWriter(f.message);
+      }
     }
+    sendReportingData(row, colMap, categories, rowIndex, agentObj);
 }

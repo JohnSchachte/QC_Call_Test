@@ -11,12 +11,10 @@
  * @param {string} severity - Coaching severity level.
  * @param {Array} categories - Coaching categories.
  * @param {number} rowIndex - Index of the row in the spreadsheet.
- * @param {string} a1Notation - Cell notation for writing status.
- * @param {Function} writeCoachingStatus - Function to write status in the sheet.
  * @param {Object} coachingHeaders - Coaching headers for formatting the row.
  * @returns {Object} - An object containing the coachingRow data and the coachingId.
  */
-function sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, a1Notation, writeCoachingStatus, coachingHeaders) {
+function sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex, coachingHeaders) {
     const cache = CacheService.getScriptCache();
     const memoizedGetHttp = Custom_Utilities.memoize(getHttp, cache);
     
@@ -37,29 +35,24 @@ function sendCoachingData(row, colMap, agentObj, severity, categories, rowIndex,
     
     let response;
 
-    // Failure function in case of errors
-    const failureFunc = () => {
-        Logger.log("Row: %s was NOT appended to a coaching backend sheet", rowIndex);
-        GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com", "Coaching Request Failure for Row: " + rowIndex, "Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(coachingRow));
-        writeCoachingStatus(a1Notation, `HTTP FAILURE. REACH OUT OT PI.\n Timestamp: ${new Date().toLocaleString()}`);
-        throw new Error("Row: " + rowIndex + " was NOT appended to a coaching backend sheet");
-    }
-
     try {
         response = retry(() => sendHttpWithRetry(
-            IS_PRODUCTION == "true" ? endPoint : "https://script.google.com/a/macros/shift4.com/s/AKfycbzVwcCdBlPVyTrjXjd0aPTf_iWYe9tJLCTPhUHGqA7FQ-ownSx0ZIKz6Ovkgl_WQw8lTA/exec", 
-            requestOptions)
+                IS_PRODUCTION == "true" ? endPoint : "https://script.google.com/a/macros/shift4.com/s/AKfycbzVwcCdBlPVyTrjXjd0aPTf_iWYe9tJLCTPhUHGqA7FQ-ownSx0ZIKz6Ovkgl_WQw8lTA/exec", 
+                requestOptions
+            )
         );
     } catch (f) {
         Logger.log(f);
-        failureFunc();
+        Logger.log("Row: %s was NOT appended to a coaching backend sheet", rowIndex);
+        GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com", "Coaching Request Failure for Row: " + rowIndex, "Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(coachingRow));
+        throw new HTTPError(`HTTP FAILURE. REACH OUT OT PI.\n Timestamp: ${new Date().toLocaleString()}`);
     }
 
     const coachingId = response["id"];
-    if (coachingId) {
-        writeCoachingStatus(a1Notation, `Coaching Id: ${coachingId}\n Timestamp: ${new Date().toLocaleString()}\nSeverity: ${severity}\nCategories: ${categories}`);
-    } else {
-        failureFunc();
+    if (!coachingId) {
+        Logger.log("Row: %s was NOT appended to a coaching backend sheet", rowIndex);
+        GmailApp.sendEmail("jschachte@shift4.com,pi@shift4.com", "Coaching Request Failure for Row: " + rowIndex, "Script: 1Yts8oTB89I_dvkIMkxIaDcrqsnLL_d7vSmtmDxPzkjqOI43gA5so84kk\n\nRow: " + rowIndex + "\n\n" + JSON.stringify(coachingRow));
+        throw new CoachingIdNull(`Coaching Id received from Coaching backend was null. REACH OUT TO PI.\n Timestamp: ${new Date().toLocaleString()}`);
     }
 
     return {
