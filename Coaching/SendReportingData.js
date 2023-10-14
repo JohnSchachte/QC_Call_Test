@@ -90,14 +90,8 @@ function sendReportingData(row,colMap,categories,rowIndex,agentObj){
  *
  * @returns {Map} A map of column headers to their indices.
  */
-function getReportingColMap() {
-
-    const reportingColMap = getReportingColMap();
-    const reportingRow = transformReliabilityReporting(row,colMap,categories,rowIndex,reportingColMap,agentObj);
-    
-    const ss = SpreadsheetApp.openById(scriptPropsObj["REPORTING_SS_ID"]);
-    const reportingSheet = ss.getSheetByName(scriptPropsObj["REPORTING_SHEET_NAME"]);
-
-    reportingSheet.appendRow(reportingRow);
-
+function getReportingColMap(){
+    const cache = CacheService.getScriptCache();
+    const memoizedReads = Custom_Utilities.getMemoizedReads(cache);
+    return Custom_Utilities.mkColMap(memoizedReads(scriptPropsObj["REPORTING_SS_ID"],`${scriptPropsObj["REPORTING_SHEET_NAME"]}!1:1`,{majorDimension:"ROWS"}).values[0]);
 }
