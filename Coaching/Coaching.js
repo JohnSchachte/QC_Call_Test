@@ -58,10 +58,11 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     }
 
     try {
-        CoachingRequestScripts.getEmails(agentObject);
+        CoachingRequestScripts.getEmails(agentObj);
     } catch (f) {
         Logger.log(f);
         writeCoachingStatus(a1Notation, "No Sup or Manager. Tried at " + new Date().toLocaleString());
+        return;
     }
 
     const { severity, categories } = determineCoachingNeed(row, colMap, score);

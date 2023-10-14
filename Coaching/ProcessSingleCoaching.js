@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-function processSingleCoaching(rowIndex="4541"){
-=======
 /**
  * Processes a single coaching entry based on the given row index.
  * 
@@ -15,7 +12,6 @@ function processSingleCoaching(rowIndex="4541"){
  */
 function processSingleCoaching(rowIndex="8820") {
     // Get the column mapping for the sheet
->>>>>>> remoteTest/test
     const colMap = getColMap();
 
     // Fetch the entire row based on the provided index from the RESPONSE_SHEET_NAME sheet
