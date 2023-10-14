@@ -27,6 +27,7 @@ function main(){
   // get schema for the backend
   const colMap = getColMap();
 
+  //lock in case main takes longer than the next trigger event.
   const lock = LockService.getScriptLock();
   lock.waitLock(LOCK_WAIT_TIME); // wait 10 minutes for others' use of the code section and lock it when available
 
@@ -85,14 +86,13 @@ function main(){
 
     updateValues[colMap.get(AGENT_LOCATION_HEADER)] = agentObj["OFFICE LOCATION"];
     updateValues[colMap.get(TEAM_HEADER)] = agentObj["Team"];
-    Logger.log("Sent");
+    Logger.log("Sent for row %s",(offset+index));
     scriptProps.setProperty("lr",offset+index+1); // update the last row to record where the script starts next time
-
+    
     if(IS_CALL == "false"){
       updateValues[colMap.get("Chat Id")] = (offset+index).toString();
       row[colMap.get("Chat Id")] = (offset+index).toString();
     }
-
 
     doEmails.send(row,colMap,agentObj,score,updateValues); //assign the row as the chat id
     writeToSheet(updateValues,index+offset);

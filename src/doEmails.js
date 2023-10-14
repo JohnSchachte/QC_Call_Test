@@ -13,6 +13,7 @@ class DoEmails{
     this.emailSubject = IS_CALL == "true" ? `Call Evaluation for ` : `Chat Evaluation for `; // Set email subject to Quality Evalutation form with agent name
   }
 
+  
   /**
    * Send an email based on the provided data.
    * @param {Array} row - The row data.
@@ -47,7 +48,7 @@ class DoEmails{
     
     if(IS_PRODUCTION == "false") GmailApp.sendEmail( "jschachte@shift4.com",this.emailSubject+row[colMap.get(AGENT_NAME_HEADER)],'',emailOptions);
     
-    const cc = this.updateCC(agentObj["Sup_Email"],agentObj["Manager_Email"]); // adds cc and updates the updateValues
+    const cc = this.updateCC(agentObj?.Sup_Email,agentObj?.Manager_Email); // adds cc and updates the updateValues
     if(cc){
       emailOptions["cc"] = cc;
       updateValues[colMap.get(CC_EMAIL_HEADER)] = cc;
