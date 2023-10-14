@@ -24,17 +24,13 @@
       {
         "userSymbol": "CoachingRequestScripts",
         "libraryId": "1Qwnt6CJYCbtBT-deW9Q-uiB6f407S3PoFpHN0wBozX00uw92WmJzvU0n",
-        "version": "6"
+        "version": "6",
+        "developmentMode": false
       },
       {
         "userSymbol": "OperationCoachingMembers",
         "libraryId": "1SVb5jxhLQp6_juLBnm6AcvUiD3jIkKFq8tGCxNagdetq_zyY_FmgBKr7",
         "version": "1"
-      },
-      {
-        "userSymbol": "Self",
-        "libraryId": "1iWCZT_q-JugWPJSQ7aY25ocJbZu4knERuoHqRMed3sEAh2L2ymzircSK",
-        "version": "14"
       }
     ]
   }
