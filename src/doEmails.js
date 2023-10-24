@@ -42,7 +42,7 @@ class DoEmails{
     this.htmlTemplate.employeeName = agentObj["Employee Name"].toUpperCase();
 
      // Set emailArray in emailTemplate.html to emailArray
-    this.htmlTemplate.emailArray = this.mkEmailArray(row,colMap,score);
+    this.htmlTemplate.emailArray = DoEmails.mkEmailArray(row,colMap,score);
 
     emailOptions["htmlBody"] = this.htmlTemplate.evaluate().getContent(); //assigning the template to the email to be sent
     
@@ -68,7 +68,7 @@ class DoEmails{
    * @param {number} score - The agent's score.
    * @returns {Array} An array of key-value pairs for email content.
    */
-  mkEmailArray(row,colMap,score){
+  static mkEmailArray(row,colMap,score){
     let emailArray = [
       ["Score", (score / 100).toString()+"%"],
     ]; 
