@@ -54,3 +54,5 @@ const DATE_SENT_HEADER = scriptPropsObj["DATE_SENT_HEADER"];
 const RELIABILITY_REPORTING_SHEET_NAME = scriptPropsObj["REPORTING_SHEET_NAME"];
 /** Spreadsheet ID for reliability reporting. */
 const RELIABILITY_REPORTING_SS_ID = scriptPropsObj["REPORTING_SS_ID"];
+
+const REMOVE_COLS = JSON.parse(scriptPropsObj["REMOVE_COLS"]);
