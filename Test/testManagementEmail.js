@@ -3,19 +3,20 @@ class TestManagementEmails extends TestCoachingRow{
         super(); // Call the parent class constructor
     }
 
-    runTestManagementEmail(howMany = -10) {
+    runTestManagementEmail(howMany = -1) {
         this.filterForCoachings();
         this.formattedRows = this.formattedRows ? this.formattedRows : this.formatCoachingRows();
         const lastHowMany = this.formattedRows.slice(howMany);
         const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind(this)
         lastHowMany.forEach((row, index) => {
-            sendManagementCoachingEmailBound(row.coachingRow,row.agentObject);
+            const emailArray = DoEmails.mkEmailArray(row.row,this.colMap,(row.score*10000).toFixed(2))
+            sendManagementCoachingEmailBound(row.coachingRow,row.agentObject,emailArray);
         });
     }
     formatCoachingRows() {
         const formatAsCoachingRowBinded = formatAsCoachingRow.bind(this)
         return this.needCoaching.map(el => {
-            return {coachingRow:formatAsCoachingRowBinded(el.row,this.colMap,el.agentObj,el.severity,el.categories,el.score),agentObject:el.agentObj};
+            return {row: el.row, score: el.score, coachingRow:formatAsCoachingRowBinded(el.row,this.colMap,el.agentObj,el.severity,el.categories,el.score),agentObject:el.agentObj};
         });
     }
 }
