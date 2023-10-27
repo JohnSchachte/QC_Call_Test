@@ -9,7 +9,6 @@ class DoEmails{
    */
   constructor(){
     this.htmlTemplate = HtmlService.createTemplateFromFile("HTML/agent_notification"); // Create html template from emailTemplate.html file
-    this.removeCols = new Set(["Resolution Outcome","How would you rate your experience on this call/chat if you were the customer? ","Agent Department","Date","Month & Year","% Score","Email Sent","Date Sent", "Agent Location","Team","Agents Department","CC Email", "Ticket#","Score %","Score",">3 Months Hire"," ","<90 Day Hire","Hire Date","Dispute Status","Copied to coaching form? And when"]);
     this.emailSubject = IS_CALL == "true" ? `Call Evaluation for ` : `Chat Evaluation for `; // Set email subject to Quality Evalutation form with agent name
   }
 
@@ -57,6 +56,7 @@ class DoEmails{
     }
 
     if(IS_PRODUCTION == "true") GmailApp.sendEmail(agentObj["Email Address"],this.emailSubject+row[colMap.get(AGENT_NAME_HEADER)],'',emailOptions); // send to the agent's email with CC's
+    
     updateValues[colMap.get(EMAIL_SENT_HEADER)] = "Sent";
     updateValues[colMap.get(DATE_SENT_HEADER)] = new Date().toLocaleString();
   }
@@ -69,11 +69,12 @@ class DoEmails{
    * @returns {Array} An array of key-value pairs for email content.
    */
   static mkEmailArray(row,colMap,score){
+    const removeCols = DoEmails.getRemoveCols();
     let emailArray = [
       ["Score", (score / 100).toString()+"%"],
     ]; 
     colMap.forEach((value,key) => {
-      if(key && row[value] && !this.removeCols.has(key) && !key.includes("Removed ")){
+      if(key && row[value] && !removeCols.has(key) && !key.includes("Removed ")){
         emailArray.push([key,row[value]])
       }
     });
@@ -88,5 +89,9 @@ class DoEmails{
   updateCC(supEmail,managerEmail){
     // Obj ect with email options
     return supEmail || managerEmail || "";
+  }
+
+  static getRemoveCols(){
+    return new Set(REMOVE_COLS);
   }
 }
