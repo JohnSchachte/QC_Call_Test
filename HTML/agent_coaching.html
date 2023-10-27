@@ -85,7 +85,10 @@
               <li style="white-space: pre-line;">Description:
               <b><?= vars["description"] ?></b>
               </li>
-              <? emailArray.forEach(([key, value]) => { ?>
+            </ul>
+            <h3 style="color: #136ef6;"> Evaluation that Triggered Coaching: </h3>
+            <ul>
+              <? vars["emailArray"].forEach(([key, value]) => { ?>
                 <li><b><?= key ?>:</b> <?= value ?></li>
               <? }) ?>
             </ul>
