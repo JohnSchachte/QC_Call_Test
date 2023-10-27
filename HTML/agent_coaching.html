@@ -85,6 +85,9 @@
               <li style="white-space: pre-line;">Description:
               <b><?= vars["description"] ?></b>
               </li>
+              <? emailArray.forEach(([key, value]) => { ?>
+                <li><b><?= key ?>:</b> <?= value ?></li>
+              <? }) ?>
             </ul>
           <p>Sincerely,<br></p>
           <p  style="font-weight: bold;">Reliability</p>
