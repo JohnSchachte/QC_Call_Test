@@ -6,7 +6,7 @@
  * @param {string} [coachingId="test22"] - The unique identifier for the coaching.
  * @returns {void}
  */
-function sendManagementCoachingEmail(coachingRow, agentObject, coachingId = "test22") {
+function sendManagementCoachingEmail(coachingRow, agentObject, emailArray, coachingId = "test22") {
     if (!agentObject) {
         return;
     }
@@ -35,7 +35,8 @@ function sendManagementCoachingEmail(coachingRow, agentObject, coachingId = "tes
         severity: coachingRow[this.coachingHeaders["Severity?"]],
         reason: coachingRow[this.coachingHeaders["Category?"]],
         description: coachingRow[this.coachingHeaders["Describe?"]],
-        agentEmail: agentObject["Email Address"]
+        agentEmail: agentObject["Email Address"],
+        emailArray : emailArray
     };
   
     // Prepare and send the email with the specified template
