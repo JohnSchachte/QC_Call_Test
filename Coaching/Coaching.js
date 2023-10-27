@@ -106,7 +106,9 @@ function alertAndCoach(row, agentObj, score, rowIndex) {
     // Sending management email with coaching details
     const sendManagementCoachingEmailBound = sendManagementCoachingEmail.bind({ coachingHeaders });
     try{
-        const emailArray = DoEmails.mkEmailArray(row, colMap, score);
+        
+        const emailArray = DoEmails.mkEmailArray(row, colMap, (score*10000).toFixed(2));
+        Logger.log(emailArray);
         sendManagementCoachingEmailBound(coachingRow, agentObj, emailArray,coachingId );
     }catch(f){
       Logger.log(f);
